@@ -16,6 +16,17 @@ docs/_data/
 └── 2026/  ← 0 条
 ```
 
+## 提交漏洞
+
+### 提交Issue
+
+1. 在站点页面顶部点击「＋ 提交漏洞」
+2. 填写表单 → 自动创建 GitHub Issue
+3. 维护者审核后打 `审核通过` label
+4. GitHub Actions 自动提取数据 → 写入 TOML → 重建站点
+
+### 提交PR
+
 示例文件 `docs/_data/2025/xxx.toml`：
 
 ```toml
@@ -30,13 +41,6 @@ date = "0730"
 label = "0day"        # 0day | 1day | nday
 verifier = "AdySec"   # 验真人（2025+）
 ```
-
-## 提交漏洞
-
-1. 在站点页面顶部点击「＋ 提交漏洞」
-2. 填写表单 → 自动创建 GitHub Issue
-3. 维护者审核后打 `审核通过` label
-4. GitHub Actions 自动提取数据 → 写入 TOML → 重建站点
 
 ## 目录说明
 
@@ -55,13 +59,3 @@ scripts/
 ├── process-issue.py     # Issue → TOML（GitHub Actions 用）
 └── build-aggregate.py   # TOML → JSON（兼容保留）
 ```
-
-## 技术栈
-
-| 层 | 技术 |
-|------|--------|
-| 数据格式 | TOML |
-| 页面生成 | Python（无框架） |
-| 托管 | GitHub Pages（静态文件） |
-| 自动化 | GitHub Actions |
-| 提交入口 | Issue 表单 → Actions 自动处理 |
