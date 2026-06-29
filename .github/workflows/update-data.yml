@@ -3,6 +3,9 @@ name: 更新漏洞数据
 on:
   issues:
     types: [labeled]
+  push:
+    paths:
+      - 'docs/_data/**/*.toml'
   workflow_dispatch:
 
 permissions:
@@ -11,7 +14,10 @@ permissions:
 
 jobs:
   update:
-    if: github.event.label.name == '审核通过' || github.event_name == 'workflow_dispatch'
+    if: |
+      github.event.label.name == '审核通过' ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +26,7 @@ jobs:
           python-version: '3.11'
 
       - name: 处理 Issue → TOML
-        if: github.event_name != 'workflow_dispatch'
+        if: github.event_name == 'issues'
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
@@ -33,7 +39,7 @@ jobs:
         run: |
           git config user.name "AdySec Bot"
           git config user.email "bot@adysec.com"
-          git add docs/_data/
+          git add docs/_data/ docs/*.html docs/assets/
           git diff --quiet && git diff --staged --quiet || \
             git commit -m "chore(data): 更新漏洞数据"
           git push
