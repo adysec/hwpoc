@@ -1,0 +1,6 @@
+vendor = "安博通"
+name = "安博通OEM产品任意文件读取"
+type = "任意文件读取"
+source = "DVB"
+date = "08.08"
+label = "nday"

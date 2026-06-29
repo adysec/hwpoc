@@ -1,0 +1,6 @@
+vendor = "启明"
+name = "天玥网络安全审计系统广告编辑任意文件上传"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,6 @@
+vendor = "金山"
+name = "金山终端安全系统V9 SQLI"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

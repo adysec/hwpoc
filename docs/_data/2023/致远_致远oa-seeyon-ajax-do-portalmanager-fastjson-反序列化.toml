@@ -1,0 +1,6 @@
+vendor = "致远"
+name = "致远OA /seeyon/ajax.do portalManager-fastjson 反序列化"
+type = "反序列化"
+source = "DVB"
+date = "08.08"
+label = "nday"

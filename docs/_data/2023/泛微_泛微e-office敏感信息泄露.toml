@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微e-office敏感信息泄露"
+type = "信息泄露"
+source = "DVB"
+date = "08.08"
+label = "nday"

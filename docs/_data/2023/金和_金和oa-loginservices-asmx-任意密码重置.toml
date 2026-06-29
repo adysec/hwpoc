@@ -1,0 +1,6 @@
+vendor = "金和"
+name = "金和OA LoginServices.asmx 任意密码重置"
+type = "认证绕过"
+source = "DVB"
+date = "08.08"
+label = "nday"

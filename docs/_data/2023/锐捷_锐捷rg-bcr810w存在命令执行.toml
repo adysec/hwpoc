@@ -1,0 +1,7 @@
+vendor = "锐捷"
+name = "锐捷RG-BCR810W存在命令执行"
+type = "RCE"
+source = "微信"
+date = "08.15"
+poc = "tracert检测 www.baidu.com|id"
+label = "nday"

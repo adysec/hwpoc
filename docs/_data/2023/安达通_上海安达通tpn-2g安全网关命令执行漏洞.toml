@@ -1,0 +1,6 @@
+vendor = "安达通"
+name = "上海安达通TPN-2G安全网关命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

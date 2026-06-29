@@ -1,0 +1,7 @@
+vendor = "致远"
+name = "致远M3反序列化漏洞"
+type = "RCE"
+source = "微信"
+info = "某司被打，但payload不太一样 /mobile_portal/api/pns/message/send/batch/6_1sp1 /mobile_portal/api/systemLog/pns/loadLog/app.log"
+date = "08.14"
+label = "1day"

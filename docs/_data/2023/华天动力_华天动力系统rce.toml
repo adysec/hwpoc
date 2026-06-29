@@ -1,0 +1,6 @@
+vendor = "华天动力"
+name = "华天动力系统RCE"
+type = "RCE"
+source = "某司售卖"
+date = "08.09"
+label = "nday"

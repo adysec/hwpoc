@@ -1,0 +1,6 @@
+vendor = "用友"
+name = "用友U8+ sync接口存在任意文件上传"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

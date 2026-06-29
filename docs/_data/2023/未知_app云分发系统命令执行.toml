@@ -1,0 +1,6 @@
+vendor = "未知"
+name = "APP云分发系统命令执行"
+type = "RCE"
+source = "某司售卖"
+date = "08.09"
+label = "未知"

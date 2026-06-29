@@ -1,0 +1,7 @@
+vendor = "锐捷"
+name = "锐捷网络 RG-EW1200G 无线路由器存在密码重置漏洞"
+type = "认证绕过"
+source = "微信"
+info = "/api/sys/set_passwd HWR_1.0(1)B1P5, Release(07161417) r483"
+date = "08.10"
+label = "nday"

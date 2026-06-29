@@ -1,0 +1,6 @@
+vendor = "广联达"
+name = "广联达OA系统目录遍历漏洞"
+type = "目录遍历"
+source = "DVB"
+date = "08.08"
+label = "nday"

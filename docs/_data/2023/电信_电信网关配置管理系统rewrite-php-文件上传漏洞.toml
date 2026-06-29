@@ -1,0 +1,6 @@
+vendor = "电信"
+name = "电信网关配置管理系统rewrite.php 文件上传漏洞"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

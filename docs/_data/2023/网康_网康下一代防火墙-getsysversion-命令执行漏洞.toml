@@ -1,0 +1,7 @@
+vendor = "网康"
+name = "网康下一代防火墙 getSysVersion 命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+poc = "hello smsn 1691564587305"
+label = "nday"

@@ -1,0 +1,6 @@
+vendor = "信呼"
+name = "信呼oa存在时间盲注"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

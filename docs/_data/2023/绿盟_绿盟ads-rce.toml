@@ -1,0 +1,7 @@
+vendor = "绿盟"
+name = "绿盟ads RCE"
+type = "RCE"
+source = "微信"
+info = "/postrev.php 请求体： filename="
+date = "08.14"
+label = "nday"

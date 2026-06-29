@@ -1,0 +1,6 @@
+vendor = "才茂"
+name = "才茂通信网关远程命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

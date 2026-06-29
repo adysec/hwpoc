@@ -1,0 +1,6 @@
+vendor = "海康威视"
+name = "海康威视安全接入网关前台远程代码执行"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

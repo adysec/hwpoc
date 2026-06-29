@@ -1,0 +1,6 @@
+vendor = "网御星云"
+name = "网御USG防火墙系统命令注入漏洞"
+type = "命令注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

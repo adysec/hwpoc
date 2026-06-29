@@ -1,0 +1,6 @@
+vendor = "金蝶"
+name = "金蝶云星空远程命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

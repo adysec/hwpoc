@@ -1,0 +1,8 @@
+vendor = "泛微"
+name = "泛微E-Mobile移动管理平台installOperate.do存在SSRF漏洞"
+type = "SSRF"
+version = "未知"
+path = "/install/installOperate.do"
+fix = "WAF封禁路路径，等待发布补丁"
+date = "0725"
+label = "nday"

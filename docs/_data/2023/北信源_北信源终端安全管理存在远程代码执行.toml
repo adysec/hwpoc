@@ -1,0 +1,7 @@
+vendor = "北信源"
+name = "北信源终端安全管理存在远程代码执行"
+type = "RCE"
+source = "网传"
+info = "未知"
+date = "08.14"
+label = "0day"

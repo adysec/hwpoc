@@ -1,0 +1,6 @@
+vendor = "蓝凌"
+name = "深圳市蓝凌软件股份有限公司-EKP系统-存在SOL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

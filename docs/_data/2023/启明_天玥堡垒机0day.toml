@@ -1,0 +1,7 @@
+vendor = "启明"
+name = "天玥堡垒机0day"
+type = "RCE"
+source = "社群"
+info = "无详细信息"
+date = "08.09"
+label = "0day"

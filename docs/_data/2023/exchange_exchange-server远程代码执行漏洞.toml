@@ -1,0 +1,7 @@
+vendor = "exchange"
+name = "Exchange Server远程代码执行漏洞"
+type = "RCE"
+source = "csdn"
+info = "CVE-2023-38182 Exchange Server 2019 Cumulative Update 13 Exchange Server 2019 Cumulative Update 12 Exchange Server 2019 Cumulative Update 11 Exchange Server 2016 Cumulative Update 23 需要有普通用户权限"
+date = "08.10"
+label = "1day"

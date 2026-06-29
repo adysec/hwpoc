@@ -1,0 +1,7 @@
+vendor = "致远"
+name = "致远A8V8SP1SP2文件上传漏洞(1day)"
+type = "文件上传"
+source = "微信"
+info = "ajaxdo接口ajaxAction"
+date = "08.09"
+label = "nday"

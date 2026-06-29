@@ -1,0 +1,6 @@
+vendor = "通达"
+name = "通达oa11.10 未授权任意文件上传"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,7 @@
+vendor = "奇安信"
+name = "奇安信天眼RCE"
+type = "RCE"
+source = "社群"
+info = "售价30w已有红队购买"
+date = "08.09"
+label = "1day"

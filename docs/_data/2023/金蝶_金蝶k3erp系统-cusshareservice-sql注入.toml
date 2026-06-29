@@ -1,0 +1,7 @@
+vendor = "金蝶"
+name = "金蝶K3ERP系统 CusShareService SQL注入"
+type = "SQL注入"
+source = "微信群"
+info = "/K3WEB/CRM/WEBSERVICE/CusShareService.asmx"
+date = "08.11"
+label = "0day"

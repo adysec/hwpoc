@@ -1,0 +1,6 @@
+vendor = "华为"
+name = "多款华为防火墙目录遍历漏洞"
+type = "目录遍历"
+source = "DVB"
+date = "08.08"
+label = "nday"

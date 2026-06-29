@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微E-MOBILE6 messageType.do命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

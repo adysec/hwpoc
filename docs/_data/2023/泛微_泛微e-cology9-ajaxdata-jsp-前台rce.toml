@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微e-cology9 ajaxdata.jsp 前台RCE"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

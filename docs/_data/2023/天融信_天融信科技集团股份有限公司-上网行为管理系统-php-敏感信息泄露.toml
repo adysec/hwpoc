@@ -1,0 +1,6 @@
+vendor = "天融信"
+name = "天融信科技集团股份有限公司-上网行为管理系统-php-敏感信息泄露"
+type = "信息泄露"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,7 @@
+vendor = "海康威视"
+name = "海康威视IVMS综合安防系统springbootenv+dump用户名密码"
+type = "信息泄露"
+source = "TG"
+info = "/artemis-portal/artemis/env /artemis-portal/artemis/heapdump"
+date = "08.11"
+label = "nday"

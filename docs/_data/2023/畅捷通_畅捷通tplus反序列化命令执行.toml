@@ -1,0 +1,6 @@
+vendor = "畅捷通"
+name = "畅捷通TPlus反序列化命令执行"
+type = "反序列化"
+source = "DVB"
+date = "08.08"
+label = "nday"

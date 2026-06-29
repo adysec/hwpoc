@@ -1,0 +1,7 @@
+vendor = "拓尔思"
+name = "拓尔思ids 前台反序列化"
+type = "反序列化"
+source = "社区"
+info = "未知"
+date = "08.10"
+label = "0day"

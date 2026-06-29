@@ -1,0 +1,6 @@
+vendor = "奇安信"
+name = "网神 SecGate 3600 防火墙 sys_export_conf_localsave 任意文件读取漏洞"
+type = "任意文件读取"
+source = "DVB"
+date = "08.08"
+label = "nday"

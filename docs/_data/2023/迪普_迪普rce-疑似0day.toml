@@ -1,0 +1,7 @@
+vendor = "迪普"
+name = "迪普rce 疑似0day"
+type = "RCE"
+source = "微信"
+info = "/func/web_main/webservice/system/system Authorization: basic:YWRtaW46YWRtaW5fZGVmYXVsdA== xml注入，filename处执行命令"
+date = "08.14"
+label = "1day"

@@ -1,0 +1,6 @@
+vendor = "畅捷通"
+name = "畅捷通T+存在任意密码重置漏洞"
+type = "认证绕过"
+source = "DVB"
+date = "08.08"
+label = "nday"

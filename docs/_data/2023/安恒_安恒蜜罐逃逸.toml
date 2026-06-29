@@ -1,0 +1,7 @@
+vendor = "安恒"
+name = "安恒蜜罐逃逸"
+type = "认证绕过"
+source = "社区"
+info = "改密泄露"
+date = "08.10"
+label = "1day"

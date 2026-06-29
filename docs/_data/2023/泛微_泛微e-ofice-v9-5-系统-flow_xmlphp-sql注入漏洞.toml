@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微E-Ofice v9.5 系统 flow_xmlphp SQL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

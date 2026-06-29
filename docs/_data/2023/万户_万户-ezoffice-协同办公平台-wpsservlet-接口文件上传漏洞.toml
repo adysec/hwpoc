@@ -1,0 +1,7 @@
+vendor = "万户"
+name = "万户 ezOFFICE 协同办公平台 wpsservlet 接口文件上传漏洞"
+type = "文件上传"
+source = "TG"
+date = "08.14"
+poc = "CContent-Disposition: form-data; name=\"file\"; filename=\"1.png\""
+label = "nday"

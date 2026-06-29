@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微 E-Mobile7 lang2sql文件覆盖漏洞"
+type = "任意文件写入"
+source = "DVB"
+date = "08.08"
+label = "nday"

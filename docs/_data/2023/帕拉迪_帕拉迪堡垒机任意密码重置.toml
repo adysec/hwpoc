@@ -1,0 +1,6 @@
+vendor = "帕拉迪"
+name = "帕拉迪堡垒机任意密码重置"
+type = "认证绕过"
+source = "DVB"
+date = "08.08"
+label = "nday"

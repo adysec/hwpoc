@@ -1,0 +1,6 @@
+vendor = "禅道"
+name = "禅道项目管理系统V16.5登录界面SQL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,6 @@
+vendor = "用友"
+name = "用友ncuapws接口老版本存在数据库账号密码泄露PortalSESInitToolService"
+type = "信息泄露"
+source = "DVB"
+date = "08.08"
+label = "nday"

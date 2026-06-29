@@ -1,0 +1,6 @@
+vendor = "畅捷通"
+name = "畅捷通T+ SOL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

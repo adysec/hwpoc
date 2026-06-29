@@ -1,0 +1,6 @@
+vendor = "中新金盾"
+name = "中新金盾安全管理与运维审计系统前台rce"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

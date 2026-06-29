@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微EOFFICE9 do_excelphp 文件写入漏洞漏洞"
+type = "任意文件写入"
+source = "DVB"
+date = "08.08"
+label = "nday"

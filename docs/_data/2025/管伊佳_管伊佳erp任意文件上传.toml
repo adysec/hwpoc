@@ -1,0 +1,8 @@
+vendor = "管伊佳"
+name = "管伊佳ERP任意文件上传"
+type = "RCE"
+version = "未知"
+path = "未知"
+detail = "未知"
+label = "0day"
+verifier = "sxf"

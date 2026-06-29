@@ -1,0 +1,7 @@
+vendor = "SolarView"
+name = "SolarView Compact downloader.php 任意命令执行漏洞"
+type = "RCE"
+source = "TG"
+info = "CVE-2023-23333 /downloader.php?file=;echo URL请求： base64、bash"
+date = "08.14"
+label = "1day"

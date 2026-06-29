@@ -1,0 +1,6 @@
+vendor = "海康威视"
+name = "海康威视综合安防系统ISecure Center未授权代码执行"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

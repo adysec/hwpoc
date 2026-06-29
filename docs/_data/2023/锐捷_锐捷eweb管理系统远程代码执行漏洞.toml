@@ -1,0 +1,7 @@
+vendor = "锐捷"
+name = "锐捷EWEB管理系统远程代码执行漏洞"
+type = "RCE"
+source = "社群"
+info = "CVE-2023-34644 RG-EW系列家用路由器和中继器EW_30(1)B11P204RG-NBS和RG-S1930系列交换机 SWITCH-3.0(1)B11P218RG-EG 系列商用VPN路由器EG_3.0(1)B11P216、EAP和RAP系列无线接入点AP_3.0(1)B11P218、NBC系列无线控制器 AC_3.0(1)B11P86允许未经授权的远程攻击者通过构建的 POST 请求对/cgi-bin/luci/api/auth 获得最高权限"
+date = "08.09"
+label = "nday"

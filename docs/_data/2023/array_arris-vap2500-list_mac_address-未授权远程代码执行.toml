@@ -1,0 +1,6 @@
+vendor = "Array"
+name = "Arris VAP2500 list_mac_address 未授权远程代码执行"
+type = "RCE"
+source = "TG"
+date = "08.15"
+label = "nday"

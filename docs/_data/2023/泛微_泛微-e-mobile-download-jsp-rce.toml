@@ -1,0 +1,7 @@
+vendor = "泛微"
+name = "泛微 e-Mobile Download.jsp RCE"
+type = "RCE"
+source = "TG"
+info = "/mobile/plugin/Download.jsp?sessionkey="
+date = "08.11"
+label = "0day"

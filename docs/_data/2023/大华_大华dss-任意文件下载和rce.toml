@@ -1,0 +1,7 @@
+vendor = "大华"
+name = "大华dss 任意文件下载和rce"
+type = "RCE"
+source = "TG"
+info = "/portal/login_init.action /portal/itc/attachment_downloadByUrlAtt.action?filePath=file:// content-type字段： /bin/bash cmd.exe"
+date = "08.11"
+label = "1day"

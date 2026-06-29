@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微E-offic-get_lan.php文件包含漏洞"
+type = "文件包含"
+source = "DVB"
+date = "08.08"
+label = "nday"

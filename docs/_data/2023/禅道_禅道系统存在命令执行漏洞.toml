@@ -1,0 +1,6 @@
+vendor = "禅道"
+name = "禅道系统存在命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

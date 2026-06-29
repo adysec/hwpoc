@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} — {{ site.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <script>
+    (function() {
+      var t = localStorage.getItem('theme');
+      if (!t) { t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+      if (t === 'dark') { document.documentElement.setAttribute('data-theme', 'dark'); }
+    })();
+  </script>
+</head>
+<body>
+  {{ content }}
+  <div class="doc-footer">
+    护网漏洞库 · 原数据维护于腾讯文档，因人数限制迁移至此；社区通过 Issue 提交，AdySec 审核维护
+  </div>
+  <script>
+    function toggleTheme() {
+      var html = document.documentElement;
+      var dark = html.getAttribute('data-theme') === 'dark';
+      if (dark) { html.removeAttribute('data-theme'); localStorage.setItem('theme', 'light'); }
+      else { html.setAttribute('data-theme', 'dark'); localStorage.setItem('theme', 'dark'); }
+    }
+  </script>
+</body>
+</html>

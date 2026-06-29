@@ -1,0 +1,6 @@
+vendor = "H3C"
+name = "H3C SecPath (PHP版) 运维审计系统命令注入漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

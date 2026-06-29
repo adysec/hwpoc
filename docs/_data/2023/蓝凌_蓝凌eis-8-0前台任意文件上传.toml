@@ -1,0 +1,7 @@
+vendor = "蓝凌"
+name = "蓝凌eis 8.0前台任意文件上传"
+type = "任意文件上传"
+source = "TG"
+info = "/eis/service/api.aspx?action=saveImg"
+date = "08.11"
+label = "1day"

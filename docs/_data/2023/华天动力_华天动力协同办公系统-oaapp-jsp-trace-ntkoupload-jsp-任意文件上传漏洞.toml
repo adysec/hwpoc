@@ -1,0 +1,6 @@
+vendor = "华天动力"
+name = "华天动力协同办公系统/OAapp/jsp/trace/ntkoupload.jsp 任意文件上传漏洞"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

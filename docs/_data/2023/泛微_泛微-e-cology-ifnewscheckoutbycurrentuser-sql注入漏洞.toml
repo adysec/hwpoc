@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微 E-Cology ifNewsCheckOutByCurrentUser SQL注入漏洞"
+type = "SQL注入"
+source = "微信"
+date = "08.09"
+label = "nday"

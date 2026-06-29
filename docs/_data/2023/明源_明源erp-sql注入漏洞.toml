@@ -1,0 +1,7 @@
+vendor = "明源"
+name = "明源erp sql注入漏洞"
+type = "SQL注入"
+source = "TG"
+info = "/cgztbweb/VisitorWeb/VisitorWeb_XMLHTTP.aspx?ywtype=GetParentProjectName&ParentCode="
+date = "08.14"
+label = "0day"

@@ -1,0 +1,7 @@
+vendor = "用友"
+name = "用友-时空KSOA QueryService sql注入漏洞"
+type = "SQL注入"
+source = "微信群"
+info = "/servlet/com.sksoft.bill.QueryService?service=query&content= 注入点在content"
+date = "08.11"
+label = "nday"

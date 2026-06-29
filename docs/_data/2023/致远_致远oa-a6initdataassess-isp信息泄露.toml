@@ -1,0 +1,6 @@
+vendor = "致远"
+name = "致远OA A6initDataAssess.isp信息泄露"
+type = "信息泄露"
+source = "DVB"
+date = "08.08"
+label = "nday"

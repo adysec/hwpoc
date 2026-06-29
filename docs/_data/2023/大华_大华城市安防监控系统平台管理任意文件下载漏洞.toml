@@ -1,0 +1,7 @@
+vendor = "大华"
+name = "大华城市安防监控系统平台管理任意文件下载漏洞"
+type = "任意文件下载"
+source = "DVB"
+info = "username=justForTest"
+date = "08.08"
+label = "nday"

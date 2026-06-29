@@ -1,0 +1,7 @@
+vendor = "帆软"
+name = "帆软fineReport 10任意文件上传漏洞"
+type = "任意文件上传"
+source = "微信"
+info = "/webroot/decision/url/attach/upload?width=32&height=32&filename="
+date = "08.14"
+label = "nday"

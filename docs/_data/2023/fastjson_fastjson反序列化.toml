@@ -1,0 +1,8 @@
+vendor = "fastjson"
+name = "fastjson反序列化"
+type = "反序列化"
+source = "微信群"
+info = "fastjson<2.0.27 建议升级至>=2.0.27"
+date = "08.09"
+poc = "暂无"
+label = "0day"

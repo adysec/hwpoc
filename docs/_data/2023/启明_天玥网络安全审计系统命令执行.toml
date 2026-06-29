@@ -1,0 +1,6 @@
+vendor = "启明"
+name = "天玥网络安全审计系统命令执行"
+type = "命令执行"
+source = "DVB"
+date = "08.08"
+label = "nday"

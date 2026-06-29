@@ -1,0 +1,7 @@
+vendor = "Kafka"
+name = "Apache Kafka Clients JNDI注入漏洞"
+type = "RCE"
+source = "DVB"
+info = "CVE-2023-25194"
+date = "08.08"
+label = "nday"

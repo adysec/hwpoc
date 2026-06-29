@@ -1,0 +1,7 @@
+vendor = "锐捷"
+name = "锐捷 RG-BCR860 后台命令注入"
+type = "RCE"
+source = "公众号"
+info = "CVE-2023-3450"
+date = "08.10"
+label = "nday"

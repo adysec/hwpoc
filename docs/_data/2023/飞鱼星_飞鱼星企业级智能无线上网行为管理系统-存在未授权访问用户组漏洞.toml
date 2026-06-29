@@ -1,0 +1,7 @@
+vendor = "飞鱼星"
+name = "飞鱼星企业级智能无线上网行为管理系统 存在未授权访问用户组漏洞"
+type = "认证绕过"
+source = "TG"
+info = "/home/advanced/new_user.html?id="
+date = "08.11"
+label = "nday"

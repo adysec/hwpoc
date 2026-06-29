@@ -1,0 +1,6 @@
+vendor = "山石网科"
+name = "山石网科通信技术股份有限公司-EDR杰思安全-OEM-php"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

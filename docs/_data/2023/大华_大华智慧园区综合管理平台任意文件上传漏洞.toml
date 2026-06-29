@@ -1,0 +1,6 @@
+vendor = "大华"
+name = "大华智慧园区综合管理平台任意文件上传漏洞"
+type = "任意文件上传"
+source = "DVB"
+date = "08.08"
+label = "nday"

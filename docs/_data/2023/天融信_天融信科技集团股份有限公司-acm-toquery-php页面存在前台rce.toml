@@ -1,0 +1,6 @@
+vendor = "天融信"
+name = "天融信科技集团股份有限公司-ACM-toQuery.php页面存在前台rce"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,7 @@
+vendor = "DzzOffice"
+name = "协同办公文档未授权访问"
+type = "认证绕过"
+source = "微信"
+info = "据说攻击队利用此0day已打穿上海某单位 不保真"
+date = "08.09"
+label = "1day"

@@ -1,0 +1,7 @@
+vendor = "大为"
+name = "大为lnnojet知识产权协同创新管理系统0day"
+type = "认证绕过"
+source = "微信"
+info = "/resetPwd.html?guid=/"
+date = "08.10"
+label = "nday"

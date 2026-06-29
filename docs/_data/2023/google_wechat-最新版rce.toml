@@ -1,0 +1,6 @@
+vendor = "Google"
+name = "wechat 最新版rce"
+type = "RCE"
+source = "TG、微信"
+date = "08.14"
+label = "0day"

@@ -1,0 +1,7 @@
+vendor = "安恒"
+name = "安恒明御WAF report.php任意用户登录"
+type = "认证绕过"
+source = "社群"
+info = "21年的老洞，4.6.34以上已修复，建议升级到4.6.51及以上版本"
+date = "08.10"
+label = "nday"

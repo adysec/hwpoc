@@ -1,0 +1,6 @@
+vendor = "圣博润"
+name = "LanSecS第二代防火墙存在代码执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

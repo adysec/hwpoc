@@ -1,0 +1,6 @@
+vendor = "奇安信"
+name = "奇安信行为感知系统未授权任意登录"
+type = "认证绕过"
+source = "DVB"
+date = "08.08"
+label = "nday"

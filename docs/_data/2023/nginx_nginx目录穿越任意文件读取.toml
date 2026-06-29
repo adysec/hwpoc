@@ -1,0 +1,8 @@
+vendor = "nginx"
+name = "nginx目录穿越任意文件读取"
+type = "任意文件读取"
+source = "TG"
+info = "version<=1.25.0 1.25.1不存在"
+date = "08.10"
+poc = "我造的假视频"
+label = "0day"

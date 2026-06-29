@@ -1,0 +1,6 @@
+vendor = "用友"
+name = "用友畅捷通任意文件下载漏洞"
+type = "任意文件下载"
+source = "DVB"
+date = "08.08"
+label = "nday"

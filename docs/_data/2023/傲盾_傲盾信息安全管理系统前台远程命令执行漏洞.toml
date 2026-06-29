@@ -1,0 +1,7 @@
+vendor = "傲盾"
+name = "傲盾信息安全管理系统前台远程命令执行漏洞"
+type = "RCE"
+source = "微信"
+info = "/user_management/sichuan_login 请求体： loginname=sysadmin&ticket="
+date = "08.11"
+label = "1day"

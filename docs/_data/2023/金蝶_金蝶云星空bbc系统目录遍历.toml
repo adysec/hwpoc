@@ -1,0 +1,6 @@
+vendor = "金蝶"
+name = "金蝶云星空BBC系统目录遍历"
+type = "目录目录遍历"
+source = "DVB"
+date = "08.08"
+label = "nday"

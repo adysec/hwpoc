@@ -1,0 +1,7 @@
+vendor = "万户"
+name = "万户Ezoffice 协同管理平台rce"
+type = "RCE"
+source = "TG"
+date = "08.15"
+poc = "--189d9163681--"
+label = "nday"

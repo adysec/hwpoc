@@ -1,0 +1,7 @@
+vendor = "思迈特"
+name = "Smartbi 未授权访问及 JDBC 任意代码执行漏洞"
+type = "RCE"
+source = "微信"
+info = "Smartbi <= V10 getPassword接口"
+date = "08.11"
+label = "nday"

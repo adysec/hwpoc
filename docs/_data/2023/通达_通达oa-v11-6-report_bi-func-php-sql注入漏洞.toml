@@ -1,0 +1,6 @@
+vendor = "通达"
+name = "通达OA v11.6 report_bi.func.php SQL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

@@ -1,0 +1,6 @@
+vendor = "安博通"
+name = "安博通OEM产品任意命令执行"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

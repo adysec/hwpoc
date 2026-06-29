@@ -1,0 +1,6 @@
+vendor = "金和"
+name = "金和OA-C6-getTreeDate-SQL注入"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

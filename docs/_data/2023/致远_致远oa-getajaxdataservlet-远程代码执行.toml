@@ -1,0 +1,6 @@
+vendor = "致远"
+name = "致远OA getAjaxDataServlet 远程代码执行"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

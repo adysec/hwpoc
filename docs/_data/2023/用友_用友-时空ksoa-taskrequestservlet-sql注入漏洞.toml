@@ -1,0 +1,7 @@
+vendor = "用友"
+name = "用友-时空KSOA TaskRequestServlet sql注入漏洞"
+type = "SQL注入"
+source = "微信群"
+info = "/servlet/com.sksoft.v8.trans.servlet.TaskRequestServlet?unitid= 注入点在unitid"
+date = "08.11"
+label = "nday"

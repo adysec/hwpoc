@@ -1,0 +1,6 @@
+vendor = "鼎成科技"
+name = "SECCN G20 VPN防火墙后台命令注入"
+type = "RCE"
+source = "DVB"
+date = "08.08"
+label = "nday"

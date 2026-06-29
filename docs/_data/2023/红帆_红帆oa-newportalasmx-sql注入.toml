@@ -1,0 +1,6 @@
+vendor = "红帆"
+name = "红帆oa newportalasmx sql注入"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

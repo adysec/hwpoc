@@ -1,0 +1,6 @@
+vendor = "极限"
+name = "极限OA 文件包含攻击"
+type = "任意文件读取"
+source = "DVB"
+date = "08.08"
+label = "nday"

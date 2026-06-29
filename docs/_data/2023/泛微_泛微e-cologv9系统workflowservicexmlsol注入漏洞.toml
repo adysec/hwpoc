@@ -1,0 +1,6 @@
+vendor = "泛微"
+name = "泛微e-cologv9系统WorkflowServiceXmlSOL注入漏洞"
+type = "SQL注入"
+source = "DVB"
+date = "08.08"
+label = "nday"

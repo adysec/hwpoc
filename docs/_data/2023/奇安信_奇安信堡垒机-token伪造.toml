@@ -1,0 +1,6 @@
+vendor = "奇安信"
+name = "奇安信堡垒机 token伪造"
+type = "认证绕过"
+source = "DVB"
+date = "08.08"
+label = "nday"

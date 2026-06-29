@@ -1,0 +1,7 @@
+vendor = "未知"
+name = "某多个oem 防火墙前台rce 1"
+type = "远程命令执行"
+source = "DVB"
+info = "未公开"
+date = "08.08"
+label = "未知"

@@ -1,0 +1,6 @@
+vendor = "畅捷通"
+name = "畅捷通任意文件删除"
+type = "任意文件删除"
+source = "DVB"
+date = "08.08"
+label = "nday"

