@@ -130,10 +130,8 @@ def page(title, body, current_year=None):
     return html
 
 def label_badge(l):
-    m = {"0day": "zday", "1day": "oney", "nday": "nday"}
-    cls = m.get(l, "")
-    if cls:
-        return '<span class="label label-%s">%s</span>' % (cls, l)
+    if l in ("0day", "1day", "nday"):
+        return '<span class="label label-%s">%s</span>' % (l, l)
     return l
 
 def build_index():
