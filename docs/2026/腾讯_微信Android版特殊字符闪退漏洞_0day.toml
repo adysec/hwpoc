@@ -1,0 +1,9 @@
+vendor = "腾讯"
+name = "微信 Android 版特殊字符会话消息闪退漏洞"
+type = "拒绝服务"
+version = "Android 最新版 8.0.74（已验证）；iOS/Windows 不确定；Linux 不受影响"
+detail = """向目标发送 \\n\\a（0x0a 0x07）消息触发 Android 微信闪退。BEL 字符(0x07)导致渲染异常进程崩溃。"""
+fix = "暂未修复"
+date = 20260708
+label = "0day"
+verifier = "AdySec"

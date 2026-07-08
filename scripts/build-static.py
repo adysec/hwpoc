@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """Build static HTML pages from TOML data files."""
 
-import tomllib
+import tomllib, html
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
-DATA = BASE / "docs" / "_data"
-OUT = BASE / "docs"
-CSS = Path(BASE / "docs" / "assets" / "css" / "style.css").read_text()
+DATA = BASE / "docs"
+OUT = BASE
+CSS = (BASE / "assets" / "css" / "style.css").read_text()
 
 TAB_BAR = '<div class="sheet-bar">{tabs}<a class="sheet-add" href="#" onclick="openModal();return false" title="提交漏洞">＋</a></div>'
 
 TOP_BAR = """<div class="doc-topbar">
-  <div class="doc-title"><a href="index.html">护网漏洞库</a> <small>护网漏洞情报</small></div>
+  <div class="doc-title"><a href="index.html">护网漏洞库</a> <small>by AdySec</small></div>
   <div class="doc-actions">
     <button class="theme-btn" onclick="toggleTheme()" title="切换主题">🌙</button>
     <a class="btn" href="#" onclick="openModal();return false">＋ 提交漏洞</a>
@@ -20,12 +20,14 @@ TOP_BAR = """<div class="doc-topbar">
   </div>
 </div>"""
 
-FOOTER = '<div class="doc-footer">护网漏洞库 · 原数据维护于腾讯文档，因人数限制迁移至此；社区通过 Issue 提交，AdySec 审核维护</div>'
+FOOTER = '<div class="doc-footer">护网漏洞库 · 原数据维护于腾讯文档，因人数限制迁移至此；社区通过 Issue 提交 · <a href="mailto:admin@adysec.com">AdySec &lt;admin@adysec.com&gt;</a></div>'
 
 SCRIPT = """<script>
-(function(){var si=document.getElementById('searchInput');if(si){si.addEventListener('input',function(){
-var q=this.value.toLowerCase();document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
-r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'})})}})();
+(function(){var si=document.getElementById('searchInput'),ss=document.getElementById('searchCol');if(si&&ss){
+var cols={'全部':-1};document.querySelectorAll('#vulnTable thead th').forEach(function(th,i){cols[th.textContent.trim().replace(/\\s*↕\\s*/,'')]=i});
+function doSearch(){var q=si.value.toLowerCase(),col=parseInt(ss.value);document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
+r.style.display=(col<0?r.textContent.toLowerCase().includes(q):(r.cells[col]||{}).textContent.toLowerCase().includes(q))?'':'none'})}
+si.addEventListener('input',doSearch);ss.addEventListener('change',doSearch)}})();
 (function(){document.querySelectorAll('#vulnTable thead th').forEach(function(th){th.addEventListener('click',function(){
 var tb=document.querySelector('#vulnTable tbody'),rows=Array.from(tb.querySelectorAll('tr')),col=parseInt(th.dataset.col),
 asc=!th.classList.contains('sort-asc');document.querySelectorAll('#vulnTable thead th').forEach(function(h){
@@ -65,9 +67,16 @@ MODAL = """<div class="modal-overlay" id="submitModal">
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal()">取消</button>
-      <button class="btn" onclick="submitVuln(MODAL_YEAR)">提交 Issue</button>
+    <div class="modal-footer" style="flex-direction:column;align-items:stretch;gap:6px">
+      <div style="font-size:12px;color:var(--text-muted);text-align:center">
+        提交方式一：填写表单 → 自动创建 Issue（推荐）<br>
+        提交方式二：直接 PR 到 <code style="background:var(--tag-bg);padding:1px 4px;border-radius:2px;font-size:11px">docs/{year}/</code> 目录新增 TOML 文件<br>
+        提交方式三：发送邮件至 <a href="mailto:admin@adysec.com" style="color:var(--primary)">admin@adysec.com</a>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-outline" onclick="closeModal()">取消</button>
+        <button class="btn" onclick="submitVuln(MODAL_YEAR)">提交 Issue</button>
+      </div>
     </div>
   </div>
 </div>"""
@@ -115,7 +124,7 @@ def page(title, body, current_year=None):
     modal_year = current_year or ""
     html = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n"
     html += "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n"
-    html += "<title>%s — 护网漏洞库</title>\n" % title
+    html += "<title>%s — 护网漏洞库 by AdySec</title>\n" % title
     html += "<style>%s</style>\n" % CSS
     html += "<script>(function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark')}})();</script>\n"
     html += "</head>\n<body>\n"
@@ -130,10 +139,8 @@ def page(title, body, current_year=None):
     return html
 
 def label_badge(l):
-    m = {"0day": "zday", "1day": "oney", "nday": "nday"}
-    cls = m.get(l, "")
-    if cls:
-        return '<span class="label label-%s">%s</span>' % (cls, l)
+    if l in ("0day", "1day", "nday"):
+        return '<span class="label label-%s">%s</span>' % (l, l)
     return l
 
 def build_index():
@@ -145,8 +152,9 @@ def build_index():
         % (y, c, y) for y, c in counts.items()
     )
     body = '<div class="home-page">\n'
-    body += '<h2>护网漏洞库</h2>\n'
+    body += '<h2>护网漏洞库 <small style="font-size:14px;color:var(--text-muted);font-weight:400">by AdySec</small></h2>\n'
     body += '<p>护网（HW）期间漏洞情报汇总 · 0day / 1day / nday</p>\n'
+    body += '<p style="font-size:13px;color:var(--text-muted);margin-top:12px">提交漏洞：① 创建 Issue ｜ ② PR 到 <code>docs/{year}/</code> ｜ ③ 邮件 <a href="mailto:admin@adysec.com" style="color:var(--primary)">admin@adysec.com</a></p>\n'
     body += '<div class="home-cards">%s</div>\n' % cards
     body += '<div class="home-links">\n'
     body += '<a class="btn" href="#" onclick="openModal();return false">＋ 提交漏洞</a>\n'
@@ -167,13 +175,13 @@ def build_year(year):
         rows = []
         for d in data:
             rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td>%s</td><td><span class=\"tag\">%s</span></td>"
+                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td><td><span class=\"tag\">%s</span></td>"
                 "<td>%s</td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td>%s</td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td>%s</td></tr>"
-                % (d.get("vendor",""), d.get("name",""), d.get("type",""),
-                   d.get("source",""), d.get("info",""), d.get("date",""),
-                   d.get("poc",""), label_badge(d.get("label","")))
+                % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
+                   html.escape(str(d.get("source",""))), html.escape(str(d.get("info",""))), html.escape(str(d.get("date",""))),
+                   html.escape(str(d.get("poc",""))), label_badge(d.get("label","")))
             )
     else:
         has_verifier = (year in ("2025", "2026"))
@@ -183,17 +191,17 @@ def build_year(year):
             headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"]
         rows = []
         for d in data:
-            verifier_cell = "<td>%s</td>" % d.get("verifier","") if has_verifier else ""
+            verifier_cell = "<td>%s</td>" % html.escape(str(d.get("verifier",""))) if has_verifier else ""
             rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td>%s</td><td><span class=\"tag\">%s</span></td>"
+                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td><td><span class=\"tag\">%s</span></td>"
                 "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
                 "<td>%s</td><td>%s</td>%s</tr>"
-                % (d.get("vendor",""), d.get("name",""), d.get("type",""),
-                   d.get("version",""), d.get("path",""), d.get("detail",""),
-                   d.get("fix",""), d.get("date",""), label_badge(d.get("label","")),
+                % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
+                   html.escape(str(d.get("version",""))), html.escape(str(d.get("path",""))), html.escape(str(d.get("detail",""))),
+                   html.escape(str(d.get("fix",""))), html.escape(str(d.get("date",""))), label_badge(d.get("label","")),
                    verifier_cell)
             )
 
@@ -207,8 +215,13 @@ def build_year(year):
 
     body = '<div class="toolbar">\n'
     body += '<div class="search-wrap"><span class="icon">🔍</span>\n'
-    body += '<input type="text" id="searchInput" placeholder="搜索厂商、漏洞名称、类型...">\n'
+    body += '<input type="text" id="searchInput" placeholder="搜索...">\n'
     body += '</div>\n'
+    body += '<select id="searchCol" style="padding:4px 8px;font-size:12px;border:1px solid var(--btn-outline-border);border-radius:4px;background:var(--surface);color:var(--text);outline:none">\n'
+    body += '<option value="-1">全部列</option>\n'
+    for i, h in enumerate(headers):
+        body += '<option value="%d">%s</option>\n' % (i, h)
+    body += '</select>\n'
     body += '<span class="stat-badge total">共 %d 条</span>\n' % len(data)
     body += '<span class="stat-badge zday">0day %d</span>\n' % count_0day
     body += '<span class="stat-badge oney">1day %d</span>\n' % count_1day

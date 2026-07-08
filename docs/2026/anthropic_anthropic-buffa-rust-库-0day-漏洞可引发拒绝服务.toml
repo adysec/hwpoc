@@ -1,0 +1,10 @@
+vendor = "Anthropic"
+name = "Anthropic Buffa Rust 库 0Day 漏洞可引发拒绝服务"
+type = "拒绝服务"
+version = "0.8.0"
+detail = "向使用 buffa 解析 protobuf 的应用发送特制消息，触发解码器中的无限制内存分配，单条消息放大 22x"
+fix = "升级至 buffa >= 0.8.0"
+date = 20260630
+label = "nday"
+cve = "CVE-2026-55407"
+verifier = "AdySec"

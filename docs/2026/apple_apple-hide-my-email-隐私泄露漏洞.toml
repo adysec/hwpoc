@@ -1,0 +1,9 @@
+vendor = "Apple"
+name = "Apple Hide My Email 隐私泄露漏洞"
+type = "信息泄露"
+detail = "无公开 PoC"
+fix = "尚未修复"
+date = 20260501
+label = "0day"
+cve = "TVD-2026-XXXXX"
+verifier = "AdySec"

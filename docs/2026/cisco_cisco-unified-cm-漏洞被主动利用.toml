@@ -1,0 +1,12 @@
+vendor = "Cisco"
+name = "Cisco Unified CM 漏洞被主动利用"
+type = "代码注入"
+version = "12.5/14.x"
+path = "/cucm-uds/"
+detail = """';id#
+https://github.com/dkstar11q/Ashwesker-CVE-2026-20045"""
+fix = "安装官方补丁"
+date = 20260121
+label = "nday"
+cve = "CVE-2026-20045"
+verifier = "AdySec"

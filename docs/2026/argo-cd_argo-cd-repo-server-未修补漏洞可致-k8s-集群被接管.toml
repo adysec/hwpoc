@@ -1,0 +1,9 @@
+vendor = "Argo CD"
+name = "Argo CD Repo-Server 未修补漏洞可致 K8s 集群被接管"
+type = "远程代码执行"
+detail = "Synacktiv 工具 argo-cdown（暂未公开）"
+fix = "无官方修复"
+date = 20260515
+label = "0day"
+cve = "CVE-2026-XXXXX"
+verifier = "AdySec"

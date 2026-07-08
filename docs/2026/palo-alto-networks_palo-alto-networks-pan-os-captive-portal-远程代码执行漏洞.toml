@@ -1,0 +1,13 @@
+vendor = "palo-alto-networks"
+name = "Palo Alto Networks PAN-OS Captive Portal 远程代码执行漏洞"
+type = "远程代码执行"
+path = "/auth/"
+version = "10.2.13"
+detail = """GET /auth/?username='A'*2000+'BBBB'+'C'*500 HTTP/1.1 Host: target
+
+https://github.com/qassam-315/PAN-OS-User-ID-Buffer-Overflow-PoC"""
+fix = "升级至 11.1.6-h7+ / 10.2.13-h6+"
+date = 20260506
+label = "nday"
+cve = "CVE-2026-0300"
+verifier = "AdySec"

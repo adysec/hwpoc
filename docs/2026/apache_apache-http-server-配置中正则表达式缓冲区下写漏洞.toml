@@ -1,0 +1,10 @@
+vendor = "apache"
+name = "Apache HTTP Server 配置中正则表达式缓冲区下写漏洞"
+type = "缓冲区溢出"
+version = "2.4.68"
+detail = "无公开 PoC"
+fix = "升级至 2.4.68+"
+date = 20260608
+label = "1day"
+cve = "CVE-2026-44631"
+verifier = "AdySec"

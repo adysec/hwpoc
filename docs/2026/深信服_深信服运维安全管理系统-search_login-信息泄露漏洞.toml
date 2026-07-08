@@ -1,0 +1,11 @@
+vendor = "深信服"
+name = "深信服运维安全管理系统 search_login 信息泄露漏洞"
+type = "信息泄露"
+path = "/search_login"
+detail = """HMAC-SHA256 密钥: 69fad654821b991725e62fb65ee464da
+Authorization: Bearer <伪造JWT>"""
+fix = "联系厂商获取补丁"
+date = 20260415
+label = "nday"
+cve = "TVD-2026-08538"
+verifier = "AdySec"

@@ -1,0 +1,20 @@
+vendor = "宏景科技 (HJSOFT)"
+name = "宏景 eHR designateTask.do SQL注入漏洞"
+type = "SQL注入"
+version = "宏景 eHR HCM 全版本（designateTask.do 接口未授权访问）"
+path = "/performance/objectiveManage/designateTask.do"
+detail = """宏景 eHR HCM 系统 /performance/objectiveManage/designateTask.do 接口存在未授权 SQL 注入漏洞。攻击者可通过 taskid 参数注入恶意 SQL 语句，无需身份认证即可获取数据库敏感信息。
+
+漏洞利用方式：
+GET /performance/objectiveManage/designateTask.do?b_save&taskid=-1-user HTTP/1.1
+Host: target
+
+其中 taskid 参数为用户可控输入点，未经过滤直接拼接至 SQL 查询。后端使用 Microsoft SQL Server 数据库，支持错误回显注入、UNION 查询、布尔盲注等利用方式。
+
+攻击者可获取数据库中的管理员后台密码、站点用户个人信息等敏感数据，在高权限场景下可通过 xp_cmdshell 等扩展存储过程执行系统命令或写入 Webshell，进一步获取服务器权限。
+
+该漏洞可通过 Nuclei 模板（hongjingeHR-designateTask_do-sql）进行批量检测。"""
+fix = "对 designateTask.do 接口添加身份认证；taskid 参数改为参数化查询；WAF 拦截 SQL 注入特征；数据库回收高权限（禁用 xp_cmdshell）；该接口仅限内网访问。"
+date = 20260301
+label = "nday"
+verifier = "AdySec"

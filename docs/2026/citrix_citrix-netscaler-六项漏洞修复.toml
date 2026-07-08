@@ -1,0 +1,13 @@
+vendor = "Citrix"
+name = "Citrix NetScaler 六项漏洞修复"
+type = "任意文件读取"
+path = "/saml/login"
+version = "14.1 < 14.1-72.61 / 13.1 < 13.1-63.18"
+detail = """POST /saml/login HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
+发送 padding 476 空格的特制 SAML 请求触发 out-of-bounds read
+GET /<path>?file=../../etc/passwd"""
+fix = "升级至 14.1-72.61+ / 13.1-63.18+"
+date = 20260630
+label = "nday"
+cve = "CVE-2026-8451"
+verifier = "AdySec"

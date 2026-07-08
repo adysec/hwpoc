@@ -1,0 +1,11 @@
+vendor = "悟空CRM"
+name = "悟空CRM queryUserList 登录绕过漏洞"
+type = "登录绕过"
+path = "/queryUserList"
+version = ""
+detail = "GET /queryUserList HTTP/1.1 Host: target"
+fix = "升级至最新版"
+date = 20260501
+label = "nday"
+cve = "TVD-2026-10475"
+verifier = "AdySec"

