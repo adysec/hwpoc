@@ -1,12 +1,15 @@
-vendor = "cisco"
+vendor = "Cisco"
 name = "Cisco Unified Communications 多产品代码注入漏洞"
 type = "代码注入"
-path = "/vmrest/"
-version = "12.6"
-detail = """POST /vmrest/ HTTP/1.1 Host: target <ysoserial payload>
+path = "/cucm-uds/ /vmrest/ /cucemapi/ /ccm100/"
+version = "12.5/14.x / 12.6"
+detail = """POST /cucm-uds/ HTTP/1.1 Host: target ';id#
+POST /vmrest/ HTTP/1.1 Host: target <ysoserial payload>
 POST /cucemapi/ HTTP/1.1 Host: target <ysoserial payload>
-POST /ccm100/ HTTP/1.1 Host: target <ysoserial payload>"""
-fix = "升级至 15SU2 / 12.6(2)ES04"
+POST /ccm100/ HTTP/1.1 Host: target <ysoserial payload>
+
+https://github.com/dkstar11q/Ashwesker-CVE-2026-20045"""
+fix = "升级至 15SU2 / 12.6(2)ES04；安装官方补丁"
 date = 20260121
 label = "nday"
 cve = "CVE-2026-20045"

