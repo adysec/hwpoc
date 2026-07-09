@@ -34,6 +34,8 @@ asc=!th.classList.contains('sort-asc');document.querySelectorAll('#vulnTable the
 h.classList.remove('sort-asc','sort-desc')});th.classList.add(asc?'sort-asc':'sort-desc');rows.sort(function(a,b){
 var va=(a.cells[col]||{}).textContent||'',vb=(b.cells[col]||{}).textContent||'';
 return asc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh')});rows.forEach(function(r){tb.appendChild(r)})})})})();
+function copyCell(el){el.classList.toggle('expand');var t=el.textContent.trim();if(!t)return;
+navigator.clipboard.writeText(t).then(function(){var o=el.style.outline;el.style.outline='2px solid var(--primary)';setTimeout(function(){el.style.outline=o},600)}).catch(function(){})}
 </script>"""
 
 MODAL = """<div class="modal-overlay" id="submitModal">
@@ -175,9 +177,9 @@ def build_year(year):
         rows = []
         for d in data:
             rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td><td><span class=\"tag\">%s</span></td>"
-                "<td>%s</td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
-                "<td>%s</td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
+                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td><td><span class=\"tag\">%s</span></td>"
+                "<td>%s</td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
+                "<td>%s</td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
                 "<td>%s</td></tr>"
                 % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
                    html.escape(str(d.get("source",""))), html.escape(str(d.get("info",""))), html.escape(str(d.get("date",""))),
@@ -193,11 +195,11 @@ def build_year(year):
         for d in data:
             verifier_cell = "<td>%s</td>" % html.escape(str(d.get("verifier",""))) if has_verifier else ""
             rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td><td><span class=\"tag\">%s</span></td>"
-                "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"this.classList.toggle('expand')\">%s</td>"
+                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td><td><span class=\"tag\">%s</span></td>"
+                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
+                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
+                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
+                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
                 "<td>%s</td><td>%s</td>%s</tr>"
                 % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
                    html.escape(str(d.get("version",""))), html.escape(str(d.get("path",""))), html.escape(str(d.get("detail",""))),
