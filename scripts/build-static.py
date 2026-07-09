@@ -35,7 +35,7 @@ h.classList.remove('sort-asc','sort-desc')});th.classList.add(asc?'sort-asc':'so
 var va=(a.cells[col]||{}).textContent||'',vb=(b.cells[col]||{}).textContent||'';
 return asc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh')});rows.forEach(function(r){tb.appendChild(r)})})})})();
 function copyCell(el){el.classList.toggle('expand');var t=el.textContent.trim();if(!t)return;
-navigator.clipboard.writeText(t).then(function(){var o=el.style.outline;el.style.outline='2px solid var(--primary)';setTimeout(function(){el.style.outline=o},600)}).catch(function(){})}
+navigator.clipboard.writeText(t).then(function(){var to=document.getElementById('toast');if(!to){to=document.createElement('div');to.id='toast';document.body.appendChild(to)}to.textContent='✓ 已复制: '+t.substring(0,40)+(t.length>40?'...':'');to.style.opacity='1';clearTimeout(to._t);to._t=setTimeout(function(){to.style.opacity='0'},2000)}).catch(function(){})}
 </script>"""
 
 MODAL = """<div class="modal-overlay" id="submitModal">
