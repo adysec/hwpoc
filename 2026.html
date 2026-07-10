@@ -333,9 +333,9 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 143 条</span>
+<span class="stat-badge total">共 144 条</span>
 <span class="stat-badge zday">0day 12</span>
-<span class="stat-badge oney">1day 11</span>
+<span class="stat-badge oney">1day 12</span>
 <span class="stat-badge nday">nday 120</span>
 </div>
 <div class="table-wrap">
@@ -349,7 +349,12 @@ Linux 发行版跟进状态：
   - Ubuntu: 24.10+ / 24.04 LTS HWE
   - RHEL: 9.5+ / 8.11+
   - Debian: 13+ / 12 backport
-临时缓解：sysfs 关闭嵌套虚拟化（echo N | tee /sys/module/kvm_intel/parameters/nested）；部署 livepatch/kpatch 热补丁；限制不可信 VM 的嵌套虚拟化权限。</td><td>20260709</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">OPNsense</span></td><td class="cell-hover" onclick="copyCell(this)">OPNsense GeoIP Alias Importer 任意文件写入致 Root RCE CVE-2026-57155</td><td><span class="tag">任意文件写入→权限提升→RCE</span></td><td class="cell-hover" onclick="copyCell(this)">&lt;= 26.1.10 / &lt;= 26.4.1</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">GeoIP Alias Importer 功能未对 country_code 字段做路径过滤，攻击者可构造恶意 GeoIP 数据库，使 country_code 包含 ../ 路径遍历序列，以 Root 权限将文件写入任意位置。结合系统默认 newsyslog 定时任务实现 Root 权限任意代码执行。需 Firewall: Alias: Edit 权限。</td><td class="cell-hover" onclick="copyCell(this)">升级至 26.1.11 / 26.4.1p1（官方已修复，无有效临时缓解方案）；
+临时缓解：sysfs 关闭嵌套虚拟化（echo N | tee /sys/module/kvm_intel/parameters/nested）；部署 livepatch/kpatch 热补丁；限制不可信 VM 的嵌套虚拟化权限。</td><td>20260709</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender RoguePlanet 本地权限提升漏洞 CVE-2026-50656</td><td><span class="tag">本地权限提升</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine &lt; 1.1.26060.3008；影响 Windows 10/11（完整更新后仍受影响）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine.dll 恶意软件防护引擎存在竞争条件漏洞（CVE-2026-50656，代号 RoguePlanet），攻击者可通过路径重定向竞争条件获取 SYSTEM 最高权限。影响 Windows 10/11 完整更新系统。服务器版需更换利用方式仍受影响。
+
+PoC: https://github.com/MSNightmare/RoguePlane
+验证报告: https://github.com/g0thamRabb1t/CVE-2026-50656-rogueplanet-validation</td><td class="cell-hover" onclick="copyCell(this)">升级恶意软件防护引擎至 1.1.26060.3008+（自动更新默认同步）；
+微软官方建议开启自动更新确保特征库与引擎版本及时更新；
+注意：即使关闭实时防护 PoC 仍可成功利用，需确保引擎版本已修复。</td><td>20260709</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">OPNsense</span></td><td class="cell-hover" onclick="copyCell(this)">OPNsense GeoIP Alias Importer 任意文件写入致 Root RCE CVE-2026-57155</td><td><span class="tag">任意文件写入→权限提升→RCE</span></td><td class="cell-hover" onclick="copyCell(this)">&lt;= 26.1.10 / &lt;= 26.4.1</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">GeoIP Alias Importer 功能未对 country_code 字段做路径过滤，攻击者可构造恶意 GeoIP 数据库，使 country_code 包含 ../ 路径遍历序列，以 Root 权限将文件写入任意位置。结合系统默认 newsyslog 定时任务实现 Root 权限任意代码执行。需 Firewall: Alias: Edit 权限。</td><td class="cell-hover" onclick="copyCell(this)">升级至 26.1.11 / 26.4.1p1（官方已修复，无有效临时缓解方案）；
 收紧 Firewall: Alias: Edit 权限分配，遵循最小权限原则；
 检查 GeoIP Alias 配置中是否存在异常下载地址及来源不明的 GeoIP 数据库；
 监控 newsyslog 定时任务执行情况及 Root 权限相关日志。</td><td>20260709</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">OpenCode</span></td><td class="cell-hover" onclick="copyCell(this)">OpenCode content 接口任意文件读取漏洞</td><td><span class="tag">任意文件读取</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/content/</td><td class="cell-hover" onclick="copyCell(this)">GET /content/..;/etc/passwd HTTP/1.1 Host: target
