@@ -1,0 +1,10 @@
+vendor = "OpenClaw"
+name = "OpenClaw 绑定挂载路径遍历沙箱绕过漏洞 GHSA-575v-8hfq-m3mc"
+type = "路径遍历"
+version = "< 2026.6.6"
+detail = """OpenClaw 绑定挂载拒绝列表仅检查源路径是否在阻塞路径下，未反向检查阻塞路径是否位于源路径之下。挂载 /home 可读取所有用户 SSH 密钥/AWS 凭证/GPG 机密；挂载 /var 可获取 Docker socket 实现沙箱逃逸。CVSS 8.4。"""
+fix = "升级至 >= 2026.6.6；为所有非主会话启用沙箱模式；将受影响功能限制在可信运营商之间；不必要时禁用受影响功能。"
+date = 20260713
+label = "1day"
+cve = "GHSA-575v-8hfq-m3mc"
+verifier = "AdySec"

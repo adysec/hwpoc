@@ -1,0 +1,10 @@
+vendor = "OpenClaw"
+name = "OpenClaw 主机执行环境 OS 命令注入漏洞 GHSA-9969-8g9h-rxwm"
+type = "远程代码执行"
+version = "< 2026.6.6"
+detail = """OpenClaw 主机执行环境过滤机制存在 OS 命令注入和不完整的不允许输入列表漏洞，可导致执行或持久执行超出调用者预授权范围的操作。CVSS 8.8。"""
+fix = "升级至 >= 2026.6.6；为所有非主会话启用沙箱模式；通道和工具允许列表缩至最小范围；避免在互不信任的用户间共享同一网关。"
+date = 20260713
+label = "1day"
+cve = "GHSA-9969-8g9h-rxwm"
+verifier = "AdySec"
