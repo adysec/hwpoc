@@ -1,0 +1,19 @@
+vendor = "Google"
+name = "Google Chrome 资源管理错误漏洞 CNVD-2026-23387"
+type = "资源管理错误"
+version = "Chrome < 128.0.6613.119（2026年7月稳定版更新前）"
+path = "chrome:// 通过特制 HTML 页面或 WebAPI 调用触发"
+detail = """Google Chrome 存在资源管理错误漏洞（CNVD-2026-23387），涉及浏览器内核在处理特定 WebAPI 或渲染过程中的资源生命周期管理缺陷。攻击者可通过诱导用户访问特制网页，利用资源释放后重用或资源状态不一致触发内存破坏，导致拒绝服务或潜在的沙箱内任意代码执行。
+
+CNVD 收录日期：2026-07-13
+该漏洞暂无对应 CVE 编号，暂未发现公开 PoC 及 GitHub 利用代码。截至披露日，adysec/nuclei_poc 中尚无对应 Nuclei 检测模板。"""
+fix = """临时缓解措施：
+1. 升级至 Chrome 128.0.6613.119 及以上版本，该版本包含 CNVD 收录的相关安全修复；
+2. 启用 Chrome 的安全浏览增强保护：chrome://settings/security → 选择"增强保护"；
+3. 开启严格站点隔离：chrome://settings/security → 使用"始终使用严格站点隔离"；
+4. 企业环境通过组策略（GPO/MDM）强制推送浏览器更新并启用 SitePerProcess；
+5. 在补丁部署完成前，限制用户对不可信网站的访问，避免点击可疑链接。"""
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-23387"
+verifier = "AdySec"
