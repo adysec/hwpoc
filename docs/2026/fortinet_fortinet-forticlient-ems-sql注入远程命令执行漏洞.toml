@@ -1,4 +1,4 @@
-vendor = "fortinet"
+vendor = "Fortinet"
 name = "Fortinet FortiClient EMS SQL注入远程命令执行漏洞"
 type = "SQL注入"
 path = "/api/v1/init_consts"

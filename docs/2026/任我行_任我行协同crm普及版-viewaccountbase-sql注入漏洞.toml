@@ -4,7 +4,7 @@ type = "SQL注入"
 path = "/viewAccountBase"
 version = ""
 detail = """GET /viewAccountBase?key=1' UNION SELECT @@version-- HTTP/1.1 Host: target"""
-fix = "升级至最新版本"
+fix = "联系任我行厂商获取安全补丁；对 viewAccountBase 的 key 参数实施参数化查询；限制该接口仅允许内网访问；WAF 拦截 SQL 注入特征。"
 date = 20260401
 label = "nday"
 cve = "TVD-2026-07626"

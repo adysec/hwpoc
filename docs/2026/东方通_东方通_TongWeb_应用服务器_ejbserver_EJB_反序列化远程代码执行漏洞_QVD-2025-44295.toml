@@ -6,7 +6,7 @@ version = "6.1.8"
 detail = """POST /ejbserver/ejb HTTP/1.1 Host: target:8088 Content-Type: application/x-java-serialized-object
 
 [OEJP/1.1 + 序列化数据]"""
-fix = "升级至官方补丁"
+fix = "联系东方通技术支持获取 QVD-2025-44295 对应补丁；临时缓解：在 TongWeb 管理控制台禁用 EJB 远程调用协议；在反向代理层限制 /ejbserver/ejb 接口的访问来源 IP；添加 JVM 反序列化过滤器 -Djdk.serialFilter=!*；监控异常的序列化流量。"
 date = 20251105
 label = "nday"
 cve = "QVD-2025-44295"

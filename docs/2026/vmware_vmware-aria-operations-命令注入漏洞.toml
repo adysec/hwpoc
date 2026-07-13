@@ -1,4 +1,4 @@
-vendor = "vmware"
+vendor = "VMware"
 name = "VMware Aria Operations 命令注入漏洞"
 type = "命令注入"
 path = "/api/operations"

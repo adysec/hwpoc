@@ -1,4 +1,4 @@
-vendor = "apache"
+vendor = "Apache"
 name = "Apache HTTP Server 配置中正则表达式缓冲区下写漏洞"
 type = "缓冲区溢出"
 version = "2.4.68"

@@ -1,4 +1,4 @@
-vendor = "cisco"
+vendor = "Cisco"
 name = "Cisco Catalyst SD-WAN Controller 认证绕过漏洞"
 type = "认证绕过"
 version = "20.19.1"

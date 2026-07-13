@@ -1,4 +1,4 @@
-vendor = "oracle"
+vendor = "Oracle"
 name = "Oracle WebLogic Server 反序列化漏洞"
 type = "反序列化"
 path = "/t3"

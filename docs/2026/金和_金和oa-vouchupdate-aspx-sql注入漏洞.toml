@@ -6,7 +6,7 @@ version = ""
 detail = """POST /c6/JHSoft.Web.CostControl/VouchUpdate.aspx HTTP/1.1 Host: target
 
 __VIEWSTATE=...&ctl=1' WAITFOR DELAY '0:0:5'--"""
-fix = "联系厂商获取补丁"
+fix = "联系金和 OA 厂商获取安全补丁；对 VouchUpdate.aspx 的 ctl 参数实施参数化查询；限制 /c6/JHSoft.Web.CostControl/ 路径仅允许内网访问；WAF 拦截 SQL 注入特征。"
 date = 20260315
 label = "nday"
 cve = "TVD-2026-05617"

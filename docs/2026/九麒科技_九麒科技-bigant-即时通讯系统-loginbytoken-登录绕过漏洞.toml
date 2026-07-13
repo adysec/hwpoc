@@ -4,7 +4,7 @@ type = "登录绕过"
 path = "/loginByToken"
 version = ""
 detail = """GET /loginByToken?token=admin HTTP/1.1 Host: target"""
-fix = "升级至最新版"
+fix = "联系九麒科技获取安全补丁；对 loginByToken 接口添加签名校验机制；限制 token 的有效期和作用域；限制该接口仅允许内网访问；审计 token 使用日志。"
 date = 20260315
 label = "nday"
 cve = "TVD-2026-05034"

@@ -1,4 +1,4 @@
-vendor = "palo-alto-networks"
+vendor = "Palo Alto Networks"
 name = "Palo Alto Networks PAN-OS Captive Portal 远程代码执行漏洞"
 type = "远程代码执行"
 path = "/auth/"
