@@ -2,7 +2,7 @@ vendor = "Google"
 name = "Google Chrome Bluetooth 组件权限提升漏洞 CNVD-2026-27212"
 type = "权限提升"
 version = "Chrome < 127.0.6517.0（补丁发布前版本）"
-path = "chrome://settings/content/bluetooth （Web Bluetooth API）"
+path = "/ (chrome://settings/content/bluetooth)"
 detail = """Google Chrome Bluetooth 组件（Web Bluetooth API）在实现 Bluetooth 权限校验时，未正确隔离跨源 iframe 的蓝牙请求。攻击者可在恶意页面中嵌入受信任源 iframe，利用权限边界绕过触发蓝牙 API 调用，实现沙箱逃逸及权限提升。
 
 补丁日期：2026-07-09
