@@ -213,15 +213,6 @@ td .tag {
   font-size: 11px; background: var(--tag-bg); color: var(--tag-text); font-weight: 500;
 }
 
-/* ── Notice Bar ── */
-.notice-bar {
-  background: var(--label-1day-bg); color: var(--label-1day-text);
-  padding: 10px 16px; margin: 0 auto 24px; max-width: 700px;
-  border-radius: 6px; font-size: 13px; line-height: 1.6; text-align: left;
-  border: 1px solid var(--label-1day-text);
-}
-.notice-bar a { color: var(--label-1day-text); font-weight: 600; text-decoration: underline; }
-
 /* ── Home ── */
 .home-page { padding: 60px 20px; text-align: center; }
 .home-page h2 { font-size: 28px; font-weight: 600; margin-bottom: 8px; color: var(--text-strong); }
@@ -326,16 +317,13 @@ td .tag {
 </div>
 <div class="sheet-bar"><a class="sheet-tab" href="2026.html">2026</a><a class="sheet-tab" href="2025.html">2025</a><a class="sheet-tab" href="2024.html">2024</a><a class="sheet-tab" href="2023.html">2023</a><a class="sheet-add" href="#" onclick="openModal();return false" title="提交漏洞">＋</a></div>
 <div class="home-page">
-<div class="notice-bar">⚠ 本站部署于 GitHub Pages 并使用了 Cloudflare CDN，数据更新后可能存在缓存延迟，请耐心等待 1-5 分钟。如发现数据不一致，可尝试 <a href="https://github.com/adysec/hwpoc" target="_blank">查看 GitHub 仓库</a> 确认最新数据。</div>
 <h2>护网漏洞库 <small style="font-size:14px;color:var(--text-muted);font-weight:400">by AdySec</small></h2>
 <p>护网（HW）期间漏洞情报汇总 · 0day / 1day / nday</p>
 <p style="font-size:13px;color:var(--text-muted);margin-top:12px">提交漏洞：① 创建 Issue ｜ ② PR 到 <code>docs/{year}/</code> ｜ ③ 邮件 <a href="mailto:admin@adysec.com" style="color:var(--primary)">admin@adysec.com</a></p>
-<div class="home-cards"><a class="home-card" href="2026.html"><span class="num">188</span><span class="lbl">2026 年</span></a><a class="home-card" href="2025.html"><span class="num">333</span><span class="lbl">2025 年</span></a><a class="home-card" href="2024.html"><span class="num">455</span><span class="lbl">2024 年</span></a><a class="home-card" href="2023.html"><span class="num">325</span><span class="lbl">2023 年</span></a></div>
+<div class="home-cards"><a class="home-card" href="2026.html"><span class="num">190</span><span class="lbl">2026 年</span></a><a class="home-card" href="2025.html"><span class="num">333</span><span class="lbl">2025 年</span></a><a class="home-card" href="2024.html"><span class="num">455</span><span class="lbl">2024 年</span></a><a class="home-card" href="2023.html"><span class="num">325</span><span class="lbl">2023 年</span></a></div>
 <div class="home-links">
 <a class="btn" href="#" onclick="openModal();return false">＋ 提交漏洞</a>
-<a class="btn" href="https://nuclei.adysec.com" target="_blank">Nuclei PoC</a>
-<a class="btn" href="https://ave.adysec.com" target="_blank">AVE</a>
-<a class="btn btn-outline" href="https://github.com/adysec/hwpoc">⭐ GitHub 仓库</a>
+<a class="btn btn-outline" href="https://github.com/adysec/hwpoc">GitHub 仓库</a>
 </div>
 </div>
 <div class="modal-overlay" id="submitModal">
