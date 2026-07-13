@@ -1,0 +1,10 @@
+vendor = "Google"
+name = "Google Chrome 资源管理错误漏洞 CNVD-2026-23387"
+type = "资源管理错误"
+version = "Chrome 受影响版本（版本号未公开）"
+detail = """Google Chrome 存在资源管理错误漏洞，可能造成拒绝服务或任意代码执行。细节待补充。"""
+fix = "升级至 Chrome 最新稳定版；启用 Site Isolation 和 Safe Browsing 增强防护；避免访问不可信网站。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-23387"
+verifier = "AdySec"

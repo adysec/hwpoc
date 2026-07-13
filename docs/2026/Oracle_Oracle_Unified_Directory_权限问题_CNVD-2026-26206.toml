@@ -1,0 +1,10 @@
+vendor = "Oracle"
+name = "Oracle Unified Directory 权限许可和访问控制问题漏洞 CNVD-2026-26206"
+type = "权限许可"
+version = "Oracle Unified Directory 12.2.1.4.0 / 14.1.2.1.0"
+detail = """Oracle Unified Directory 存在权限许可和访问控制问题，未认证攻击者可通过 LDAP/RMI 接口利用该漏洞实现未授权访问。"""
+fix = "应用 Oracle 季度关键补丁更新（CPU）；限制 LDAP（389/636）和 RMI 端口仅允许可信源 IP 访问。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-26206"
+verifier = "AdySec"
