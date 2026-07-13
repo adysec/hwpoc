@@ -1,0 +1,11 @@
+vendor = "OpenBSD"
+name = "OpenBSD httpd fastcgi NULL 解引用拒绝服务漏洞 CVE-2024-11148"
+type = "拒绝服务"
+path = "/fcgi-bin/"
+version = "OpenBSD 7.3 / 7.4"
+detail = """OpenBSD httpd(8) 在处理格式错误的 fastcgi 请求时出现 NULL 解引用，导致拒绝服务。"""
+fix = "应用补丁：https://ftp.openbsd.org/pub/OpenBSD/patches/7.4/common/006_httpd.patch.sig（7.4）/ 7.3 对应 020_httpd.patch.sig；限制 fastcgi 后端访问来源。"
+date = 20260713
+label = "nday"
+cve = "CVE-2024-11148"
+verifier = "AdySec"

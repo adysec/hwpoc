@@ -1,0 +1,10 @@
+vendor = "Microsoft"
+name = "Microsoft SharePoint 代码执行漏洞 CNVD-2026-26519"
+type = "远程代码执行"
+version = "SharePoint（版本号未公开）"
+detail = """Microsoft SharePoint 存在代码执行漏洞，攻击者可利用该漏洞远程执行代码。细节待补充。"""
+fix = "关注 Microsoft Security Response Center 发布的安全更新；限制 SharePoint 前端的外网暴露；对 /_vti_bin/ 等敏感路径添加额外访问控制。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-26519"
+verifier = "AdySec"

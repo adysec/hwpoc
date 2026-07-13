@@ -1,0 +1,11 @@
+vendor = "Tenda"
+name = "Tenda WH450 /goform/RouteStatic 栈缓冲区溢出漏洞 CNVD-2026-26822"
+type = "缓冲区溢出"
+path = "/goform/RouteStatic"
+version = "Tenda WH450（版本号未公开）"
+detail = """Tenda WH450 /goform/RouteStatic 文件在处理 page 参数时存在栈缓冲区溢出。"""
+fix = "关注 Tenda 官方固件更新；临时缓解：限制设备 Web 管理界面的互联网暴露，仅允许内网可信 IP 访问管理端口。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-26822"
+verifier = "AdySec"

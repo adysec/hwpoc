@@ -1,0 +1,10 @@
+vendor = "统信"
+name = "统信 UOS Desktop 20 Professional 本地提权漏洞 CNVD-2026-23981"
+type = "本地提权"
+version = "UOS Desktop 20 Professional"
+detail = """统信 UOS Desktop 20 Professional 存在本地提权漏洞，攻击者可利用该漏洞提升权限。细节待补充。"""
+fix = "关注统信官方安全公告获取补丁；临时缓解：限制本地用户登录权限，实施最小权限原则；监控异常的特权进程调用。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-23981"
+verifier = "AdySec"

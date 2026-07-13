@@ -1,0 +1,11 @@
+vendor = "OpenClaw"
+name = "OpenClaw macOS Swift exec 白名单绕过漏洞 CNVD-2026-26888"
+type = "远程代码执行"
+path = "/gateway/"
+version = "OpenClaw 受影响版本（版本号未公开）"
+detail = """macOS Swift exec 功能中缺乏对组合 POSIX 内联命令标志的检查，攻击者使用组合标志形式绕过白名单执行 Shell 命令。"""
+fix = "升级至 OpenClaw 最新版本；审查 safeBins 配置，禁用不必要的 POSIX 命令；macOS 节点上监控异常进程启动日志。"
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-26888"
+verifier = "AdySec"
