@@ -1,6 +1,7 @@
 vendor = "OpenClaw"
 name = "OpenClaw 授权问题漏洞 CNVD-2026-25113"
 type = "授权绕过"
+path = "/gateway/"
 version = "OpenClaw 受影响版本（版本号未公开）"
 detail = """OpenClaw 存在授权问题漏洞，已认证用户可通过操纵客户端元数据或请求参数绕过权限检查执行未授权操作。"""
 fix = "升级至 OpenClaw 最新版本；限制 operator.write 等高危令牌的发放范围；监控异常的 API 调用和配置变更日志。"
