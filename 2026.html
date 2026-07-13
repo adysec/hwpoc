@@ -362,9 +362,9 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 188 条</span>
+<span class="stat-badge total">共 187 条</span>
 <span class="stat-badge zday">0day 15</span>
-<span class="stat-badge oney">1day 55</span>
+<span class="stat-badge oney">1day 54</span>
 <span class="stat-badge nday">nday 118</span>
 </div>
 <div class="table-wrap">
@@ -644,11 +644,7 @@ CNVD 收录日期：2026-07-13
 2. 启用 Chrome 的安全浏览增强保护：chrome://settings/security → 选择&quot;增强保护&quot;；
 3. 开启严格站点隔离：chrome://settings/security → 使用&quot;始终使用严格站点隔离&quot;；
 4. 企业环境通过组策略（GPO/MDM）强制推送浏览器更新并启用 SitePerProcess；
-5. 在补丁部署完成前，限制用户对不可信网站的访问，避免点击可疑链接。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ivanti</span></td><td class="cell-hover" onclick="copyCell(this)">Ivanti EPMM 认证绕过致 RCE 漏洞 CVE-2026-54825</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">EPMM &lt; 11.12.0.6</td><td class="cell-hover" onclick="copyCell(this)">/mifs/</td><td class="cell-hover" onclick="copyCell(this)">Ivanti EPMM（原 MobileIron Core）API 端点认证校验缺陷（CWE-287），未认证攻击者可绕过认证访问管理员 API，结合路径遍历（CWE-22）读取 /opt/ivanti/ 敏感配置文件，进一步利用内置脚本接口实现 RCE，完全控制集中管理大量移动设备、证书与 VPN 配置的 MDM 平台。07-13 Ivanti PSIRT 披露，暂无公开在野利用报告但利用条件宽松。CVSS 9.1。
-
-Nuclei: https://github.com/projectdiscovery/nuclei-templates</td><td class="cell-hover" onclick="copyCell(this)">升级至 EPMM 11.12.0.6+；无补丁前禁用面向互联网的 EPMM 管理接口或限制源 IP；轮换 MDM 平台所有证书与 API 密钥；监控异常管理员 API 调用；排查可疑设备注册与命令下发。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Jenkins</span></td><td class="cell-hover" onclick="copyCell(this)">Jenkins CLI 任意文件读取致 RCE 漏洞 CVE-2026-54826</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">Jenkins &lt; 2.516.2 LTS / &lt; 2.518</td><td class="cell-hover" onclick="copyCell(this)">/cli/</td><td class="cell-hover" onclick="copyCell(this)">Jenkins CLI 组件参数解析逻辑存在缺陷（CWE-22），攻击者通过特制 CLI 命令触发任意文件读取，并结合内置 Groovy 脚本执行接口实现远程代码执行。Jenkins 作为最广泛使用的 CI/CD 自动化服务器，一旦被攻陷可成为软件供应链攻击跳板。07-13 Jenkins 安全团队发布安全公告，官方建议立即升级至 Jenkins 2.516.2 LTS 或 2.518。CVSS 8.5。
-
-Nuclei: https://github.com/projectdiscovery/nuclei-templates</td><td class="cell-hover" onclick="copyCell(this)">升级至 Jenkins 2.516.2 LTS 或 2.518+；限制 Jenkins CLI 端口的网络访问；审计 Jenkins 日志中异常的 CLI 命令调用；监控 Groovy 脚本执行记录。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Linux</span></td><td class="cell-hover" onclick="copyCell(this)">Linux Kernel tc pedit COW 污染缓存本地提权漏洞 CVE-2026-46331</td><td><span class="tag">本地提权</span></td><td class="cell-hover" onclick="copyCell(this)">v5.18 ~ v7.1-rc7</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Linux 内核 net/sched/act_pedit.c 中 tcf_pedit_act() 在执行数据包字段编辑时，skb_ensure_writable() 的 COW 保护范围基于 tcfp_off_max_hint 静态预计算，未包含 typed key 动态追加的 header offset。超出 COW 范围的写入直接落在共享 page cache 上，可篡改 /usr/bin/su 等 setuid-root 二进制文件的内存副本，执行被污染文件后本地稳定提权至 root。无需竞态条件，确定性触发。
+5. 在补丁部署完成前，限制用户对不可信网站的访问，避免点击可疑链接。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">WordPress</span></td><td class="cell-hover" onclick="copyCell(this)">SupportCandy 不安全的直接对象引用漏洞 CVE-2026-54826</td><td><span class="tag">未授权访问</span></td><td class="cell-hover" onclick="copyCell(this)">SupportCandy &lt;= 3.4.6</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">SupportCandy WordPress 帮助台工单插件 3.4.6 及之前版本存在不安全的直接对象引用（IDOR, CWE-639），已认证的 Subscriber 级别攻击者可通过用户可控的键值参数访问其他用户的工单数据及敏感信息。CVSS 7.6 HIGH。2026-06-17 由 Patchstack 公开披露，研究员 HieuPenguinnn 于 2026-04-29 提交。暂无公开 PoC 及 GitHub 仓库。</td><td class="cell-hover" onclick="copyCell(this)">升级 SupportCandy 插件至 3.4.7 或更高版本；如无法立即升级，限制 Subscriber 角色的工单访问权限，仅允许受信用户；审计所有通过用户输入参数直接引用工单对象的接口，添加严格的权限校验；审核 WordPress 数据库 wp_posts 表中 supportcandy 相关数据的异常查询记录。</td><td>20260617</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">Linux</span></td><td class="cell-hover" onclick="copyCell(this)">Linux Kernel tc pedit COW 污染缓存本地提权漏洞 CVE-2026-46331</td><td><span class="tag">本地提权</span></td><td class="cell-hover" onclick="copyCell(this)">v5.18 ~ v7.1-rc7</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Linux 内核 net/sched/act_pedit.c 中 tcf_pedit_act() 在执行数据包字段编辑时，skb_ensure_writable() 的 COW 保护范围基于 tcfp_off_max_hint 静态预计算，未包含 typed key 动态追加的 header offset。超出 COW 范围的写入直接落在共享 page cache 上，可篡改 /usr/bin/su 等 setuid-root 二进制文件的内存副本，执行被污染文件后本地稳定提权至 root。无需竞态条件，确定性触发。
 
 PoC:
  - https://github.com/0xBlackash/CVE-2026-46331

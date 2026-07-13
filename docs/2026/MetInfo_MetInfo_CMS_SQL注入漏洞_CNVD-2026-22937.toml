@@ -1,0 +1,19 @@
+vendor = "MetInfo"
+name = "MetInfo CMS SQL注入漏洞 CNVD-2026-22937"
+type = "SQL注入"
+version = "MetInfo 6.1.2, 7.0.0"
+path = "/admin/index.php?m=web&n=message&c=message&a=domessage&action=add&id="
+detail = """MetInfo 开源 CMS 企业建站系统后台消息模块存在 SQL 注入漏洞。攻击者通过 `id` 参数注入恶意 SQL 语句，可盲注获取数据库敏感信息（如管理员凭据）。受影响的文件包括 `/admin/index.php`（消息模块）及 `/app/system/include/class/user.class.php`（`$id` 参数）。
+
+PoC:
+- https://github.com/ianxtianxt/Metinfo-6.1.2-SQL-injection（MetInfo 6.1.2，Python 布尔盲注脚本）
+- https://github.com/rebic/metinfo（MetInfo 7.0.0，user.class.php 注入）
+"""
+fix = """1. 对 `id`、`para*` 等输入参数进行参数化查询或严格整数校验，禁止直接拼接 SQL；
+2. WAF 拦截 `/admin/index.php` 路径下对 `id` 参数的 SQL 注入特征（如 UNION、AND、OR 后跟比较/延时函数）；
+3. 限制后台管理地址（`/admin/`）的互联网暴露，仅允许内网或 VPN 访问；
+4. 对 `app/system/include/class/user.class.php` 中 `$id` 参数使用 prepared statement 重构。"""
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-22937"
+verifier = "AdySec"
