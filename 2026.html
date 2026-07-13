@@ -333,15 +333,34 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 144 条</span>
-<span class="stat-badge zday">0day 12</span>
+<span class="stat-badge total">共 145 条</span>
+<span class="stat-badge zday">0day 13</span>
 <span class="stat-badge oney">1day 12</span>
 <span class="stat-badge nday">nday 120</span>
 </div>
 <div class="table-wrap">
 <table id="vulnTable">
 <thead><tr><th data-col="0">厂商 <span class="sort-icon">↕</span></th><th data-col="1">漏洞名称 <span class="sort-icon">↕</span></th><th data-col="2">类型 <span class="sort-icon">↕</span></th><th data-col="3">版本 <span class="sort-icon">↕</span></th><th data-col="4">路径 <span class="sort-icon">↕</span></th><th data-col="5">详情 <span class="sort-icon">↕</span></th><th data-col="6">处置建议 <span class="sort-icon">↕</span></th><th data-col="7" class="sort-desc">日期 <span class="sort-icon">↕</span></th><th data-col="8">标签 <span class="sort-icon">↕</span></th><th data-col="9">验真人 <span class="sort-icon">↕</span></th></tr></thead>
-<tbody><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender RoguePlanet 本地权限提升漏洞 CVE-2026-50656</td><td><span class="tag">本地权限提升</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine &lt; 1.1.26060.3008；影响 Windows 10/11（完整更新后仍受影响）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine.dll 恶意软件防护引擎存在竞争条件漏洞（CVE-2026-50656，代号 RoguePlanet），攻击者可通过路径重定向竞争条件获取 SYSTEM 最高权限。影响 Windows 10/11 完整更新系统。服务器版需更换利用方式仍受影响。
+<tbody><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows HTTP.sys 远程代码执行漏洞 CVE-2026-47291</td><td><span class="tag">远程代码执行（整数溢出→堆溢出→RCE）</span></td><td class="cell-hover" onclick="copyCell(this)">Windows 10 (1607/1809/21H2/22H2), Windows 11 (23H2/24H2/25H2/26H1), Windows Server 2012~2025</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">HTTP.sys 内核驱动在解析 HTTP 请求头时，16 位计数器（*(short *)(piVar16 + 400)）处理存在整数溢出漏洞（CWE-190→CWE-122）。攻击者发送包含 0xFFFF+2 个自定义 HTTP 头的特制请求，触发计数器回绕导致堆缓冲区分配不足，进而产生堆溢出，可在内核上下文（Ring 0）实现远程代码执行，获取 SYSTEM 权限。
+
+PoC:
+python CVE-2026-47291.py -t target
+
+原理：
+1. 构造 GET / HTTP/1.1 请求，添加 0xFFFF+2 个 X-Pad-N: valueN 自定义头
+2. 每次接收缓冲区计数器 +=5，运行约 30 分钟触发 16 位整数溢出（0xFFFF→0）
+3. 堆分配错误导致缓冲区溢出，覆写内核对象劫持执行流
+4. 占用约 1.2GB 内存消耗，稳定触发 BSOD 或 RCE
+
+PoC 链接:
+- https://github.com/omair2084/misc (cve_2026_47291_poc.py)
+- https://github.com/ManagerEmpty/CVE-2026-47291-httpsys
+- https://github.com/dhmosfunk/CVE-2026-49160-CVE-2026-47291-HTTP.sys</td><td class="cell-hover" onclick="copyCell(this)">立即安装微软 2026年6月补丁日 KB502569（MSRC: msrc.microsoft.com/update-guide/vulnerability/CVE-2026-47291）；
+临时缓解：
+- 在网络层面限制 80/443/5985/5986 端口访问来源 IP
+- 禁用不必要的 HTTP 服务（WinRM、WSDAPI 等）
+- 部署 WAF/IPS 规则（Check Point CPAT-2026-6526、Talos Snort）
+- 启用 Windows Defender Application Control (WDAC) 限制未签名内核代码执行</td><td>20260713</td><td><span class="label label-0day">0day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Microsoft</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender RoguePlanet 本地权限提升漏洞 CVE-2026-50656</td><td><span class="tag">本地权限提升</span></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine &lt; 1.1.26060.3008；影响 Windows 10/11（完整更新后仍受影响）</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Windows Defender mpengine.dll 恶意软件防护引擎存在竞争条件漏洞（CVE-2026-50656，代号 RoguePlanet），攻击者可通过路径重定向竞争条件获取 SYSTEM 最高权限。影响 Windows 10/11 完整更新系统。服务器版需更换利用方式仍受影响。
 
 PoC: https://github.com/MSNightmare/RoguePlane
 验证报告: https://github.com/g0thamRabb1t/CVE-2026-50656-rogueplanet-validation</td><td class="cell-hover" onclick="copyCell(this)">升级恶意软件防护引擎至 1.1.26060.3008+（自动更新默认同步）；
