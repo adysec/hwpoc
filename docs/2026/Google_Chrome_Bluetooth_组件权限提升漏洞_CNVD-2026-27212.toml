@@ -1,0 +1,20 @@
+vendor = "Google"
+name = "Google Chrome Bluetooth 组件权限提升漏洞 CNVD-2026-27212"
+type = "权限提升"
+version = "Chrome < 127.0.6517.0（补丁发布前版本）"
+path = "chrome://settings/content/bluetooth （Web Bluetooth API）"
+detail = """Google Chrome Bluetooth 组件（Web Bluetooth API）在实现 Bluetooth 权限校验时，未正确隔离跨源 iframe 的蓝牙请求。攻击者可在恶意页面中嵌入受信任源 iframe，利用权限边界绕过触发蓝牙 API 调用，实现沙箱逃逸及权限提升。
+
+补丁日期：2026-07-09
+公开时间：2026-07-13
+CVSS 评分：未公开
+该漏洞无对应 CVE 编号，仅收录于 CNVD。截至公开日，GitHub 及 adysec/nuclei_poc 中未发现公开 PoC 或 Nuclei 模板。"""
+fix = """1. 升级至 Chrome 127.0.6517.0 及以上版本，Google 已于 2026-07-09 在 Stable 通道推送修复；
+2. 临时禁用 Web Bluetooth API：访问 chrome://flags/#enable-web-bluetooth 设置为 Disabled；
+3. 企业环境通过 GPO（Group Policy）配置 BluetoothAvailability 策略为 2（禁止蓝牙访问）；
+4. 管理员可通过 --disable-blink-features=WebBluetooth 命令行参数全局禁用蓝牙功能；
+5. 用户避免在不可信页面中允许蓝牙权限请求，及时关闭来源不明的蓝牙弹窗。"""
+date = 20260713
+label = "1day"
+cve = "CNVD-2026-27212"
+verifier = "AdySec"
