@@ -92,8 +92,8 @@ window.open(url,'_blank');closeModal()}
 
 # ── TOML loader + streaming render (no pagination) ──
 YEAR_JS = """<script>
-var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s, CONCURRENT = 6;
-var loaded = [], rendered = 0;
+var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s;
+var loaded = [];
 
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
@@ -143,36 +143,20 @@ function buildRow(d){
   return r+'</tr>';
 }
 
-function renderBatch(){
-  var tbody=document.querySelector('#vulnTable tbody');
-  if(!tbody||rendered>=loaded.length){
-    document.getElementById('loadingBar').style.display='none';
-    attachSortAndCopy();applySearch();
-    return
-  }
-  var end=Math.min(rendered+20, loaded.length), frag=[];
-  for(var i=rendered;i<end;i++) frag.push(buildRow(loaded[i]));
-  tbody.insertAdjacentHTML('beforeend', frag.join(''));
-  rendered=end;
-  document.getElementById('statTotal').textContent='共 '+rendered+'/'+loaded.length+' 条';
-  setTimeout(renderBatch, 5);
-}
-
 function loadTOMLs(files, idx){
-  if(idx>=files.length){renderBatch();return}
-  var end=Math.min(idx+CONCURRENT, files.length), pending=end-idx;
-  for(var i=idx;i<end;i++){
-    (function(i){
-      fetch(files[i]).then(function(r){return r.text()}).then(function(text){
-        try{
-          var d=parseTOML(text);
-          loaded.push(d);
-        }catch(e){}
-        pending--;
-        if(pending===0) loadTOMLs(files, end);
-      }).catch(function(){pending--;if(pending===0)loadTOMLs(files,end)});
-    })(i);
-  }
+  if(idx>=files.length){attachSortAndCopy();applySearch();document.getElementById('loadingBar').style.display='none';return}
+  var tbody=document.querySelector('#vulnTable tbody');
+  fetch(files[idx]).then(function(r){return r.text()}).then(function(text){
+    try{
+      var d=parseTOML(text);
+      loaded.push(d);
+      tbody.insertAdjacentHTML('beforeend', buildRow(d));
+      document.getElementById('statTotal').textContent='共 '+tbody.children.length+'/'+files.length+' 条';
+    }catch(e){}
+    setTimeout(function(){loadTOMLs(files, idx+1)}, 0);
+  }).catch(function(){
+    setTimeout(function(){loadTOMLs(files, idx+1)}, 0);
+  });
 }
 
 function attachSortAndCopy(){
@@ -199,6 +183,7 @@ function initPage(){
     document.getElementById('stat0day').textContent='0day '+manifest.count_0day;
     document.getElementById('stat1day').textContent='1day '+manifest.count_1day;
     document.getElementById('statNday').textContent='nday '+manifest.count_nday;
+    document.getElementById('statTotal').textContent='共 0/'+manifest.total+' 条';
     loadTOMLs(manifest.files, 0);
   });
 }
