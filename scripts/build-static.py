@@ -90,19 +90,43 @@ var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template
 window.open(url,'_blank');closeModal()}
 </script>"""
 
-# ── Streaming-load year page JS (no pagination, batch render) ──
+# ── TOML loader + streaming render (no pagination) ──
 YEAR_JS = """<script>
-var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s;
-var allData = [], filtered = [], BATCH = 30;
+var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s, CONCURRENT = 6;
+var loaded = [], rendered = 0;
 
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
+// Minimal TOML parser for our simple format
+function parseTOML(t){
+  var lines=t.split('\\n'), d={}, key='', inML=false, mlKey='', mlLines=[];
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i].trim();
+    if(inML){
+      if(l==='\"\"\"'){d[mlKey]=mlLines.join('\\n');inML=false;mlLines=[];continue}
+      mlLines.push(lines[i]);continue
+    }
+    if(!l||l.startsWith('#')) continue;
+    if(l.startsWith('\"\"\"')){inML=true;mlKey=key;mlLines=[];continue}
+    var m=l.match(/^([^=]+)=\\s*(.*)/);
+    if(!m) continue;
+    key=m[1].trim();
+    var val=m[2].trim();
+    if(val==='\"\"\"'){inML=true;mlKey=key;mlLines=[];continue}
+    if(val.startsWith('\"')&&val.endsWith('\"')) d[key]=val.slice(1,-1);
+    else if(val==='true'||val==='false') d[key]=val==='true';
+    else if(!isNaN(val)) d[key]=Number(val);
+    else d[key]=val;
+  }
+  return d;
+}
+
 function buildRow(d){
   var r='<tr>';
-  r+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
-  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
-  r+='<td><span class="tag">'+esc(d.type)+'</span></td>';
+  r+='<td><span class="tag">'+esc(d.vendor||'')+'</span></td>';
+  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name||'')+'</td>';
+  r+='<td><span class="tag">'+esc(d.type||'')+'</span></td>';
   if(HEADERS.length>3){
     r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
     r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
@@ -119,20 +143,36 @@ function buildRow(d){
   return r+'</tr>';
 }
 
-function streamRows(tbody, data, idx){
-  if(idx>=data.length){attachSortAndCopy();applySearch();return}
-  var end=Math.min(idx+BATCH, data.length), frag=[];
-  for(var i=idx;i<end;i++) frag.push(buildRow(data[i]));
+function renderBatch(){
+  var tbody=document.querySelector('#vulnTable tbody');
+  if(!tbody||rendered>=loaded.length){
+    document.getElementById('loadingBar').style.display='none';
+    attachSortAndCopy();applySearch();
+    return
+  }
+  var end=Math.min(rendered+20, loaded.length), frag=[];
+  for(var i=rendered;i<end;i++) frag.push(buildRow(loaded[i]));
   tbody.insertAdjacentHTML('beforeend', frag.join(''));
-  document.getElementById('statTotal').textContent='共 '+tbody.children.length+'/'+data.length+' 条';
-  setTimeout(function(){streamRows(tbody,data,end)}, 1);
+  rendered=end;
+  document.getElementById('statTotal').textContent='共 '+rendered+'/'+loaded.length+' 条';
+  setTimeout(renderBatch, 5);
 }
 
-function renderFull(){
-  document.getElementById('loadingBar').style.display='none';
-  var tbody=document.querySelector('#vulnTable tbody');
-  tbody.innerHTML='';
-  streamRows(tbody, filtered, 0);
+function loadTOMLs(files, idx){
+  if(idx>=files.length){renderBatch();return}
+  var end=Math.min(idx+CONCURRENT, files.length), pending=end-idx;
+  for(var i=idx;i<end;i++){
+    (function(i){
+      fetch(files[i]).then(function(r){return r.text()}).then(function(text){
+        try{
+          var d=parseTOML(text);
+          loaded.push(d);
+        }catch(e){}
+        pending--;
+        if(pending===0) loadTOMLs(files, end);
+      }).catch(function(){pending--;if(pending===0)loadTOMLs(files,end)});
+    })(i);
+  }
 }
 
 function attachSortAndCopy(){
@@ -153,25 +193,19 @@ function applySearch(){
     r.style.display=(col<0?r.textContent.toLowerCase().includes(q.toLowerCase()):(r.cells[col]||{}).textContent.toLowerCase().includes(q.toLowerCase()))?'':'none'});
 }
 
-function doSearch(){
-  renderFull();
-}
-
 function initPage(){
-  fetch('data/'+YEAR+'.json').then(function(r){return r.json()}).then(function(data){
-    allData=data;
-    filtered=allData;
-    document.getElementById('stat0day').textContent='0day '+filtered.filter(function(d){return d.label==='0day'}).length;
-    document.getElementById('stat1day').textContent='1day '+filtered.filter(function(d){return d.label==='1day'}).length;
-    document.getElementById('statNday').textContent='nday '+filtered.filter(function(d){return d.label==='nday'}).length;
-    document.getElementById('statTotal').textContent='共 '+filtered.length+' 条';
-    renderFull();
+  fetch('data/'+YEAR+'.json').then(function(r){return r.json()}).then(function(manifest){
+    document.getElementById('statTotal').textContent='共 '+manifest.total+' 条';
+    document.getElementById('stat0day').textContent='0day '+manifest.count_0day;
+    document.getElementById('stat1day').textContent='1day '+manifest.count_1day;
+    document.getElementById('statNday').textContent='nday '+manifest.count_nday;
+    loadTOMLs(manifest.files, 0);
   });
 }
 
 document.addEventListener('DOMContentLoaded',initPage);
 document.addEventListener('input',function(e){
-  if(e.target.id==='searchInput'||e.target.id==='searchCol') doSearch();
+  if(e.target.id==='searchInput'||e.target.id==='searchCol') applySearch();
 });
 </script>"""
 
@@ -251,47 +285,44 @@ def build_index():
     print("index.html")
 
 def build_year(year):
-    data = load_toml_dir(DATA / year)
-    data.sort(key=lambda d: d.get("date", ""), reverse=True)
-    count_0day = sum(1 for d in data if d.get("label") == "0day")
-    count_1day = sum(1 for d in data if d.get("label") == "1day")
-    count_nday = sum(1 for d in data if d.get("label") == "nday")
+    raw = []
+    toml_dir = DATA / year
+    if toml_dir.is_dir():
+        for fp in sorted(toml_dir.glob("*.toml")):
+            try:
+                d = tomllib.loads(fp.read_text())
+                d["_file"] = "docs/%s/%s" % (year, fp.name)
+                raw.append(d)
+            except Exception as e:
+                print("  [warn] skip %s: %s" % (fp.name, e))
+    raw.sort(key=lambda d: d.get("date", ""), reverse=True)
+
+    count_0day = sum(1 for d in raw if d.get("label") == "0day")
+    count_1day = sum(1 for d in raw if d.get("label") == "1day")
+    count_nday = sum(1 for d in raw if d.get("label") == "nday")
+    total = len(raw)
 
     if year == "2023":
         headers = ["厂商", "漏洞名称", "类型", "来源", "信息", "日期", "POC", "标签"]
-        json_data = []
-        for d in data:
-            json_data.append({
-                "vendor": str(d.get("vendor","")), "name": str(d.get("name","")),
-                "type": str(d.get("type","")), "source": str(d.get("source","")),
-                "info": str(d.get("info","")), "date": str(d.get("date","")),
-                "poc": str(d.get("poc","")), "label": str(d.get("label",""))
-            })
         has_verifier = "false"
     else:
-        has_verifier_val = (year in ("2025", "2026"))
-        if has_verifier_val:
-            headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签", "验真人"]
-        else:
-            headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"]
-        json_data = []
-        for d in data:
-            item = {
-                "vendor": str(d.get("vendor","")), "name": str(d.get("name","")),
-                "type": str(d.get("type","")), "version": str(d.get("version","")),
-                "path": str(d.get("path","")), "detail": str(d.get("detail","")),
-                "fix": str(d.get("fix","")), "date": str(d.get("date","")),
-                "label": str(d.get("label",""))
-            }
-            if has_verifier_val:
-                item["verifier"] = str(d.get("verifier",""))
-            json_data.append(item)
-        has_verifier = "true" if has_verifier_val else "false"
+        has_v = (year in ("2025", "2026"))
+        headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"]
+        if has_v:
+            headers.append("验真人")
+        has_verifier = "true" if has_v else "false"
 
-    # Write JSON data file
+    # Write manifest JSON (only counts + toml file paths)
     (OUT / "data").mkdir(parents=True, exist_ok=True)
-    (OUT / "data" / ("%s.json" % year)).write_text(json.dumps(json_data, ensure_ascii=False, indent=1))
-    print("  data/%s.json (%d entries)" % (year, len(json_data)))
+    manifest = {
+        "total": total,
+        "count_0day": count_0day,
+        "count_1day": count_1day,
+        "count_nday": count_nday,
+        "files": [d["_file"] for d in raw]
+    }
+    (OUT / "data" / ("%s.json" % year)).write_text(json.dumps(manifest, ensure_ascii=False))
+    print("  data/%s.json (%d toml files)" % (year, total))
 
     # Write HTML with embedded JS for pagination
     headers_json = json.dumps(headers, ensure_ascii=False)
@@ -306,13 +337,13 @@ def build_year(year):
     for i, h in enumerate(headers):
         body += '<option value="%d">%s</option>\n' % (i, h)
     body += '</select>\n'
-    body += '<span class="stat-badge total" id="statTotal">共 %d 条</span>\n' % len(data)
+    body += '<span class="stat-badge total" id="statTotal">共 %d 条</span>\n' % total
     body += '<span class="stat-badge zday" id="stat0day">0day %d</span>\n' % count_0day
     body += '<span class="stat-badge oney" id="stat1day">1day %d</span>\n' % count_1day
     body += '<span class="stat-badge nday" id="statNday">nday %d</span>\n' % count_nday
     body += '</div>\n'
     body += '<div class="table-wrap" id="tableWrap">\n'
-    body += '<div id="loadingBar" class="loading-bar">⏳ 加载数据中...</div>\n'
+    body += '<div id="loadingBar" class="loading-bar">⏳ 加载漏洞数据中...</div>\n'
     body += '<table id="vulnTable"><thead><tr>'
     for i, h in enumerate(headers):
         body += '<th data-col="%d">%s <span class="sort-icon">↕</span></th>' % (i, h)
@@ -320,7 +351,7 @@ def build_year(year):
     body += '</div>\n'
 
     (OUT / ("%s.html" % year)).write_text(page("%s年漏洞" % year, body, current_year=year, year_js=year_js))
-    print("  %s.html (paged, %d entries)" % (year, len(data)))
+    print("  %s.html (%d entries)" % (year, total))
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)

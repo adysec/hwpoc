@@ -372,7 +372,7 @@ td .tag {
 <span class="stat-badge nday" id="statNday">nday 284</span>
 </div>
 <div class="table-wrap" id="tableWrap">
-<div id="loadingBar" class="loading-bar">⏳ 加载数据中...</div>
+<div id="loadingBar" class="loading-bar">⏳ 加载漏洞数据中...</div>
 <table id="vulnTable"><thead><tr><th data-col="0">厂商 <span class="sort-icon">↕</span></th><th data-col="1">漏洞名称 <span class="sort-icon">↕</span></th><th data-col="2">类型 <span class="sort-icon">↕</span></th><th data-col="3">版本 <span class="sort-icon">↕</span></th><th data-col="4">路径 <span class="sort-icon">↕</span></th><th data-col="5">详情 <span class="sort-icon">↕</span></th><th data-col="6">处置建议 <span class="sort-icon">↕</span></th><th data-col="7">日期 <span class="sort-icon">↕</span></th><th data-col="8">标签 <span class="sort-icon">↕</span></th></tr></thead><tbody></tbody></table>
 </div>
 
@@ -444,17 +444,41 @@ var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template
 window.open(url,'_blank');closeModal()}
 </script>
 <script>
-var YEAR = '2024', HEADERS = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"], HAS_VERIFIER = false;
-var allData = [], filtered = [], BATCH = 30;
+var YEAR = '2024', HEADERS = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"], HAS_VERIFIER = false, CONCURRENT = 6;
+var loaded = [], rendered = 0;
 
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
+// Minimal TOML parser for our simple format
+function parseTOML(t){
+  var lines=t.split('\n'), d={}, key='', inML=false, mlKey='', mlLines=[];
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i].trim();
+    if(inML){
+      if(l==='"""'){d[mlKey]=mlLines.join('\n');inML=false;mlLines=[];continue}
+      mlLines.push(lines[i]);continue
+    }
+    if(!l||l.startsWith('#')) continue;
+    if(l.startsWith('"""')){inML=true;mlKey=key;mlLines=[];continue}
+    var m=l.match(/^([^=]+)=\s*(.*)/);
+    if(!m) continue;
+    key=m[1].trim();
+    var val=m[2].trim();
+    if(val==='"""'){inML=true;mlKey=key;mlLines=[];continue}
+    if(val.startsWith('"')&&val.endsWith('"')) d[key]=val.slice(1,-1);
+    else if(val==='true'||val==='false') d[key]=val==='true';
+    else if(!isNaN(val)) d[key]=Number(val);
+    else d[key]=val;
+  }
+  return d;
+}
+
 function buildRow(d){
   var r='<tr>';
-  r+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
-  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
-  r+='<td><span class="tag">'+esc(d.type)+'</span></td>';
+  r+='<td><span class="tag">'+esc(d.vendor||'')+'</span></td>';
+  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name||'')+'</td>';
+  r+='<td><span class="tag">'+esc(d.type||'')+'</span></td>';
   if(HEADERS.length>3){
     r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
     r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
@@ -471,20 +495,36 @@ function buildRow(d){
   return r+'</tr>';
 }
 
-function streamRows(tbody, data, idx){
-  if(idx>=data.length){attachSortAndCopy();applySearch();return}
-  var end=Math.min(idx+BATCH, data.length), frag=[];
-  for(var i=idx;i<end;i++) frag.push(buildRow(data[i]));
+function renderBatch(){
+  var tbody=document.querySelector('#vulnTable tbody');
+  if(!tbody||rendered>=loaded.length){
+    document.getElementById('loadingBar').style.display='none';
+    attachSortAndCopy();applySearch();
+    return
+  }
+  var end=Math.min(rendered+20, loaded.length), frag=[];
+  for(var i=rendered;i<end;i++) frag.push(buildRow(loaded[i]));
   tbody.insertAdjacentHTML('beforeend', frag.join(''));
-  document.getElementById('statTotal').textContent='共 '+tbody.children.length+'/'+data.length+' 条';
-  setTimeout(function(){streamRows(tbody,data,end)}, 1);
+  rendered=end;
+  document.getElementById('statTotal').textContent='共 '+rendered+'/'+loaded.length+' 条';
+  setTimeout(renderBatch, 5);
 }
 
-function renderFull(){
-  document.getElementById('loadingBar').style.display='none';
-  var tbody=document.querySelector('#vulnTable tbody');
-  tbody.innerHTML='';
-  streamRows(tbody, filtered, 0);
+function loadTOMLs(files, idx){
+  if(idx>=files.length){renderBatch();return}
+  var end=Math.min(idx+CONCURRENT, files.length), pending=end-idx;
+  for(var i=idx;i<end;i++){
+    (function(i){
+      fetch(files[i]).then(function(r){return r.text()}).then(function(text){
+        try{
+          var d=parseTOML(text);
+          loaded.push(d);
+        }catch(e){}
+        pending--;
+        if(pending===0) loadTOMLs(files, end);
+      }).catch(function(){pending--;if(pending===0)loadTOMLs(files,end)});
+    })(i);
+  }
 }
 
 function attachSortAndCopy(){
@@ -505,25 +545,19 @@ function applySearch(){
     r.style.display=(col<0?r.textContent.toLowerCase().includes(q.toLowerCase()):(r.cells[col]||{}).textContent.toLowerCase().includes(q.toLowerCase()))?'':'none'});
 }
 
-function doSearch(){
-  renderFull();
-}
-
 function initPage(){
-  fetch('data/'+YEAR+'.json').then(function(r){return r.json()}).then(function(data){
-    allData=data;
-    filtered=allData;
-    document.getElementById('stat0day').textContent='0day '+filtered.filter(function(d){return d.label==='0day'}).length;
-    document.getElementById('stat1day').textContent='1day '+filtered.filter(function(d){return d.label==='1day'}).length;
-    document.getElementById('statNday').textContent='nday '+filtered.filter(function(d){return d.label==='nday'}).length;
-    document.getElementById('statTotal').textContent='共 '+filtered.length+' 条';
-    renderFull();
+  fetch('data/'+YEAR+'.json').then(function(r){return r.json()}).then(function(manifest){
+    document.getElementById('statTotal').textContent='共 '+manifest.total+' 条';
+    document.getElementById('stat0day').textContent='0day '+manifest.count_0day;
+    document.getElementById('stat1day').textContent='1day '+manifest.count_1day;
+    document.getElementById('statNday').textContent='nday '+manifest.count_nday;
+    loadTOMLs(manifest.files, 0);
   });
 }
 
 document.addEventListener('DOMContentLoaded',initPage);
 document.addEventListener('input',function(e){
-  if(e.target.id==='searchInput'||e.target.id==='searchCol') doSearch();
+  if(e.target.id==='searchInput'||e.target.id==='searchCol') applySearch();
 });
 </script>
 </body>
