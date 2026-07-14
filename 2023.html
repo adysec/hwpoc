@@ -449,26 +449,32 @@ var loaded = [];
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-// Minimal TOML parser for our simple format
+// Minimal TOML parser supporting "..." and """...""" strings
 function parseTOML(t){
   var lines=t.split('\n'), d={}, key='', inML=false, mlKey='', mlLines=[];
   for(var i=0;i<lines.length;i++){
-    var l=lines[i].trim();
+    var raw=lines[i], l=raw.trim();
     if(inML){
-      if(l==='"""'){d[mlKey]=mlLines.join('\n');inML=false;mlLines=[];continue}
-      mlLines.push(lines[i]);continue
+      var endIdx=l.indexOf('"""');
+      if(endIdx>=0){
+        if(endIdx>0) mlLines.push(l.substring(0,endIdx));
+        d[mlKey]=mlLines.join('\n');inML=false;mlLines=[];
+      }else{mlLines.push(raw)}
+      continue
     }
     if(!l||l.startsWith('#')) continue;
-    if(l.startsWith('"""')){inML=true;mlKey=key;mlLines=[];continue}
     var m=l.match(/^([^=]+)=\s*(.*)/);
     if(!m) continue;
-    key=m[1].trim();
-    var val=m[2].trim();
-    if(val==='"""'){inML=true;mlKey=key;mlLines=[];continue}
-    if(val.startsWith('"')&&val.endsWith('"')) d[key]=val.slice(1,-1);
-    else if(val==='true'||val==='false') d[key]=val==='true';
-    else if(!isNaN(val)) d[key]=Number(val);
-    else d[key]=val;
+    key=m[1].trim(); var val=m[2].trim();
+    if(val.startsWith('"""')){
+      var rest=val.substring(3);
+      var closeIdx=rest.indexOf('"""');
+      if(closeIdx>=0){d[key]=rest.substring(0,closeIdx)}
+      else{inML=true;mlKey=key;mlLines=[];if(rest)mlLines.push(rest)}
+    }else if(val.startsWith('"')&&val.endsWith('"')){d[key]=val.slice(1,-1)}
+    else if(val==='true'||val==='false'){d[key]=val==='true'}
+    else if(!isNaN(val)){d[key]=Number(val)}
+    else{d[key]=val}
   }
   return d;
 }
