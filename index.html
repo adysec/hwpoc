@@ -229,6 +229,21 @@ td .tag {
 .home-card .lbl { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .home-links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
 
+/* ── Pager ── */
+.pager {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 8px 16px; border-bottom: 1px solid var(--border);
+  background: var(--bg); font-size: 13px;
+}
+.pager button {
+  padding: 4px 12px; border: 1px solid var(--btn-outline-border);
+  border-radius: 4px; background: var(--surface); color: var(--text);
+  cursor: pointer; font-size: 12px;
+}
+.pager button:hover:not(:disabled) { background: var(--surface-hover); }
+.pager button:disabled { opacity: 0.4; cursor: default; }
+.pager #pageInfo { font-weight: 600; color: var(--text-strong); min-width: 60px; text-align: center; }
+
 /* ── Tool Cards (Nuclei & AVE) ── */
 .home-tools {
   display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
@@ -431,7 +446,7 @@ if(ver)b+='\n\n### 涉及版本\n'+ver;if(p)b+='\n\n### 利用路径 / URL\n'+p;
 if(d)b+='\n\n### 漏洞详情 / POC\n```\n'+d+'\n```';if(f)b+='\n\n### 处置建议 / 修复方案\n'+f;
 if(dt)b+='\n\n### 情报获取时间\n'+dt;b+='\n\n### 标签 *\n- [x] '+l;
 if(s)b+='\n\n### 来源 / 验证人\n'+s;
-b+='\n\n---\n\n**提交前请确认：**\n- [ ] 该漏洞尚未存在于当前漏洞库中\n- [ ] 信息准确，POC 经过验证或注明来源\n- [ ] 已去除敏感信息（如内部 IP、密码等）';
+b+='\n\n---\n\n**提交前确认：**\n- [ ] 该漏洞尚未存在于当前漏洞库中\n- [ ] 信息准确，POC 经过验证或注明来源\n- [ ] 已去除敏感信息';
 var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template=submit-vulnerability.md&title='+encodeURIComponent('['+(year||'')+'] '+n)+'&body='+encodeURIComponent(b);
 window.open(url,'_blank');closeModal()}
 </script>

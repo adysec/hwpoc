@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Build static HTML pages from TOML data files."""
+"""Build static HTML pages + JSON data files from TOML vulnerability data."""
 
-import tomllib, html
+import tomllib, html, json
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 DATA = BASE / "docs"
 OUT = BASE
 CSS = (BASE / "assets" / "css" / "style.css").read_text()
+PAGE_SIZE = 50
 
 TAB_BAR = '<div class="sheet-bar">{tabs}<a class="sheet-add" href="#" onclick="openModal();return false" title="提交漏洞">＋</a></div>'
 
@@ -21,22 +22,6 @@ TOP_BAR = """<div class="doc-topbar">
 </div>"""
 
 FOOTER = '<div class="doc-footer">护网漏洞库 · 原数据维护于腾讯文档，因人数限制迁移至此；社区通过 Issue 提交 · <a href="mailto:admin@adysec.com">AdySec &lt;admin@adysec.com&gt;</a></div>'
-
-SCRIPT = """<script>
-(function(){var si=document.getElementById('searchInput'),ss=document.getElementById('searchCol');if(si&&ss){
-var cols={'全部':-1};document.querySelectorAll('#vulnTable thead th').forEach(function(th,i){cols[th.textContent.trim().replace(/\\s*↕\\s*/,'')]=i});
-function doSearch(){var q=si.value.toLowerCase(),col=parseInt(ss.value);document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
-r.style.display=(col<0?r.textContent.toLowerCase().includes(q):(r.cells[col]||{}).textContent.toLowerCase().includes(q))?'':'none'})}
-si.addEventListener('input',doSearch);ss.addEventListener('change',doSearch)}})();
-(function(){document.querySelectorAll('#vulnTable thead th').forEach(function(th){th.addEventListener('click',function(){
-var tb=document.querySelector('#vulnTable tbody'),rows=Array.from(tb.querySelectorAll('tr')),col=parseInt(th.dataset.col),
-asc=!th.classList.contains('sort-asc');document.querySelectorAll('#vulnTable thead th').forEach(function(h){
-h.classList.remove('sort-asc','sort-desc')});th.classList.add(asc?'sort-asc':'sort-desc');rows.sort(function(a,b){
-var va=(a.cells[col]||{}).textContent||'',vb=(b.cells[col]||{}).textContent||'';
-return asc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh')});rows.forEach(function(r){tb.appendChild(r)})})})})();
-function copyCell(el){el.classList.toggle('expand');var t=el.textContent.trim();if(!t)return;
-navigator.clipboard.writeText(t).then(function(){var to=document.getElementById('toast');if(!to){to=document.createElement('div');to.id='toast';document.body.appendChild(to)}to.textContent='✓ 已复制: '+t.substring(0,40)+(t.length>40?'...':'');to.style.opacity='1';clearTimeout(to._t);to._t=setTimeout(function(){to.style.opacity='0'},2000)}).catch(function(){})}
-</script>"""
 
 MODAL = """<div class="modal-overlay" id="submitModal">
   <div class="modal-box">
@@ -100,9 +85,104 @@ if(ver)b+='\\n\\n### 涉及版本\\n'+ver;if(p)b+='\\n\\n### 利用路径 / URL\
 if(d)b+='\\n\\n### 漏洞详情 / POC\\n```\\n'+d+'\\n```';if(f)b+='\\n\\n### 处置建议 / 修复方案\\n'+f;
 if(dt)b+='\\n\\n### 情报获取时间\\n'+dt;b+='\\n\\n### 标签 *\\n- [x] '+l;
 if(s)b+='\\n\\n### 来源 / 验证人\\n'+s;
-b+='\\n\\n---\\n\\n**提交前请确认：**\\n- [ ] 该漏洞尚未存在于当前漏洞库中\\n- [ ] 信息准确，POC 经过验证或注明来源\\n- [ ] 已去除敏感信息（如内部 IP、密码等）';
+b+='\\n\\n---\\n\\n**提交前确认：**\\n- [ ] 该漏洞尚未存在于当前漏洞库中\\n- [ ] 信息准确，POC 经过验证或注明来源\\n- [ ] 已去除敏感信息';
 var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template=submit-vulnerability.md&title='+encodeURIComponent('['+(year||'')+'] '+n)+'&body='+encodeURIComponent(b);
 window.open(url,'_blank');closeModal()}
+</script>"""
+
+# ── Paginated year page JS ──
+YEAR_JS = """<script>
+var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s, PAGE_SIZE = %s;
+var allData = [], filtered = [], page = 1, totalPages = 1;
+
+function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
+
+function renderTable(){
+  var start=(page-1)*PAGE_SIZE, end=Math.min(start+PAGE_SIZE, filtered.length);
+  totalPages=Math.ceil(filtered.length/PAGE_SIZE)||1;
+  var h='<table id="vulnTable"><thead><tr>';
+  HEADERS.forEach(function(hdr,i){h+='<th data-col="'+i+'">'+hdr+' <span class="sort-icon">↕</span></th>'});
+  h+='</tr></thead><tbody>';
+  for(var i=start;i<end;i++){
+    var d=filtered[i];
+    h+='<tr>';
+    h+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
+    h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
+    h+='<td><span class="tag">'+esc(d.type)+'</span></td>';
+    if (HEADERS.length>3){
+      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
+      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
+      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.detail||'')+'</td>';
+      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.fix||'')+'</td>';
+      h+='<td>'+esc(d.date||'')+'</td>';
+      h+='<td>'+labelBadge(d.label||'')+'</td>';
+      if(HAS_VERIFIER) h+='<td>'+esc(d.verifier||'')+'</td>';
+    } else {
+      h+='<td>'+esc(d.source||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.info||'')+'</td>';
+      h+='<td>'+esc(d.date||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.poc||'')+'</td>';
+      h+='<td>'+labelBadge(d.label||'')+'</td>';
+    }
+    h+='</tr>';
+  }
+  h+='</tbody></table>';
+  document.getElementById('tableWrap').innerHTML=h;
+  document.getElementById('pageInfo').textContent=page+'/'+totalPages;
+  attachSortAndCopy();
+  applySearch();
+}
+
+function goPage(n){
+  if(n<1||n>totalPages)return;
+  page=n; renderTable();
+  document.getElementById('prevBtn').disabled=(page<=1);
+  document.getElementById('nextBtn').disabled=(page>=totalPages);
+}
+
+function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function attachSortAndCopy(){
+  document.querySelectorAll('#vulnTable thead th').forEach(function(th){th.addEventListener('click',function(){
+    var tb=document.querySelector('#vulnTable tbody'),rows=Array.from(tb.querySelectorAll('tr')),col=parseInt(th.dataset.col),
+    asc=!th.classList.contains('sort-asc');
+    document.querySelectorAll('#vulnTable thead th').forEach(function(h){h.classList.remove('sort-asc','sort-desc')});
+    th.classList.add(asc?'sort-asc':'sort-desc');
+    rows.sort(function(a,b){
+      var va=(a.cells[col]||{}).textContent||'',vb=(b.cells[col]||{}).textContent||'';
+      return asc?va.localeCompare(vb,'zh'):vb.localeCompare(va,'zh')});
+    rows.forEach(function(r){tb.appendChild(r)})})});
+}
+
+function applySearch(){
+  var q=(document.getElementById('searchInput')||{}).value||'',col=parseInt((document.getElementById('searchCol')||{}).value||'-1');
+  document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
+    r.style.display=(col<0?r.textContent.toLowerCase().includes(q.toLowerCase()):(r.cells[col]||{}).textContent.toLowerCase().includes(q.toLowerCase()))?'':'none'});
+  updateStats();
+}
+
+function updateStats(){
+  var visible=document.querySelectorAll('#vulnTable tbody tr[style!="display:none"]').length;
+  var total=document.querySelectorAll('#vulnTable tbody tr').length;
+  document.getElementById('statTotal').textContent='共 '+visible+'/'+total+' 条';
+}
+
+function initPage(){
+  fetch('data/'+YEAR+'.json').then(function(r){return r.json()}).then(function(data){
+    allData=data;
+    filtered=allData;
+    document.getElementById('stat0day').textContent='0day '+filtered.filter(function(d){return d.label==='0day'}).length;
+    document.getElementById('stat1day').textContent='1day '+filtered.filter(function(d){return d.label==='1day'}).length;
+    document.getElementById('statNday').textContent='nday '+filtered.filter(function(d){return d.label==='nday'}).length;
+    renderTable();
+  });
+}
+
+document.addEventListener('DOMContentLoaded',initPage);
+// search on input
+document.addEventListener('input',function(e){
+  if(e.target.id==='searchInput'||e.target.id==='searchCol'){
+    page=1; renderTable();
+  }
+});
 </script>"""
 
 def load_toml_dir(dirpath):
@@ -116,7 +196,7 @@ def load_toml_dir(dirpath):
             print("  [warn] skip %s: %s" % (fp.name, e))
     return items
 
-def page(title, body, current_year=None):
+def page(title, body, current_year=None, year_js=None):
     years = ["2026", "2025", "2024", "2023"]
     tabs = "".join(
         '<a class="sheet-tab%s" href="%s.html">%s</a>'
@@ -124,21 +204,23 @@ def page(title, body, current_year=None):
         for y in years
     )
     modal_year = current_year or ""
-    html = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n"
-    html += "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n"
-    html += "<title>%s — 护网漏洞库 by AdySec</title>\n" % title
-    html += "<style>%s</style>\n" % CSS
-    html += "<script>(function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark')}})();</script>\n"
-    html += "</head>\n<body>\n"
-    html += TOP_BAR + "\n"
-    html += TAB_BAR.replace("{tabs}", tabs) + "\n"
-    html += body + "\n"
-    html += MODAL.replace("MODAL_YEAR", "'%s'" % modal_year) + "\n"
-    html += FOOTER + "\n"
-    html += "<script>function toggleTheme(){var h=document.documentElement;var d=h.getAttribute('data-theme')==='dark';if(d){h.removeAttribute('data-theme');localStorage.setItem('theme','light')}else{h.setAttribute('data-theme','dark');localStorage.setItem('theme','dark')}}</script>\n"
-    html += MODAL_JS + "\n"
-    html += "</body>\n</html>"
-    return html
+    h = "<!DOCTYPE html>\n<html lang=\"zh-CN\">\n<head>\n"
+    h += "<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">\n"
+    h += "<title>%s — 护网漏洞库 by AdySec</title>\n" % title
+    h += "<style>%s</style>\n" % CSS
+    h += "<script>(function(){var t=localStorage.getItem('theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark')}})();</script>\n"
+    h += "</head>\n<body>\n"
+    h += TOP_BAR + "\n"
+    h += TAB_BAR.replace("{tabs}", tabs) + "\n"
+    h += body + "\n"
+    h += MODAL.replace("MODAL_YEAR", "'%s'" % modal_year) + "\n"
+    h += FOOTER + "\n"
+    h += "<script>function toggleTheme(){var h=document.documentElement;var d=h.getAttribute('data-theme')==='dark';if(d){h.removeAttribute('data-theme');localStorage.setItem('theme','light')}else{h.setAttribute('data-theme','dark');localStorage.setItem('theme','dark')}}</script>\n"
+    h += MODAL_JS + "\n"
+    if year_js:
+        h += year_js + "\n"
+    h += "</body>\n</html>"
+    return h
 
 def label_badge(l):
     if l in ("0day", "1day", "nday"):
@@ -187,70 +269,68 @@ def build_year(year):
 
     if year == "2023":
         headers = ["厂商", "漏洞名称", "类型", "来源", "信息", "日期", "POC", "标签"]
-        rows = []
+        json_data = []
         for d in data:
-            rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td><td><span class=\"tag\">%s</span></td>"
-                "<td>%s</td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td>%s</td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td>%s</td></tr>"
-                % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
-                   html.escape(str(d.get("source",""))), html.escape(str(d.get("info",""))), html.escape(str(d.get("date",""))),
-                   html.escape(str(d.get("poc",""))), label_badge(d.get("label","")))
-            )
+            json_data.append({
+                "vendor": str(d.get("vendor","")), "name": str(d.get("name","")),
+                "type": str(d.get("type","")), "source": str(d.get("source","")),
+                "info": str(d.get("info","")), "date": str(d.get("date","")),
+                "poc": str(d.get("poc","")), "label": str(d.get("label",""))
+            })
+        has_verifier = "false"
     else:
-        has_verifier = (year in ("2025", "2026"))
-        if has_verifier:
+        has_verifier_val = (year in ("2025", "2026"))
+        if has_verifier_val:
             headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签", "验真人"]
         else:
             headers = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签"]
-        rows = []
+        json_data = []
         for d in data:
-            verifier_cell = "<td>%s</td>" % html.escape(str(d.get("verifier",""))) if has_verifier else ""
-            rows.append(
-                "<tr><td><span class=\"tag\">%s</span></td><td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td><td><span class=\"tag\">%s</span></td>"
-                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td class=\"cell-hover\" onclick=\"copyCell(this)\">%s</td>"
-                "<td>%s</td><td>%s</td>%s</tr>"
-                % (html.escape(str(d.get("vendor",""))), html.escape(str(d.get("name",""))), html.escape(str(d.get("type",""))),
-                   html.escape(str(d.get("version",""))), html.escape(str(d.get("path",""))), html.escape(str(d.get("detail",""))),
-                   html.escape(str(d.get("fix",""))), html.escape(str(d.get("date",""))), label_badge(d.get("label","")),
-                   verifier_cell)
-            )
+            item = {
+                "vendor": str(d.get("vendor","")), "name": str(d.get("name","")),
+                "type": str(d.get("type","")), "version": str(d.get("version","")),
+                "path": str(d.get("path","")), "detail": str(d.get("detail","")),
+                "fix": str(d.get("fix","")), "date": str(d.get("date","")),
+                "label": str(d.get("label",""))
+            }
+            if has_verifier_val:
+                item["verifier"] = str(d.get("verifier",""))
+            json_data.append(item)
+        has_verifier = "true" if has_verifier_val else "false"
 
-    date_col = 5 if year == "2023" else (7 if year in ("2026","2025","2024") else -1)
-    ths = "".join(
-        '<th data-col="%d"%s>%s <span class="sort-icon">↕</span></th>'
-        % (i, ' class="sort-desc"' if i == date_col else "", h)
-        for i, h in enumerate(headers)
-    )
-    tbody = "".join(rows)
+    # Write JSON data file
+    (OUT / "data").mkdir(parents=True, exist_ok=True)
+    (OUT / "data" / ("%s.json" % year)).write_text(json.dumps(json_data, ensure_ascii=False, indent=1))
+    print("  data/%s.json (%d entries)" % (year, len(json_data)))
+
+    # Write HTML with embedded JS for pagination
+    headers_json = json.dumps(headers, ensure_ascii=False)
+    year_js = YEAR_JS % (year, headers_json, has_verifier, str(PAGE_SIZE))
 
     body = '<div class="toolbar">\n'
     body += '<div class="search-wrap"><span class="icon">🔍</span>\n'
-    body += '<input type="text" id="searchInput" placeholder="搜索...">\n'
+    body += '<input type="text" id="searchInput" placeholder="搜索..." oninput="page=1;renderTable()">\n'
     body += '</div>\n'
-    body += '<select id="searchCol" style="padding:4px 8px;font-size:12px;border:1px solid var(--btn-outline-border);border-radius:4px;background:var(--surface);color:var(--text);outline:none">\n'
+    body += '<select id="searchCol" style="padding:4px 8px;font-size:12px;border:1px solid var(--btn-outline-border);border-radius:4px;background:var(--surface);color:var(--text);outline:none" onchange="page=1;renderTable()">\n'
     body += '<option value="-1">全部列</option>\n'
     for i, h in enumerate(headers):
         body += '<option value="%d">%s</option>\n' % (i, h)
     body += '</select>\n'
-    body += '<span class="stat-badge total">共 %d 条</span>\n' % len(data)
-    body += '<span class="stat-badge zday">0day %d</span>\n' % count_0day
-    body += '<span class="stat-badge oney">1day %d</span>\n' % count_1day
-    body += '<span class="stat-badge nday">nday %d</span>\n' % count_nday
+    body += '<span class="stat-badge total" id="statTotal">共 %d 条</span>\n' % len(data)
+    body += '<span class="stat-badge zday" id="stat0day">0day %d</span>\n' % count_0day
+    body += '<span class="stat-badge oney" id="stat1day">1day %d</span>\n' % count_1day
+    body += '<span class="stat-badge nday" id="statNday">nday %d</span>\n' % count_nday
     body += '</div>\n'
-    body += '<div class="table-wrap">\n'
-    body += '<table id="vulnTable">\n'
-    body += '<thead><tr>%s</tr></thead>\n' % ths
-    body += '<tbody>%s</tbody>\n' % tbody
-    body += '</table>\n</div>\n'
-    body += SCRIPT
+    body += '<div class="pager"><button id="prevBtn" onclick="goPage(page-1)">◀ 上一页</button> <span id="pageInfo">1/1</span> <button id="nextBtn" onclick="goPage(page+1)">下一页 ▶</button></div>\n'
+    body += '<div class="table-wrap" id="tableWrap">\n'
+    body += '<table id="vulnTable"><thead><tr>'
+    for i, h in enumerate(headers):
+        body += '<th data-col="%d">%s <span class="sort-icon">↕</span></th>' % (i, h)
+    body += '</tr></thead><tbody></tbody></table>\n'
+    body += '</div>\n'
 
-    (OUT / ("%s.html" % year)).write_text(page("%s年漏洞" % year, body, current_year=year))
-    print("%s.html (%d entries)" % (year, len(data)))
+    (OUT / ("%s.html" % year)).write_text(page("%s年漏洞" % year, body, current_year=year, year_js=year_js))
+    print("  %s.html (paged, %d entries)" % (year, len(data)))
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)

