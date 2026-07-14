@@ -479,6 +479,9 @@ function parseTOML(t){
   return d;
 }
 
+function copyCell(el){el.classList.toggle('expand');var t=el.textContent.trim();if(!t)return;
+navigator.clipboard.writeText(t).then(function(){var to=document.getElementById('toast');if(!to){to=document.createElement('div');to.id='toast';document.body.appendChild(to)}to.textContent='✓ 已复制: '+t.substring(0,40)+(t.length>40?'...':'');to.style.opacity='1';clearTimeout(to._t);to._t=setTimeout(function(){to.style.opacity='0'},2000)}).catch(function(){})}
+
 function buildRow(d){
   var r='<tr>';
   r+='<td><span class="tag">'+esc(d.vendor||'')+'</span></td>';
