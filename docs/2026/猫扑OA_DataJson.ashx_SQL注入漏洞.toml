@@ -1,0 +1,11 @@
+vendor = "MaopSoft"
+name = "猫扑OA DataJson.ashx SQL注入漏洞"
+type = "SQL注入"
+path = "/DataJson.ashx"
+detail = """猫扑OA（MaopSoft）DataJson.ashx 接口存在 SQL 注入漏洞，攻击者可利用该漏洞获取数据库中的管理员后台密码、用户个人信息等敏感数据，在高权限的情况下可向服务器写入木马，进一步获取服务器系统权限。该漏洞暂未分配 CVE 编号。
+FOFA: body = "您是MaopSoft的VIP客户"
+最早披露: 2026-07-14"""
+fix = "联系厂商获取修复补丁或升级版本；临时措施：通过 WAF/反向代理拦截对 /DataJson.ashx 的恶意 SQL 注入请求；限制接口访问来源 IP；若业务允许，暂时关闭该接口的外网访问。"
+date = 20260714
+label = "0day"
+verifier = "AdySec"
