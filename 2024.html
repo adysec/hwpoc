@@ -504,7 +504,7 @@ function buildRow(d){
 function loadTOMLs(files, idx){
   if(idx>=files.length){attachSortAndCopy();applySearch();document.getElementById('loadingBar').style.display='none';return}
   var tbody=document.querySelector('#vulnTable tbody');
-  fetch(files[idx]).then(function(r){return r.text()}).then(function(text){
+  fetch('docs/'+YEAR+'/'+files[idx]).then(function(r){return r.text()}).then(function(text){
     try{
       var d=parseTOML(text);
       loaded.push(d);

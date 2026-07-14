@@ -152,7 +152,7 @@ function buildRow(d){
 function loadTOMLs(files, idx){
   if(idx>=files.length){attachSortAndCopy();applySearch();document.getElementById('loadingBar').style.display='none';return}
   var tbody=document.querySelector('#vulnTable tbody');
-  fetch(files[idx]).then(function(r){return r.text()}).then(function(text){
+  fetch('docs/'+YEAR+'/'+files[idx]).then(function(r){return r.text()}).then(function(text){
     try{
       var d=parseTOML(text);
       loaded.push(d);
@@ -282,7 +282,7 @@ def build_year(year):
         for fp in sorted(toml_dir.glob("*.toml")):
             try:
                 d = tomllib.loads(fp.read_text())
-                d["_file"] = "docs/%s/%s" % (year, fp.name)
+                d["_file"] = fp.name
                 raw.append(d)
             except Exception as e:
                 print("  [warn] skip %s: %s" % (fp.name, e))
