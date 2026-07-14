@@ -1,0 +1,12 @@
+vendor = "企业信息发送平台"
+name = "企业信息发送平台 getLicenceDetail 任意文件读取漏洞"
+type = "任意文件读取"
+version = ""
+path = "/getLicenceDetail"
+detail = """企业信息发送平台 getLicenceDetail 接口存在任意文件读取漏洞，未经身份验证的攻击者可通过构造包含目录遍历序列（如 ..;）的路径参数，读取服务器上的任意文件，如系统配置文件、数据库凭证等敏感信息。该漏洞目前尚未分配 CVE 编号，已出现公开 PoC。
+FOFA fid: G+ad9wy/zlkrmbSKJo9x+Q==
+最早披露: 2026-07-14"""
+fix = "联系厂商获取补丁或升级版本；临时措施：通过 WAF/反向代理拦截 /getLicenceDetail 接口的路径遍历请求（如 ..; 等序列）；限制接口访问来源 IP；若业务允许，暂时关闭该接口的外网访问。"
+date = 20260714
+label = "0day"
+verifier = "AdySec"
