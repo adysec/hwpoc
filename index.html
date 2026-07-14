@@ -229,20 +229,10 @@ td .tag {
 .home-card .lbl { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .home-links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
 
-/* ── Pager ── */
-.pager {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  padding: 8px 16px; border-bottom: 1px solid var(--border);
-  background: var(--bg); font-size: 13px;
+/* ── Loading Bar ── */
+.loading-bar {
+  padding: 20px; text-align: center; color: var(--text-muted); font-size: 14px;
 }
-.pager button {
-  padding: 4px 12px; border: 1px solid var(--btn-outline-border);
-  border-radius: 4px; background: var(--surface); color: var(--text);
-  cursor: pointer; font-size: 12px;
-}
-.pager button:hover:not(:disabled) { background: var(--surface-hover); }
-.pager button:disabled { opacity: 0.4; cursor: default; }
-.pager #pageInfo { font-weight: 600; color: var(--text-strong); min-width: 60px; text-align: center; }
 
 /* ── Tool Cards (Nuclei & AVE) ── */
 .home-tools {

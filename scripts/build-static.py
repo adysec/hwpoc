@@ -90,55 +90,50 @@ var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template
 window.open(url,'_blank');closeModal()}
 </script>"""
 
-# ── Paginated year page JS ──
+# ── Streaming-load year page JS (no pagination, batch render) ──
 YEAR_JS = """<script>
-var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s, PAGE_SIZE = %s;
-var allData = [], filtered = [], page = 1, totalPages = 1;
+var YEAR = '%s', HEADERS = %s, HAS_VERIFIER = %s;
+var allData = [], filtered = [], BATCH = 30;
 
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
-
-function renderTable(){
-  var start=(page-1)*PAGE_SIZE, end=Math.min(start+PAGE_SIZE, filtered.length);
-  totalPages=Math.ceil(filtered.length/PAGE_SIZE)||1;
-  var h='<table id="vulnTable"><thead><tr>';
-  HEADERS.forEach(function(hdr,i){h+='<th data-col="'+i+'">'+hdr+' <span class="sort-icon">↕</span></th>'});
-  h+='</tr></thead><tbody>';
-  for(var i=start;i<end;i++){
-    var d=filtered[i];
-    h+='<tr>';
-    h+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
-    h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
-    h+='<td><span class="tag">'+esc(d.type)+'</span></td>';
-    if (HEADERS.length>3){
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.detail||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.fix||'')+'</td>';
-      h+='<td>'+esc(d.date||'')+'</td>';
-      h+='<td>'+labelBadge(d.label||'')+'</td>';
-      if(HAS_VERIFIER) h+='<td>'+esc(d.verifier||'')+'</td>';
-    } else {
-      h+='<td>'+esc(d.source||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.info||'')+'</td>';
-      h+='<td>'+esc(d.date||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.poc||'')+'</td>';
-      h+='<td>'+labelBadge(d.label||'')+'</td>';
-    }
-    h+='</tr>';
-  }
-  h+='</tbody></table>';
-  document.getElementById('tableWrap').innerHTML=h;
-  document.getElementById('pageInfo').textContent=page+'/'+totalPages;
-  attachSortAndCopy();
-  applySearch();
-}
-
-function goPage(n){
-  if(n<1||n>totalPages)return;
-  page=n; renderTable();
-  document.getElementById('prevBtn').disabled=(page<=1);
-  document.getElementById('nextBtn').disabled=(page>=totalPages);
-}
-
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function buildRow(d){
+  var r='<tr>';
+  r+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
+  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
+  r+='<td><span class="tag">'+esc(d.type)+'</span></td>';
+  if(HEADERS.length>3){
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.detail||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.fix||'')+'</td>';
+    r+='<td>'+esc(d.date||'')+'</td>';
+    r+='<td>'+labelBadge(d.label||'')+'</td>';
+    if(HAS_VERIFIER) r+='<td>'+esc(d.verifier||'')+'</td>';
+  } else {
+    r+='<td>'+esc(d.source||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.info||'')+'</td>';
+    r+='<td>'+esc(d.date||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.poc||'')+'</td>';
+    r+='<td>'+labelBadge(d.label||'')+'</td>';
+  }
+  return r+'</tr>';
+}
+
+function streamRows(tbody, data, idx){
+  if(idx>=data.length){attachSortAndCopy();applySearch();return}
+  var end=Math.min(idx+BATCH, data.length), frag=[];
+  for(var i=idx;i<end;i++) frag.push(buildRow(data[i]));
+  tbody.insertAdjacentHTML('beforeend', frag.join(''));
+  document.getElementById('statTotal').textContent='共 '+tbody.children.length+'/'+data.length+' 条';
+  setTimeout(function(){streamRows(tbody,data,end)}, 1);
+}
+
+function renderFull(){
+  document.getElementById('loadingBar').style.display='none';
+  var tbody=document.querySelector('#vulnTable tbody');
+  tbody.innerHTML='';
+  streamRows(tbody, filtered, 0);
+}
 
 function attachSortAndCopy(){
   document.querySelectorAll('#vulnTable thead th').forEach(function(th){th.addEventListener('click',function(){
@@ -156,13 +151,10 @@ function applySearch(){
   var q=(document.getElementById('searchInput')||{}).value||'',col=parseInt((document.getElementById('searchCol')||{}).value||'-1');
   document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
     r.style.display=(col<0?r.textContent.toLowerCase().includes(q.toLowerCase()):(r.cells[col]||{}).textContent.toLowerCase().includes(q.toLowerCase()))?'':'none'});
-  updateStats();
 }
 
-function updateStats(){
-  var visible=document.querySelectorAll('#vulnTable tbody tr[style!="display:none"]').length;
-  var total=document.querySelectorAll('#vulnTable tbody tr').length;
-  document.getElementById('statTotal').textContent='共 '+visible+'/'+total+' 条';
+function doSearch(){
+  renderFull();
 }
 
 function initPage(){
@@ -172,16 +164,14 @@ function initPage(){
     document.getElementById('stat0day').textContent='0day '+filtered.filter(function(d){return d.label==='0day'}).length;
     document.getElementById('stat1day').textContent='1day '+filtered.filter(function(d){return d.label==='1day'}).length;
     document.getElementById('statNday').textContent='nday '+filtered.filter(function(d){return d.label==='nday'}).length;
-    renderTable();
+    document.getElementById('statTotal').textContent='共 '+filtered.length+' 条';
+    renderFull();
   });
 }
 
 document.addEventListener('DOMContentLoaded',initPage);
-// search on input
 document.addEventListener('input',function(e){
-  if(e.target.id==='searchInput'||e.target.id==='searchCol'){
-    page=1; renderTable();
-  }
+  if(e.target.id==='searchInput'||e.target.id==='searchCol') doSearch();
 });
 </script>"""
 
@@ -305,7 +295,7 @@ def build_year(year):
 
     # Write HTML with embedded JS for pagination
     headers_json = json.dumps(headers, ensure_ascii=False)
-    year_js = YEAR_JS % (year, headers_json, has_verifier, str(PAGE_SIZE))
+    year_js = YEAR_JS % (year, headers_json, has_verifier)
 
     body = '<div class="toolbar">\n'
     body += '<div class="search-wrap"><span class="icon">🔍</span>\n'
@@ -321,8 +311,8 @@ def build_year(year):
     body += '<span class="stat-badge oney" id="stat1day">1day %d</span>\n' % count_1day
     body += '<span class="stat-badge nday" id="statNday">nday %d</span>\n' % count_nday
     body += '</div>\n'
-    body += '<div class="pager"><button id="prevBtn" onclick="goPage(page-1)">◀ 上一页</button> <span id="pageInfo">1/1</span> <button id="nextBtn" onclick="goPage(page+1)">下一页 ▶</button></div>\n'
     body += '<div class="table-wrap" id="tableWrap">\n'
+    body += '<div id="loadingBar" class="loading-bar">⏳ 加载数据中...</div>\n'
     body += '<table id="vulnTable"><thead><tr>'
     for i, h in enumerate(headers):
         body += '<th data-col="%d">%s <span class="sort-icon">↕</span></th>' % (i, h)

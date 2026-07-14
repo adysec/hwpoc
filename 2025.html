@@ -229,20 +229,10 @@ td .tag {
 .home-card .lbl { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
 .home-links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; }
 
-/* ── Pager ── */
-.pager {
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  padding: 8px 16px; border-bottom: 1px solid var(--border);
-  background: var(--bg); font-size: 13px;
+/* ── Loading Bar ── */
+.loading-bar {
+  padding: 20px; text-align: center; color: var(--text-muted); font-size: 14px;
 }
-.pager button {
-  padding: 4px 12px; border: 1px solid var(--btn-outline-border);
-  border-radius: 4px; background: var(--surface); color: var(--text);
-  cursor: pointer; font-size: 12px;
-}
-.pager button:hover:not(:disabled) { background: var(--surface-hover); }
-.pager button:disabled { opacity: 0.4; cursor: default; }
-.pager #pageInfo { font-weight: 600; color: var(--text-strong); min-width: 60px; text-align: center; }
 
 /* ── Tool Cards (Nuclei & AVE) ── */
 .home-tools {
@@ -382,8 +372,8 @@ td .tag {
 <span class="stat-badge oney" id="stat1day">1day 125</span>
 <span class="stat-badge nday" id="statNday">nday 93</span>
 </div>
-<div class="pager"><button id="prevBtn" onclick="goPage(page-1)">◀ 上一页</button> <span id="pageInfo">1/1</span> <button id="nextBtn" onclick="goPage(page+1)">下一页 ▶</button></div>
 <div class="table-wrap" id="tableWrap">
+<div id="loadingBar" class="loading-bar">⏳ 加载数据中...</div>
 <table id="vulnTable"><thead><tr><th data-col="0">厂商 <span class="sort-icon">↕</span></th><th data-col="1">漏洞名称 <span class="sort-icon">↕</span></th><th data-col="2">类型 <span class="sort-icon">↕</span></th><th data-col="3">版本 <span class="sort-icon">↕</span></th><th data-col="4">路径 <span class="sort-icon">↕</span></th><th data-col="5">详情 <span class="sort-icon">↕</span></th><th data-col="6">处置建议 <span class="sort-icon">↕</span></th><th data-col="7">日期 <span class="sort-icon">↕</span></th><th data-col="8">标签 <span class="sort-icon">↕</span></th><th data-col="9">验真人 <span class="sort-icon">↕</span></th></tr></thead><tbody></tbody></table>
 </div>
 
@@ -455,53 +445,48 @@ var url='https://github.com/adysec/hwpoc/issues/new?labels=漏洞提交&template
 window.open(url,'_blank');closeModal()}
 </script>
 <script>
-var YEAR = '2025', HEADERS = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签", "验真人"], HAS_VERIFIER = true, PAGE_SIZE = 50;
-var allData = [], filtered = [], page = 1, totalPages = 1;
+var YEAR = '2025', HEADERS = ["厂商", "漏洞名称", "类型", "版本", "路径", "详情", "处置建议", "日期", "标签", "验真人"], HAS_VERIFIER = true;
+var allData = [], filtered = [], BATCH = 30;
 
 function labelBadge(l){return l==='0day'||l==='1day'||l==='nday'?'<span class="label label-'+l+'">'+l+'</span>':l}
-
-function renderTable(){
-  var start=(page-1)*PAGE_SIZE, end=Math.min(start+PAGE_SIZE, filtered.length);
-  totalPages=Math.ceil(filtered.length/PAGE_SIZE)||1;
-  var h='<table id="vulnTable"><thead><tr>';
-  HEADERS.forEach(function(hdr,i){h+='<th data-col="'+i+'">'+hdr+' <span class="sort-icon">↕</span></th>'});
-  h+='</tr></thead><tbody>';
-  for(var i=start;i<end;i++){
-    var d=filtered[i];
-    h+='<tr>';
-    h+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
-    h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
-    h+='<td><span class="tag">'+esc(d.type)+'</span></td>';
-    if (HEADERS.length>3){
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.detail||'')+'</td>';
-      h+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.fix||'')+'</td>';
-      h+='<td>'+esc(d.date||'')+'</td>';
-      h+='<td>'+labelBadge(d.label||'')+'</td>';
-      if(HAS_VERIFIER) h+='<td>'+esc(d.verifier||'')+'</td>';
-    } else {
-      h+='<td>'+esc(d.source||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.info||'')+'</td>';
-      h+='<td>'+esc(d.date||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.poc||'')+'</td>';
-      h+='<td>'+labelBadge(d.label||'')+'</td>';
-    }
-    h+='</tr>';
-  }
-  h+='</tbody></table>';
-  document.getElementById('tableWrap').innerHTML=h;
-  document.getElementById('pageInfo').textContent=page+'/'+totalPages;
-  attachSortAndCopy();
-  applySearch();
-}
-
-function goPage(n){
-  if(n<1||n>totalPages)return;
-  page=n; renderTable();
-  document.getElementById('prevBtn').disabled=(page<=1);
-  document.getElementById('nextBtn').disabled=(page>=totalPages);
-}
-
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function buildRow(d){
+  var r='<tr>';
+  r+='<td><span class="tag">'+esc(d.vendor)+'</span></td>';
+  r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.name)+'</td>';
+  r+='<td><span class="tag">'+esc(d.type)+'</span></td>';
+  if(HEADERS.length>3){
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.version||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.path||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.detail||'')+'</td>';
+    r+='<td class="cell-hover" onclick="copyCell(this)">'+esc(d.fix||'')+'</td>';
+    r+='<td>'+esc(d.date||'')+'</td>';
+    r+='<td>'+labelBadge(d.label||'')+'</td>';
+    if(HAS_VERIFIER) r+='<td>'+esc(d.verifier||'')+'</td>';
+  } else {
+    r+='<td>'+esc(d.source||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.info||'')+'</td>';
+    r+='<td>'+esc(d.date||'')+'</td><td class="cell-hover" onclick="copyCell(this)">'+esc(d.poc||'')+'</td>';
+    r+='<td>'+labelBadge(d.label||'')+'</td>';
+  }
+  return r+'</tr>';
+}
+
+function streamRows(tbody, data, idx){
+  if(idx>=data.length){attachSortAndCopy();applySearch();return}
+  var end=Math.min(idx+BATCH, data.length), frag=[];
+  for(var i=idx;i<end;i++) frag.push(buildRow(data[i]));
+  tbody.insertAdjacentHTML('beforeend', frag.join(''));
+  document.getElementById('statTotal').textContent='共 '+tbody.children.length+'/'+data.length+' 条';
+  setTimeout(function(){streamRows(tbody,data,end)}, 1);
+}
+
+function renderFull(){
+  document.getElementById('loadingBar').style.display='none';
+  var tbody=document.querySelector('#vulnTable tbody');
+  tbody.innerHTML='';
+  streamRows(tbody, filtered, 0);
+}
 
 function attachSortAndCopy(){
   document.querySelectorAll('#vulnTable thead th').forEach(function(th){th.addEventListener('click',function(){
@@ -519,13 +504,10 @@ function applySearch(){
   var q=(document.getElementById('searchInput')||{}).value||'',col=parseInt((document.getElementById('searchCol')||{}).value||'-1');
   document.querySelectorAll('#vulnTable tbody tr').forEach(function(r){
     r.style.display=(col<0?r.textContent.toLowerCase().includes(q.toLowerCase()):(r.cells[col]||{}).textContent.toLowerCase().includes(q.toLowerCase()))?'':'none'});
-  updateStats();
 }
 
-function updateStats(){
-  var visible=document.querySelectorAll('#vulnTable tbody tr[style!="display:none"]').length;
-  var total=document.querySelectorAll('#vulnTable tbody tr').length;
-  document.getElementById('statTotal').textContent='共 '+visible+'/'+total+' 条';
+function doSearch(){
+  renderFull();
 }
 
 function initPage(){
@@ -535,16 +517,14 @@ function initPage(){
     document.getElementById('stat0day').textContent='0day '+filtered.filter(function(d){return d.label==='0day'}).length;
     document.getElementById('stat1day').textContent='1day '+filtered.filter(function(d){return d.label==='1day'}).length;
     document.getElementById('statNday').textContent='nday '+filtered.filter(function(d){return d.label==='nday'}).length;
-    renderTable();
+    document.getElementById('statTotal').textContent='共 '+filtered.length+' 条';
+    renderFull();
   });
 }
 
 document.addEventListener('DOMContentLoaded',initPage);
-// search on input
 document.addEventListener('input',function(e){
-  if(e.target.id==='searchInput'||e.target.id==='searchCol'){
-    page=1; renderTable();
-  }
+  if(e.target.id==='searchInput'||e.target.id==='searchCol') doSearch();
 });
 </script>
 </body>
