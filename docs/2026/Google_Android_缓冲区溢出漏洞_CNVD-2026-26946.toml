@@ -1,0 +1,11 @@
+vendor = "Google"
+name = "Google Android 缓冲区溢出漏洞 CNVD-2026-26946"
+type = "缓冲区溢出"
+version = "Google Android"
+detail = """Google Android 存在缓冲区溢出漏洞（CNVD-2026-26946），综合评级为高危。攻击者可利用该漏洞造成拒绝服务或可能的代码执行。厂商已发布漏洞修复程序，请及时关注 Android 安全公告更新。
+CNVD: CNVD-2026-26946
+最早披露: 2026-06-25"""
+fix = "关注 Google Android 安全公告并及时安装安全补丁；保持 Android 系统版本为最新；在补丁可用前，避免安装来源不明的应用。"
+date = 20260714
+label = "nday"
+verifier = "AdySec"
