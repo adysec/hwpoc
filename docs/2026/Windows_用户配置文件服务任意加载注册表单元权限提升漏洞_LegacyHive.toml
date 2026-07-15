@@ -1,0 +1,11 @@
+vendor = "Microsoft"
+name = "Windows 用户配置文件服务任意加载注册表单元权限提升漏洞 LegacyHive"
+type = "本地提权"
+version = "Windows 10/11 所有版本, Windows Server 所有版本（含 2026 年 7 月补丁后）"
+detail = """Windows 用户配置文件服务（User Profile Service）存在任意加载注册表单元（hive）的权限提升漏洞（LegacyHive）。该漏洞允许标准用户加载目标用户的注册表单元，实现权限提升。微软 2026 年 7 月安全更新未能完全修复该漏洞。PoC 已公开，影响所有当前支持的 Windows 桌面和服务器版本。
+GitHub PoC: https://github.com/MSNightmare/LegacyHive
+最早披露: 2026-07-14"""
+fix = "微软尚未发布完整修复补丁；临时措施：限制标准用户对敏感注册表单元的操作权限；监控注册表单元加载相关的事件日志；限制多用户共享系统的用户交互；对受影响系统实施最小权限原则。"
+date = 20260715
+label = "0day"
+verifier = "AdySec"
