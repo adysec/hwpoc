@@ -1,7 +1,7 @@
 vendor = "智跃"
 name = "智跃人力资源管理系统 zyconfig.txt 敏感信息泄露漏洞"
 type = "敏感信息泄露"
-path = "/zyconfig.txt"
+path = "/resource/servs/file/zyconfig.txt"
 detail = """智跃人力资源管理系统 zyconfig.txt 接口存在敏感信息泄露漏洞，未经身份验证的攻击者可访问 /zyconfig.txt 获取系统配置、数据库连接等敏感信息。该漏洞暂未分配 CVE 编号。
 最早披露: 2026-07-14"""
 fix = "联系厂商获取修复补丁；临时措施：通过 WAF/反向代理拦截对 /zyconfig.txt 的访问请求；限制接口访问来源 IP；若业务允许，删除或限制 zyconfig.txt 文件的公网可读权限。"
