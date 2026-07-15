@@ -1,0 +1,10 @@
+vendor = "PortAdmin"
+name = "PortAdmin端口管理系统 account 任意用户添加漏洞"
+type = "未授权访问"
+path = "/account"
+detail = """PortAdmin端口管理系统 account 接口存在任意用户添加漏洞，攻击者可在未经授权的情况下向系统中添加任意管理员账户，导致系统被完全控制。该漏洞暂未分配 CVE 编号。
+最早披露: 2026-07-14"""
+fix = "联系厂商获取修复补丁；临时措施：通过 WAF/反向代理限制对 /account 接口的访问，仅允许受信任 IP 调用；对用户添加操作实施严格的身份验证和权限校验；审计系统现有账户列表，排查可疑新增账户。"
+date = 20260714
+label = "0day"
+verifier = "AdySec"
