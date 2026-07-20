@@ -1,0 +1,10 @@
+vendor = "Alibaba"
+name = "Fastjson 1.2.83 无 Gadget 远程代码执行漏洞"
+type = "RCE"
+version = "Fastjson 1.2.83（1.x 最终版）"
+detail = """Fastjson 1.2.83（1.x 系列最终版本）被发现存在无需 classpath gadget 的远程代码执行漏洞。攻击者无需特定反序列化 gadget 链，仅需单个 payload 即可实现 RCE。该漏洞影响范围广，Fastjson 1.x 仍是生产环境中最广泛部署的 Java JSON 库之一。
+最早披露: 2026-07-17（Kirill Firsov 公开）"""
+fix = "升级至 Fastjson 2.x 版本；临时措施：在无法升级时通过 WAF 拦截可疑的 JSON 请求内容；限制 Fastjson 解析接口的访问来源。"
+date = 20260717
+label = "0day"
+verifier = "AdySec"
