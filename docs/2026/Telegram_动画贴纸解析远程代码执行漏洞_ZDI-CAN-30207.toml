@@ -1,0 +1,18 @@
+vendor = "Telegram"
+name = "Telegram 动画贴纸解析远程代码执行漏洞 ZDI-CAN-30207"
+type = "RCE"
+version = "Telegram Android / Desktop"
+detail = """Telegram 动画贴纸/媒体预览解析存在零点击远程代码执行漏洞，ZDI-CAN-30207，CVSS 评分 9.8（后调整为 7.0）。攻击者可通过发送特制动画贴纸自动触发内存破坏（疑似 rlottie 库解析缺陷），无需用户交互即可在目标设备执行任意代码。由 Trend Micro ZDI 研究员 Michael DePlante (@izobashi) 于 2026-03-26 发现。Telegram 官方否认该漏洞存在，未发布补丁。
+
+参考链接:
+- https://github.com/gameworkerkim/Telegram-0-Click-RCE-SECURITY-VULNERABILITY-ANALYSIS-REPORT
+- https://securityonline.info/telegram-critical-zero-click-vulnerability-zdi-can-30207/
+- https://x.com/thezdi/status/2037292596339613982"""
+fix = """1. 在 Telegram 设置中禁用动画贴纸自动播放（Settings > Chat Settings > Auto-play animated stickers）
+2. 关闭媒体自动下载（Settings > Data and Storage > Automatic Media Download > 全部设为 Never）
+3. 暂不使用非官方客户端或修改版 Telegram
+4. 关注 ZDI 2026-07-24 披露截止日后的官方补丁发布"""
+date = 20260720
+label = "0day"
+cve = "ZDI-CAN-30207"
+verifier = "Michael DePlante (@izobashi)"

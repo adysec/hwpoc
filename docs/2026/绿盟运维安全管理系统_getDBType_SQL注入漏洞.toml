@@ -1,0 +1,10 @@
+vendor = "绿盟科技"
+name = "绿盟运维安全管理系统 getDBType SQL注入漏洞"
+type = "SQL注入"
+path = "/api/device/getDBType"
+detail = """绿盟运维安全管理系统（NSFOCUS OSSIM/USM）getDBType 接口存在 SQL 注入漏洞。应用程序未能正确过滤用户输入，未授权攻击者可通过构造恶意 SQL 语句获取数据库敏感信息，可能导致数据泄露或进一步利用。
+
+来源: FreeBuf 威胁情报"""
+fix = "联系绿盟科技获取安全补丁；在 WAF 中配置 /api/device/getDBType 接口的 SQL 注入防护规则；限制管理接口仅内网白名单访问；排查数据库日志中的异常查询。"
+date = 20260720
+label = "nday"
