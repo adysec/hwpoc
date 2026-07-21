@@ -1,0 +1,11 @@
+vendor = "泛微"
+name = "泛微 E-cology10 invoke接口远程命令执行漏洞"
+type = "RCE"
+version = "泛微 E-cology10"
+path = "/papi/openapi/sapi/oauth2/logicflow/plugin/invoke"
+detail = """泛微 E-cology10 invoke 接口存在远程命令执行漏洞。未经身份验证的攻击者可通过向 /papi/openapi/sapi/oauth2/logicflow/plugin/invoke 接口发送特制请求，实现远程命令执行。该漏洞暂未分配 CVE 编号，PoC 已公开。
+最早披露: 2026-07-20"""
+fix = "联系厂商获取修复补丁；临时措施：通过 WAF/反向代理拦截对 /papi/openapi/sapi/oauth2/logicflow/plugin/invoke 的访问请求；限制该接口的访问来源 IP。"
+date = 20260721
+label = "0day"
+verifier = "AdySec"
