@@ -1,0 +1,10 @@
+vendor = "OpenSSL"
+name = "OpenSSL HollowByte TLS 握手内存耗尽拒绝服务漏洞"
+type = "拒绝服务"
+version = "OpenSSL < 3.0.21, < 3.4.6, < 3.5.7, < 3.6.3, < 4.0.1"
+detail = """OpenSSL TLS 握手过程中存在内存耗尽漏洞（HollowByte）。远程未认证攻击者发送仅 11 字节的恶意载荷后，服务器在 TLS 握手开始前便会分配高达 131 KB 的内存，随后阻塞一个工作线程无限期等待数据。通过多轮连接并随机化声明的大小，攻击者可导致堆内存碎片化，使服务器常驻内存持续攀升直至被 OOM-Killer 杀掉。Okta 红队在 1 GB RAM 环境中成功触发 OOM，在 16 GB RAM 环境中锁定了 25% 的系统内存。由于 OpenSSL 被广泛嵌入，影响范围包括 Apache、NGINX、Node.js、Python、Ruby、PHP、MySQL、PostgreSQL 等。OpenSSL 未分配 CVE 编号，将其视为加固性修复。
+最早披露: 2026-07-21"""
+fix = "升级 OpenSSL 至 3.0.21、3.4.6、3.5.7、3.6.3 或 4.0.1 版本；临时措施：无法升级时在反向代理层限制 TLS 握手连接速率；监控服务器内存占用异常增长。"
+date = 20260721
+label = "nday"
+verifier = "AdySec"
