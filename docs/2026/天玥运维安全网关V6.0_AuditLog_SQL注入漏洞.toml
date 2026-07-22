@@ -1,0 +1,11 @@
+vendor = "天玥"
+name = "天玥运维安全网关V6.0 AuditLog SQL注入漏洞"
+type = "SQL注入"
+version = "天玥运维安全网关（OSM 堡垒机/云堡垒机）V6.0"
+path = "/（AuditLog 审计日志查询接口）"
+detail = """天玥运维安全网关 V6.0（OSM 堡垒机/云堡垒机）AuditLog 审计日志查询中 userip 参数直接拼入 ILIKE 子句未转义，同函数内 account 参数已有转义但 userip 被遗漏，任意登录用户可触发 SQL 注入窃取审计记录和数据库数据。该漏洞暂未分配 CVE 编号。
+最早披露: 2026-07-21"""
+fix = "联系厂商获取修复补丁；临时措施：通过 WAF 拦截对审计日志查询接口的恶意 SQL 注入请求；限制审计日志查询功能的访问权限。"
+date = 20260721
+label = "0day"
+verifier = "AdySec"
