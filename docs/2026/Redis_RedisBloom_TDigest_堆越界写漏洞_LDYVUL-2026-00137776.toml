@@ -1,0 +1,12 @@
+vendor = "Redis"
+name = "Redis RedisBloom TDigest 堆越界写漏洞 LDYVUL-2026-00137776"
+type = "RCE"
+version = "Redis 8.8.0、8.10-RC2（已验证 8.6.3 及 redis:latest 镜像亦受影响，其他版本暂未验证），需加载 RedisBloom 模块"
+detail = """RedisBloom TDigest RDB 反序列化存在堆越界写漏洞（LDYVUL-2026-00137776）。TDigestRdbLoad 函数根据 compression 字段计算内部数组大小，但后续使用 RDB 数据中的 cap 字段覆盖内部容量值，导致 merged_nodes 数据写入时边界检查基于攻击者控制的容量参数，而非真实分配空间，造成 nodes_mean[] 与 nodes_weight[] 数组越界写，覆盖相邻堆对象内容。攻击者可进一步利用任意地址读写覆盖 RedisModuleType 结构中的 free 函数指针为 libc system() 地址，当删除 Key 时触发 RCE。
+利用条件：目标加载 RedisBloom 模块 + 攻击者能访问 Redis 协议接口 + 具备 RESTORE/DUMP/CONFIG/EVAL 命令权限。
+最早披露: 2026-07-23"""
+fix = "关注 Redis 官方安全公告并及时升级至修复版本；临时措施：禁用 RedisBloom 模块；限制高风险命令 RESTORE、DUMP、CONFIG、EVAL 仅允许受信任来源执行；启用 Redis 认证机制并避免弱密码；避免将 Redis 服务直接暴露于公网。"
+date = 20260723
+label = "0day"
+cve = "LDYVUL-2026-00137776"
+verifier = "360漏洞研究院"
