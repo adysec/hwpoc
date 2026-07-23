@@ -1,0 +1,11 @@
+vendor = "大华"
+name = "大华ICC智能物联综合管理平台 download 任意文件读取漏洞"
+type = "任意文件读取"
+version = "大华ICC智能物联综合管理平台"
+path = "/download"
+detail = """大华ICC智能物联综合管理平台 download 接口存在任意文件读取漏洞，未经身份验证的远程攻击者通过该漏洞可获取服务器敏感信息。该漏洞暂未分配 CVE 编号。
+最早披露: 2026-07-22"""
+fix = "联系厂商获取修复补丁；临时措施：通过 WAF/反向代理拦截对 /download 接口的路径遍历请求；限制接口访问来源 IP。"
+date = 20260722
+label = "0day"
+verifier = "AdySec"

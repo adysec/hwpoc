@@ -1,7 +1,7 @@
 vendor = "建文"
 name = "建文工程项目管理软件 ProjectMap SQL注入漏洞"
 type = "SQL注入"
-path = "/ProjectMap"
+path = "/api/api/APM/KPI/PMDashBoard/ProjectMap"
 detail = """建文工程项目管理软件 ProjectMap 接口存在 SQL 注入漏洞，攻击者可通过该漏洞获取数据库中的管理员后台密码、用户个人信息等敏感数据，在高权限情况下可向服务器写入木马，进一步获取服务器系统权限。该漏洞暂未分配 CVE 编号。
 最早披露: 2026-07-22"""
 fix = "联系厂商获取修复补丁；临时措施：通过 WAF 拦截对 /ProjectMap 接口的恶意 SQL 注入请求；限制接口访问来源 IP。"
