@@ -1,0 +1,10 @@
+vendor = "雨诺"
+name = "雨诺调度客户端 UserList 未授权敏感信息泄露漏洞"
+type = "未授权访问"
+path = "/UserList"
+detail = """雨诺调度客户端 UserList 接口存在未授权访问漏洞，未经身份验证的攻击者可获取敏感信息。该漏洞暂未分配 CVE 编号。
+最早披露: 2026-07-22"""
+fix = "联系厂商获取修复补丁；临时措施：通过 WAF/反向代理限制对 /UserList 接口的访问；限制接口访问来源 IP。"
+date = 20260722
+label = "0day"
+verifier = "AdySec"
