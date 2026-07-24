@@ -1,0 +1,11 @@
+vendor = "智能表"
+name = "智能表综合管理系统 SunReportService.asmx SQL注入漏洞"
+type = "SQL注入"
+version = "智能表综合管理系统"
+path = "/SunReportService.asmx"
+detail = """智能表综合管理系统 /SunReportService.asmx 接口存在 SQL 注入漏洞，未经身份验证的攻击者可通过该漏洞获取数据库中的管理员密码、用户个人信息等敏感信息，高权限下可向服务器写入木马，进一步获取系统权限。该漏洞暂未分配 CVE 编号。
+最早披露: 2026-07-23"""
+fix = "联系厂商获取修复补丁升级至安全版本；临时措施：通过 WAF/反向代理拦截对 /SunReportService.asmx 的恶意 SQL 注入请求；限制该接口仅允许内网访问；对接口参数实施严格的输入过滤。"
+date = 20260723
+label = "0day"
+verifier = "Superhero"
